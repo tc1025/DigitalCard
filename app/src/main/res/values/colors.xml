@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#757575</color>
+    <color name="colorPrimaryDark">#616161</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <color name="colorAppGradientBgStart">#4A2E68</color>
+    <color name="colorAppGradientBgCenter">#E6756B</color>
+    <color name="colorAppGradientBgEnd">#F06B42</color>
+
+    <color name="grey_background">#EEEEEE</color>
+    <color name="grey_button">#616161</color>
+</resources>
