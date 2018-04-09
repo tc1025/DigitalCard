@@ -1,5 +1,6 @@
 package digitalcard.digitalcard.Fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -9,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -37,6 +39,8 @@ public class CategoryCardFragment extends Fragment implements View.OnClickListen
     List<CardList> cardLists;
     CardListAdapter cardListAdapter;
 
+    Boolean mKeyboardStatus = false;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -60,6 +64,31 @@ public class CategoryCardFragment extends Fragment implements View.OnClickListen
         getData();
 
         return rootview;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+
+    }
+
+    /*buat hide keyboard*/
+    public void dismissKeyboard(){
+        InputMethodManager imm =(InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+        mKeyboardStatus = false;
+    }
+
+    public void showKeyboard(){
+        InputMethodManager imm =(InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+        mKeyboardStatus = true;
+    }
+
+    private boolean isKeyboardActive(){
+        return mKeyboardStatus;
     }
 
     @Override
