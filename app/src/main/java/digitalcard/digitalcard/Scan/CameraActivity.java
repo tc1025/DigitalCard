@@ -92,6 +92,7 @@ public class CameraActivity extends CustomAppCompatActivity implements digitalca
 
         Intent intent = this.getIntent();
         intent.putExtra("CODE_DATA" ,rawResult.getText());
+        intent.putExtra("CODE_TYPE", rawResult.getBarcodeFormat().toString()s);
 
         setResult(2, intent);
         finish();
