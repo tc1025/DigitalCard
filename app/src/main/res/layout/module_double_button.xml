@@ -27,7 +27,7 @@
                 android:textColor="#FFFFFF"
                 android:textAllCaps="true"
                 android:textStyle="bold"
-                android:text="cancel" />
+                android:text="@string/cancel_text" />
         </LinearLayout>
 
         <View
@@ -55,7 +55,7 @@
                 android:textColor="#FFFFFF"
                 android:textAllCaps="true"
                 android:textStyle="bold"
-                android:text="done" />
+                android:text="@string/done_text" />
         </LinearLayout>
     </LinearLayout>
 </merge>

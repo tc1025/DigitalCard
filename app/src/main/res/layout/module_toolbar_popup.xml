@@ -22,7 +22,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="#424242"
-                android:text="back"/>
+                android:text="@string/back_text"/>
         </LinearLayout>
 
         <TextView
@@ -31,7 +31,8 @@
             android:layout_height="wrap_content"
             android:textSize="16sp"
             android:textColor="@android:color/black"
-            android:text="Add new card"
+            android:text="@string/add_new_card_text"
             android:layout_centerInParent="true"/>
+
     </RelativeLayout>
 </merge>

@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -31,6 +32,7 @@ public class CategoryCardFragment extends Fragment implements View.OnClickListen
 
     TextView txtTitle;
     LinearLayout btnBack, searchPanel;
+    ImageView btnDrop;
     ListView lvTop5Card;
     RecyclerView rvAllCard;
 
