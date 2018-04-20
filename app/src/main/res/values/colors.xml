@@ -10,4 +10,7 @@
 
     <color name="grey_background">#EEEEEE</color>
     <color name="grey_button">#616161</color>
+
+    <color name="start1">#fa709a</color>
+    <color name="start2">#F99305</color>
 </resources>
