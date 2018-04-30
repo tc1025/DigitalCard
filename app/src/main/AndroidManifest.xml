@@ -19,7 +19,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".Scan.CameraActivity"></activity>
+        <activity android:name=".Scan.CameraActivity"/>
     </application>
 
 </manifest>

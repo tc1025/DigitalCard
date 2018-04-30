@@ -25,8 +25,11 @@ import com.google.zxing.common.BitMatrix;
 
 import java.util.EnumMap;
 import java.util.Map;
+import java.util.Objects;
 
+import digitalcard.digitalcard.Database.CardDB;
 import digitalcard.digitalcard.MainActivity;
+import digitalcard.digitalcard.Model.CardList;
 import digitalcard.digitalcard.Module.Toolbar;
 import digitalcard.digitalcard.R;
 import digitalcard.digitalcard.Util.Utilities;
@@ -106,6 +109,15 @@ public class DetailCardFragment extends Fragment implements View.OnClickListener
 
             case R.id.btn_ok:
                 Toast.makeText(getContext(), "You choose OK", Toast.LENGTH_SHORT).show();
+
+                CardList cardList = new CardList();
+                cardList.cardName = cardName;
+                cardList.cardType = title;
+                cardList.barcodeNumber = barcodeNumber;
+
+                CardDB cardDB = new CardDB(getContext());
+                cardDB.addCard(new CardList(cardList.cardName, cardList.cardType ,cardList.barcodeNumber));
+
                 Intent intent = new Intent(getActivity(), MainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
@@ -121,11 +133,18 @@ public class DetailCardFragment extends Fragment implements View.OnClickListener
         int width = displayMetrics.widthPixels;
         width = (4 * width) / 5;
 
-        try {
-            bitmap = encodeAsBitmap(barcodeNumber, BarcodeFormat.CODE_128, width, convertDpToPx(87));
-        } catch (WriterException e) {
-            e.printStackTrace();
-        }
+        if (Objects.equals(title, Utilities.MERCHANT_STARBUCKS)) {
+            try {
+                bitmap = encodeAsBitmap(barcodeNumber, BarcodeFormat.PDF_417, width, convertDpToPx(87));
+            } catch (WriterException e) {
+                e.printStackTrace();
+            }
+        } else
+            try {
+                bitmap = encodeAsBitmap(barcodeNumber, BarcodeFormat.CODE_128, width, convertDpToPx(87));
+            } catch (WriterException e) {
+                e.printStackTrace();
+            }
 
         imgBarcode.setImageBitmap(bitmap);
     }

@@ -1,6 +1,7 @@
 package digitalcard.digitalcard.Module;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -18,18 +19,30 @@ public class Toolbar extends LinearLayout {
     TextView txtTitle;
     LinearLayout btnBack;
     RelativeLayout panel;
+
+    Boolean backButton;
+
     public Toolbar(Context context, AttributeSet attrs) {
         super(context, attrs);
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         if (inflater != null) {
             inflater.inflate(R.layout.module_toolbar_popup, this, true);
         }
+
+        TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.Toolbar);
+        backButton = ta.getBoolean(R.styleable.Toolbar_backButton, true);
+
         setOrientation(LinearLayout.HORIZONTAL);
         setGravity(Gravity.CENTER_VERTICAL);
 
         panel = (RelativeLayout) getChildAt(0);
         btnBack = (LinearLayout) panel.getChildAt(0);
         txtTitle = (TextView) panel.getChildAt(1);
+
+        if (!backButton)
+            btnBack.setVisibility(GONE);
+        else
+            btnBack.setVisibility(VISIBLE);
     }
 
     public TextView getTxtTitle(){
