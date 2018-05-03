@@ -21,4 +21,8 @@
         <attr name="umanoScrollInterpolator" format="reference" />
     </declare-styleable>
 
+    <declare-styleable name="Toolbar">
+        <attr name="backButton" format="boolean"/>
+    </declare-styleable>
+
 </resources>

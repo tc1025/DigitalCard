@@ -26,7 +26,7 @@ public class CameraActivity extends CustomAppCompatActivity implements digitalca
 
     public static int               OPEN_FRAGMENT_SMARTWARRANTY   = 0;
 
-    private PopUpPanelLayout mSlidingLayout;
+    private PopUpPanelLayout        mSlidingLayout;
     private boolean                 mSlidingOpen            = false;
     private int                     flag_fragment           = -1;
 
@@ -92,7 +92,7 @@ public class CameraActivity extends CustomAppCompatActivity implements digitalca
 
         Intent intent = this.getIntent();
         intent.putExtra("CODE_DATA" ,rawResult.getText());
-        intent.putExtra("CODE_TYPE", rawResult.getBarcodeFormat().toString()s);
+        intent.putExtra("CODE_TYPE", rawResult.getBarcodeFormat().toString());
 
         setResult(2, intent);
         finish();

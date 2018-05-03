@@ -7,6 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="bottom"
+    android:background="@drawable/toolbar_gradient"
     app:umanoDragView="@id/drag_area"
     app:umanoFadeColor="#7d000000"
     app:umanoOverlay="true"
@@ -14,13 +15,16 @@
     app:umanoShadowHeight="0dp">
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@drawable/toolbar_gradient"
+        android:layout_marginTop="15dp"
+        android:fitsSystemWindows="true">
         <RelativeLayout
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="64dp"
             android:orientation="horizontal"
-            android:background="@color/colorPrimary">
+            android:background="@drawable/toolbar_gradient">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -42,11 +46,32 @@
                 android:contentDescription="@string/imageButton_menu_description"/>
         </RelativeLayout>
 
-        <ScrollView
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_card"
             android:layout_below="@id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-        </ScrollView>
+        </android.support.v7.widget.RecyclerView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_below="@id/toolbar"
+            android:background="@android:color/white">
+
+            <android.support.design.widget.TabLayout
+                android:id="@+id/tab_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:tabMode="fixed" />
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/pager"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/white" />
+        </LinearLayout>
 
         <ImageButton
             android:id="@+id/add_button"

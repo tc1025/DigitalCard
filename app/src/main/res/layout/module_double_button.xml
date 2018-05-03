@@ -14,7 +14,7 @@
             android:layout_height="match_parent"
             android:orientation="horizontal"
             android:gravity="center"
-            android:background="@color/grey_button">
+            android:background="@color/start2">
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
@@ -27,7 +27,7 @@
                 android:textColor="#FFFFFF"
                 android:textAllCaps="true"
                 android:textStyle="bold"
-                android:text="cancel" />
+                android:text="@string/cancel_text" />
         </LinearLayout>
 
         <View
@@ -42,7 +42,7 @@
             android:layout_height="match_parent"
             android:orientation="horizontal"
             android:gravity="center"
-            android:background="@color/grey_button">
+            android:background="@color/start2">
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
@@ -55,7 +55,7 @@
                 android:textColor="#FFFFFF"
                 android:textAllCaps="true"
                 android:textStyle="bold"
-                android:text="done" />
+                android:text="@string/done_text" />
         </LinearLayout>
     </LinearLayout>
 </merge>

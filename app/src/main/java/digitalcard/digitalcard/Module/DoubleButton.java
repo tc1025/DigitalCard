@@ -1,6 +1,7 @@
 package digitalcard.digitalcard.Module;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.Gravity;
@@ -28,6 +29,8 @@ public class DoubleButton extends LinearLayout {
         panel = (LinearLayout) getChildAt(0);
         btnLeft = (LinearLayout) panel.getChildAt(0);
         btnRight = (LinearLayout) panel.getChildAt(2);
+
+        panel.setBackground(getResources().getDrawable(R.drawable.toolbar_gradient));
     }
 
     public LinearLayout getBtnLeft(){

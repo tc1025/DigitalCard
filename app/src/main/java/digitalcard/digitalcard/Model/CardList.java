@@ -7,30 +7,31 @@ import android.support.annotation.Nullable;
  */
 
 public class CardList {
-    private String cardCategory;
-    private String cardName;
-    private String cardBarcodeNumber;
-    private int thumbnail;
-    private String cardBarcodeType;
+    public String cardCategory;
+    public int cardIcon;
+    public String cardName;
+    public String cardType;
+    public String barcodeNumber;
+    public int id;
 
-    public CardList(String cardCategory, String cardName, String cardBarcodeNumber, int thumbnail) {
-        this.cardCategory = cardCategory;
+    public CardList() {}
+
+    public CardList(String cardName, String cardType, String barcodeNumber) {
         this.cardName = cardName;
-        this.cardBarcodeNumber = cardBarcodeNumber;
-        this.thumbnail = thumbnail;
+        this.cardType = cardType;
+        this.barcodeNumber = barcodeNumber;
     }
 
-    public CardList(String cardCategory, @Nullable int thumbnail) {
+    public CardList(int id, String cardType, String cardName, String BarcodeNumber) {
+        this.cardName = cardName;
+        this.cardType = cardType;
+        this.barcodeNumber = BarcodeNumber;
+        this.id = id;
+    }
+
+    public CardList(String cardCategory, int cardIcon) {
         this.cardCategory = cardCategory;
-        this.thumbnail = thumbnail;
-    }
-
-    public String getCardCategory() {
-        return cardCategory;
-    }
-
-    public void setCardCategory(String cardCategory) {
-        this.cardCategory = cardCategory;
+        this.cardIcon = cardIcon;
     }
 
     public String getCardName() {
@@ -41,27 +42,27 @@ public class CardList {
         this.cardName = cardName;
     }
 
-    public String getCardBarcodeNumber() {
-        return cardBarcodeNumber;
+    public String getCardType() {
+        return cardType;
     }
 
-    public void setCardBarcodeNumber(String cardBarcodeNumber) {
-        this.cardBarcodeNumber = cardBarcodeNumber;
+    public void setCardType(String cardType) {
+        this.cardType = cardType;
     }
 
-    public String getCardBarcodeType() {
-        return cardBarcodeType;
+    public String getBarcodeNumber() {
+        return barcodeNumber;
     }
 
-    public void setCardBarcodeType(String cardBarcodeType) {
-        this.cardBarcodeType = cardBarcodeType;
+    public void setBarcodeNumber(String BarcodeNumber) {
+        this.barcodeNumber = BarcodeNumber;
     }
 
-    public int getThumbnail() {
-        return thumbnail;
+    public int getId() {
+        return id;
     }
 
-    public void setThumbnail(int thumbnail) {
-        this.thumbnail = thumbnail;
+    public void setId(int id) {
+        this.id = id;
     }
 }
