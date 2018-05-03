@@ -6,6 +6,7 @@ import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.widget.SlidingPaneLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
@@ -25,10 +26,12 @@ import java.util.List;
 
 import digitalcard.digitalcard.Database.CardDB;
 import digitalcard.digitalcard.Fragment.AddCardFragment;
+import digitalcard.digitalcard.Fragment.CardOverViewFragment;
 import digitalcard.digitalcard.Fragment.CategoryCardFragment;
 import digitalcard.digitalcard.Fragment.RegistrationCardFragment;
 import digitalcard.digitalcard.Model.CardList;
 import digitalcard.digitalcard.PopUpPanel.PopUpPanelLayout;
+import digitalcard.digitalcard.Util.Utilities;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
     CardDB cardDB;
@@ -173,9 +176,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             MyViewHolder(View view) {
                 super(view);
-                card = (LinearLayout) view.findViewById(R.id.card_card);
-                cardName = (TextView) view.findViewById(R.id.card_name);
-                cardIcon = (ImageView) view.findViewById(R.id.card_icon);
+                card = view.findViewById(R.id.card_card);
+                cardName = view.findViewById(R.id.card_name);
+                cardIcon = view.findViewById(R.id.card_icon);
             }
         }
 
@@ -204,6 +207,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             + ", card type : " + data.cardType
                             + ", card barcode : " + data.barcodeNumber, Toast.LENGTH_SHORT).show();
 
+                    CardOverViewFragment cardOverViewFragment = new CardOverViewFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putString(Utilities.BUNNDLE_CARD_NAME, data.cardName);
+                    bundle.putString(Utilities.BUNNDLE_CARD_CATEGORY, data.cardType);
+                    bundle.putString(Utilities.BUNNDLE_BARCODE_NUMBER, data.barcodeNumber);
+                    cardOverViewFragment.setArguments(bundle);
+
+                    ft = getSupportFragmentManager().beginTransaction();
+                    ft.addToBackStack(null);
+                    ft.replace(R.id.drag_view, cardOverViewFragment, "CardOverview").commit();
+                    popUpPanelLayout.setPanelState(PopUpPanelLayout.PanelState.EXPANDED);
 //                    CardOverviewFragments cardOverviewFragments = new CardOverviewFragments();
 //
 //                    Bundle bundle = new Bundle();
@@ -224,7 +238,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //
 //                    //Expand sliding panel and set status
 //                    mSlidingLayout.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
-//                    mSlidingOpen = true;
                 }
             });
 
