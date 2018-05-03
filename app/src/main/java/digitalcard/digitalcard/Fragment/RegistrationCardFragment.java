@@ -4,9 +4,11 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,6 +31,7 @@ public class RegistrationCardFragment extends Fragment implements View.OnClickLi
 
     TextView tvTitle;
     LinearLayout btnBack, btnCancel, btnDone;
+    EditText regName, regIdNumber, regGender, regAddress, regDOB;
 
     String title;
 
@@ -40,6 +43,12 @@ public class RegistrationCardFragment extends Fragment implements View.OnClickLi
         toolbar = rootView.findViewById(R.id.toolbar);
         action = rootView.findViewById(R.id.btn_action);
 
+        regName = rootView.findViewById(R.id.register_name);
+        regIdNumber = rootView.findViewById(R.id.register_id_number);
+        regGender = rootView.findViewById(R.id.register_gender);
+        regAddress = rootView.findViewById(R.id.register_address);
+        regDOB = rootView.findViewById(R.id.register_DOB);
+
         title = getArguments().getString(Utilities.BUNNDLE_CARD_CATEGORY);
 
         tvTitle = toolbar.getTxtTitle();
@@ -48,6 +57,7 @@ public class RegistrationCardFragment extends Fragment implements View.OnClickLi
         btnDone = action.getBtnRight();
 
         tvTitle.setText(title);
+        regIdNumber.setInputType(InputType.TYPE_CLASS_NUMBER);
 
         btnBack.setOnClickListener(this);
         btnCancel.setOnClickListener(this);
@@ -69,31 +79,41 @@ public class RegistrationCardFragment extends Fragment implements View.OnClickLi
                 break;
 
             case R.id.button_done:
-                Random random = new Random();
-                String dsa = "";
-                for (int i = 0; i < 4; i++) {
-                    int q = random.nextInt(9999 + 1);
-                    String test;
-                    if (q < 1000) {
-                        test = "0" + String.valueOf(q);
-                        dsa = dsa + test + " ";
-                    } else {
-                        dsa = dsa + q + " ";
+                if (regName.getText().toString().equals("")) {
+                    Toast.makeText(getActivity(), "Name field must be filled", Toast.LENGTH_SHORT).show();
+                } else if (regIdNumber.getText().toString().equals("")) {
+                    Toast.makeText(getActivity(), "Id number field must be filled", Toast.LENGTH_SHORT).show();
+                } else if (regGender.getText().toString().equals("")) {
+                    Toast.makeText(getActivity(), "Gender field must be filled", Toast.LENGTH_SHORT).show();
+                } else if (regAddress.getText().toString().equals("")) {
+                    Toast.makeText(getActivity(), "Address field must be filled", Toast.LENGTH_SHORT).show();
+                } else if (regDOB.getText().toString().equals("")) {
+                    Toast.makeText(getActivity(), "Date of birth field must be filled", Toast.LENGTH_SHORT).show();
+                } else {
+                    Random random = new Random();
+                    String randomBarcode = "";
+                    for (int i = 0; i < 4; i++) {
+                        int randomInt = random.nextInt(9999 + 1);
+                        String test;
+                        if (randomInt < 1000) {
+                            test = "0" + String.valueOf(randomInt);
+                            randomBarcode = randomBarcode + test;
+                        } else {
+                            randomBarcode = randomBarcode + randomInt;
+                        }
                     }
+
+                    DetailCardFragment detailCardFragment = new DetailCardFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putString(Utilities.BUNNDLE_CARD_NAME, title);
+                    bundle.putString(Utilities.BUNNDLE_BARCODE_NUMBER, randomBarcode);
+                    bundle.putString(Utilities.BUNNDLE_CARD_CATEGORY, title);
+                    detailCardFragment.setArguments(bundle);
+
+                    FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+                    ft.addToBackStack(null);
+                    ft.replace(R.id.drag_view, detailCardFragment, "DetailCard").commit();
                 }
-
-                Toast.makeText(getActivity(), "You choose done, card id is " + dsa, Toast.LENGTH_SHORT).show();
-
-                DetailCardFragment detailCardFragment = new DetailCardFragment();
-                Bundle bundle = new Bundle();
-                bundle.putString(Utilities.BUNNDLE_CARD_NAME, title);
-                bundle.putString(Utilities.BUNNDLE_BARCODE_NUMBER, dsa);
-                bundle.putString(Utilities.BUNNDLE_CARD_CATEGORY, title);
-                detailCardFragment.setArguments(bundle);
-
-                FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-                ft.addToBackStack(null);
-                ft.replace(R.id.drag_view, detailCardFragment, "DetailCard").commit();
                 break;
         }
     }
