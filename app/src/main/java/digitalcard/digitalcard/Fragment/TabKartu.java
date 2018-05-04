@@ -122,7 +122,7 @@ public class TabKartu extends Fragment {
                     ft.replace(R.id.drag_view, cardOverViewFragment, "CardOverview").commit();
 
                     if (getContext() instanceof MainActivity) {
-                        ((MainActivity) getContext()).getSlidingPanel().setPanelState(PopUpPanelLayout.PanelState.EXPANDED);
+                        ((MainActivity) getContext()).getSlidingPanel().setPanelState(com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelState.EXPANDED);
                     }
 //                    CardOverviewFragments cardOverviewFragments = new CardOverviewFragments();
 //
