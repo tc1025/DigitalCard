@@ -7,24 +7,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="bottom"
-    android:background="@drawable/toolbar_gradient"
     app:umanoDragView="@id/drag_area"
     app:umanoFadeColor="#7d000000"
     app:umanoOverlay="true"
     app:umanoPanelHeight="0dp"
     app:umanoShadowHeight="0dp">
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/toolbar_gradient"
-        android:layout_marginTop="15dp"
-        android:fitsSystemWindows="true">
+        android:layout_marginTop="15dp">
         <RelativeLayout
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="64dp"
-            android:orientation="horizontal"
-            android:background="@drawable/toolbar_gradient">
+            android:layout_height="79dp"
+            android:layout_alignParentStart="true"
+            android:background="@drawable/toolbar_gradient"
+            android:minHeight="?attr/actionBarSize">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -46,45 +45,51 @@
                 android:contentDescription="@string/imageButton_menu_description"/>
         </RelativeLayout>
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rv_card"
-            android:layout_below="@id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-        </android.support.v7.widget.RecyclerView>
-
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
             android:layout_below="@id/toolbar"
             android:background="@android:color/white">
 
-            <android.support.design.widget.TabLayout
-                android:id="@+id/tab_layout"
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_card"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:tabMode="fixed" />
+                android:layout_height="match_parent">
+            </android.support.v7.widget.RecyclerView>
 
-            <android.support.v4.view.ViewPager
-                android:id="@+id/pager"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@android:color/white" />
-        </LinearLayout>
+                android:orientation="vertical">
 
-        <ImageButton
-            android:id="@+id/add_button"
-            android:layout_width="78dp"
-            android:layout_height="78dp"
-            android:padding="14dp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginBottom="16dp"
-            android:layout_marginEnd="16dp"
-            android:contentDescription="@string/imageButton_plus_description"
-            android:background="@android:color/transparent"
-            android:src="@drawable/ic_add_button"/>
+                <android.support.design.widget.TabLayout
+                    android:id="@+id/tab_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:tabMode="fixed" />
+
+                <android.support.v4.view.ViewPager
+                    android:id="@+id/pager"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/white" />
+            </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/add_button"
+                android:layout_width="78dp"
+                android:layout_height="78dp"
+                android:padding="14dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginBottom="16dp"
+                android:layout_marginEnd="16dp"
+                android:contentDescription="@string/imageButton_plus_description"
+                android:background="@android:color/transparent"
+                android:src="@drawable/ic_add_button"/>
+
+        </RelativeLayout>
+
     </RelativeLayout>
 
     <!--SLIDING LAYOUT-->
