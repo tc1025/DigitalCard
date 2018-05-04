@@ -46,13 +46,6 @@
                 android:contentDescription="@string/imageButton_menu_description"/>
         </RelativeLayout>
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rv_card"
-            android:layout_below="@id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-        </android.support.v7.widget.RecyclerView>
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
