@@ -1,7 +1,9 @@
 package digitalcard.digitalcard.Fragment;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.DisplayMetrics;
@@ -11,7 +13,6 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,6 +26,7 @@ import java.util.EnumMap;
 import java.util.Map;
 import java.util.Objects;
 
+import digitalcard.digitalcard.Module.PopupDialog;
 import digitalcard.digitalcard.Module.Toolbar;
 import digitalcard.digitalcard.R;
 import digitalcard.digitalcard.Util.Utilities;
@@ -35,18 +37,21 @@ import static android.graphics.Color.WHITE;
 public class CardOverViewFragment extends Fragment implements View.OnClickListener{
     View rootView;
     Toolbar toolbar;
+    PopupDialog popupDialog;
 
     TextView tvTitle, tvCardName, tvBarcodeNumber;
     ImageButton btnLocation;
-    ImageView imgBarcode;
+    ImageView imgBarcode, dialogImgBarcode;
+    LinearLayout dialogActivity;
 
     String title, cardName, barcodeNumber;
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_card_overview, container, false);
         toolbar = rootView.findViewById(R.id.toolbar);
+        popupDialog = new PopupDialog(getActivity());
 
         tvTitle = toolbar.getTxtTitle();
         btnLocation = toolbar.getBtnLocation();
@@ -63,8 +68,9 @@ public class CardOverViewFragment extends Fragment implements View.OnClickListen
         tvBarcodeNumber.setText(barcodeNumber);
 
         btnLocation.setOnClickListener(this);
+        imgBarcode.setOnClickListener(this);
 
-        convertNumberToBarcode(barcodeNumber);
+        convertNumberToBarcode(barcodeNumber, false);
 
         return rootView;
     }
@@ -75,10 +81,29 @@ public class CardOverViewFragment extends Fragment implements View.OnClickListen
             case R.id.location_button:
                 Toast.makeText(getActivity(), "You choose get location", Toast.LENGTH_SHORT).show();
                 break;
+
+            case R.id.barcode_image:
+                Toast.makeText(getContext(), "You choose Barcode Image", Toast.LENGTH_SHORT).show();
+                popupDialog.show();
+                if (popupDialog.isShowing()) {
+                    TextView dialogBarcodeNumber = popupDialog.getTvBarcodeNumber();
+                    dialogImgBarcode = popupDialog.getImgBarcode();
+                    dialogActivity = popupDialog.getLlDialogActivity();
+
+                    dialogBarcodeNumber.setText(barcodeNumber);
+                    convertNumberToBarcode(barcodeNumber, true);
+
+                    dialogActivity.setOnClickListener(this);
+                }
+                break;
+
+            case R.id.dialog_activity:
+                popupDialog.dismiss();
+                break;
         }
     }
 
-    public void convertNumberToBarcode(String barcodeNumber) {
+    public void convertNumberToBarcode(String barcodeNumber, Boolean dialogBarcode) {
         Bitmap bitmap = null;
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
@@ -99,7 +124,10 @@ public class CardOverViewFragment extends Fragment implements View.OnClickListen
                 e.printStackTrace();
             }
 
-        imgBarcode.setImageBitmap(bitmap);
+        if (!dialogBarcode)
+            imgBarcode.setImageBitmap(bitmap);
+        else
+            dialogImgBarcode.setImageBitmap(bitmap);
     }
 
     private Bitmap encodeAsBitmap(String contents, BarcodeFormat format, int img_width, int img_height) throws WriterException {

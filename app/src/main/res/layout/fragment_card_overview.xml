@@ -30,7 +30,6 @@
             android:id="@+id/barcode_image"
             android:layout_width="match_parent"
             android:layout_height="100dp"
-            android:background="#E3E3E3"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"/>
 
@@ -129,6 +128,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="100dp"
                             android:background="@color/grey_button"/>
+
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
