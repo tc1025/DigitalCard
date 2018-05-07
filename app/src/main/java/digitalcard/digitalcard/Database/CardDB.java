@@ -20,6 +20,9 @@ public class CardDB extends SQLiteOpenHelper {
     private static final String card_name = "card_names";
     private static final String card_type = "card_types";
     private static final String barcode_number = "barcodeNumber";
+    private static final String notes = "notes";
+    private static final String front_view = "frontView";
+    private static final String back_view = "backView";
 
     private Context context;
 

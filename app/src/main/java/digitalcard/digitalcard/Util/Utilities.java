@@ -9,6 +9,7 @@ public class Utilities {
 
 
 //    Bundle
+    public final static String BUNNDLE_CARD_ID = "card_id";
     public final static String BUNNDLE_CARD_NAME = "card_name";
     public final static String BUNNDLE_BARCODE_NUMBER = "barcode_number";
     public final static String BUNNDLE_CARD_CATEGORY = "card_category";

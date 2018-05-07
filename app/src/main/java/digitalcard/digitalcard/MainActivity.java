@@ -1,49 +1,27 @@
 package digitalcard.digitalcard;
 
-import android.content.Context;
 import android.os.Bundle;
-import android.os.PersistableBundle;
-import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewParent;
-import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import digitalcard.digitalcard.Database.CardDB;
-import digitalcard.digitalcard.Fragment.AddCardFragment;
-import digitalcard.digitalcard.Fragment.CardOverViewFragment;
+import digitalcard.digitalcard.Fragment.ExistingCardFragment;
 import digitalcard.digitalcard.Fragment.CategoryCardFragment;
-import digitalcard.digitalcard.Fragment.RegistrationCardFragment;
-import digitalcard.digitalcard.Model.CardList;
 import digitalcard.digitalcard.PopUpPanel.PopUpPanelLayout;
-import digitalcard.digitalcard.Util.Utilities;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
     LinearLayout mainLayout;
     PopUpPanelLayout popUpPanelLayout;
     ImageButton btnAdd, btnMenu;
 
-    AddCardFragment fAddCard;
+    ExistingCardFragment fAddCard;
     CategoryCardFragment fcategoryCardFragment;
     FragmentTransaction ft;
     private int flag_fragment = -1;
@@ -59,7 +37,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         popUpPanelLayout.addPanelSlideListener(new PanelSlidingListener());
         popUpPanelLayout.setFadeOnClickListener(new FadeOnClickListener());
 
-        fAddCard = new AddCardFragment();
+        fAddCard = new ExistingCardFragment();
         fcategoryCardFragment = new CategoryCardFragment();
 
         btnAdd = findViewById(R.id.add_button);
@@ -68,7 +46,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnAdd.setOnClickListener(this);
         btnMenu.setOnClickListener(this);
 
-        TabLayout tabLayout = findViewById(R.id.tab_layout);
+        final TabLayout tabLayout = findViewById(R.id.tab_layout);
         tabLayout.addTab(tabLayout.newTab().setText(R.string.card_text));
         tabLayout.addTab(tabLayout.newTab().setText(R.string.promo_text));
 //        tabLayout.addTab(tabLayout.newTab().setText("Tab 3"));
@@ -83,6 +61,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 viewPager.setCurrentItem(tab.getPosition());
+                if (tabLayout.getSelectedTabPosition() == 1)
+                    btnAdd.setVisibility(View.GONE);
+                else btnAdd.setVisibility(View.VISIBLE);
             }
 
             @Override

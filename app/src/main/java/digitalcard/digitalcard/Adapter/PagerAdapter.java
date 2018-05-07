@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 
 import digitalcard.digitalcard.Fragment.TabKartu;
 import digitalcard.digitalcard.Fragment.TabPromo;
+import digitalcard.digitalcard.MainActivity;
 
 /**
  * Created by andrewtanowijono on 09/04/18.

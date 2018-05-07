@@ -12,11 +12,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-
 import java.util.List;
 
-import digitalcard.digitalcard.Fragment.AddCardFragment;
+import digitalcard.digitalcard.Fragment.ExistingCardFragment;
 import digitalcard.digitalcard.Fragment.RegistrationCardFragment;
 import digitalcard.digitalcard.MainActivity;
 import digitalcard.digitalcard.Model.CardList;
@@ -96,13 +94,13 @@ public class CardListAdapter extends RecyclerView.Adapter<CardListAdapter.ViewHo
                     btn_yes.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            AddCardFragment addCardFragment = new AddCardFragment();
+                            ExistingCardFragment existingCardFragment = new ExistingCardFragment();
                             Bundle bundle = new Bundle();
                             bundle.putString(Utilities.BUNNDLE_CARD_CATEGORY, data.cardCategory);
-                            addCardFragment.setArguments(bundle);
+                            existingCardFragment.setArguments(bundle);
 
                             ((MainActivity)context).getSupportFragmentManager().beginTransaction()
-                                    .replace(R.id.drag_view, addCardFragment, "AddCard")
+                                    .replace(R.id.drag_view, existingCardFragment, "AddCard")
                                     .addToBackStack(null)
                                     .commit();
                             registerDialog.dismiss();

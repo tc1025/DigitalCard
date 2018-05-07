@@ -28,7 +28,7 @@ import digitalcard.digitalcard.Util.Utilities;
  * Created by viks on 16/03/2018.
  */
 
-public class AddCardFragment extends Fragment implements View.OnClickListener{
+public class ExistingCardFragment extends Fragment implements View.OnClickListener{
     View rootView;
     Toolbar toolbar;
     DoubleButton btnAction;

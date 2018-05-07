@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Digital Card</string>
+    <string name="app_name">DigiCard</string>
 
     <string name="imageButton_plus_description">add new card</string>
     <string name="imageButton_menu_description">menu</string>

@@ -42,7 +42,8 @@
                 <EditText
                     android:id="@+id/register_name"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:hint="Input your full name"/>
             </LinearLayout>
 
             <LinearLayout
@@ -60,7 +61,8 @@
                 <EditText
                     android:id="@+id/register_id_number"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:hint="Input your identity number"/>
             </LinearLayout>
 
             <LinearLayout
@@ -75,10 +77,21 @@
                     android:gravity="center_vertical"
                     android:text="Gender"
                     android:textSize="14sp" />
-                <EditText
-                    android:id="@+id/register_gender"
+                <RadioGroup
+                    android:id="@+id/radio_gender"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Male"/>
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:text="Female"/>
+                </RadioGroup>
             </LinearLayout>
 
             <LinearLayout
@@ -114,7 +127,8 @@
                 <EditText
                     android:id="@+id/register_DOB"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:focusableInTouchMode="false"/>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
