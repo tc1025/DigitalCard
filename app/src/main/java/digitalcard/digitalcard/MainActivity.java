@@ -1,24 +1,51 @@
 package digitalcard.digitalcard;
 
+import android.Manifest;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.PersistableBundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewParent;
+import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import digitalcard.digitalcard.Fragment.ExistingCardFragment;
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout;
+
 import digitalcard.digitalcard.Fragment.CategoryCardFragment;
-import digitalcard.digitalcard.PopUpPanel.PopUpPanelLayout;
+import digitalcard.digitalcard.Util.Utilities;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
     LinearLayout mainLayout;
-    PopUpPanelLayout popUpPanelLayout;
+    SlidingUpPanelLayout slidingUpPanelLayout;
     ImageButton btnAdd, btnMenu;
 
     ExistingCardFragment fAddCard;
@@ -33,9 +60,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        popUpPanelLayout = findViewById(R.id.popup_layout);
-        popUpPanelLayout.addPanelSlideListener(new PanelSlidingListener());
-        popUpPanelLayout.setFadeOnClickListener(new FadeOnClickListener());
+        slidingUpPanelLayout = findViewById(R.id.popup_layout);
+        slidingUpPanelLayout.addPanelSlideListener(new PanelSlidingListener());
+        slidingUpPanelLayout.setFadeOnClickListener(new FadeOnClickListener());
 
         fAddCard = new ExistingCardFragment();
         fcategoryCardFragment = new CategoryCardFragment();
@@ -78,6 +105,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
     }
 
+    private boolean isPermissionGranted(String permission) {
+        return ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED;
+    }
+
     @Override
     public void onClick(View view) {
         switch (view.getId()){
@@ -86,7 +117,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 ft = getSupportFragmentManager().beginTransaction();
                 ft.addToBackStack(null);
                 ft.replace(R.id.drag_view, fcategoryCardFragment, "AddNewCard").commit();
-                popUpPanelLayout.setPanelState(PopUpPanelLayout.PanelState.EXPANDED);
+                slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
                 break;
             case R.id.menu_button:
                 Toast.makeText(this, "Menu button", Toast.LENGTH_SHORT).show();
@@ -102,35 +133,53 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             this.finish();
             System.exit(0);
         } else if (fragment.getTag().equals("AddNewCard")) {
-            super.onBackPressed();
-            popUpPanelLayout.setPanelState(PopUpPanelLayout.PanelState.COLLAPSED);
+            slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
         } else if (fragment.getTag().equals("CardOverview")) {
-            popUpPanelLayout.setPanelState(PopUpPanelLayout.PanelState.COLLAPSED);
-        } else if (popUpPanelLayout.getPanelState() == PopUpPanelLayout.PanelState.EXPANDED) {
+            slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+        } else if (fragment.getTag().equals("DetailPromoFragment")) {
+            slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+        } else if (slidingUpPanelLayout.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
             if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
                 getSupportFragmentManager().popBackStack();
             }
             if (getSupportFragmentManager().getBackStackEntryCount() == 1) {
-                popUpPanelLayout.setPanelState(PopUpPanelLayout.PanelState.COLLAPSED);
+                slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
             }
         } else {
             super.onBackPressed();
         }
     }
 
-    public PopUpPanelLayout getSlidingPanel() {
-        return popUpPanelLayout;
+    private void validateAllPermissions() {
+        String[] permissions = Utilities.ALL_PERMISSIONS;
+
+        boolean allPermissionGranted = true;
+        for (String permission : permissions) {
+            if (ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_DENIED) {
+                allPermissionGranted = false;
+            }
+        }
+
+        if (!allPermissionGranted) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                requestPermissions(permissions, Utilities.VP_ALL);
+            }
+        }
     }
 
-    private class PanelSlidingListener implements PopUpPanelLayout.PanelSlideListener {
+    public SlidingUpPanelLayout getSlidingPanel() {
+        return slidingUpPanelLayout;
+    }
+
+    private class PanelSlidingListener implements SlidingUpPanelLayout.PanelSlideListener {
         @Override
         public void onPanelSlide(View panel, float slideOffset) {
             //Log.v(TAG, "onPanelSlide, offset: " + slideOffset);
         }
 
         @Override
-        public void onPanelStateChanged(View panel, PopUpPanelLayout.PanelState previousState, PopUpPanelLayout.PanelState newState) {
-            if (newState == PopUpPanelLayout.PanelState.COLLAPSED) {
+        public void onPanelStateChanged(View panel, SlidingUpPanelLayout.PanelState previousState, SlidingUpPanelLayout.PanelState newState) {
+            if (newState == SlidingUpPanelLayout.PanelState.COLLAPSED) {
                 FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
                 if (flag_fragment == OPEN_FRAGMENT_ADD_CARDS) {
                     ft.remove(getSupportFragmentManager().findFragmentByTag("AddNewCard")).commit();
@@ -147,7 +196,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private class FadeOnClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
-            popUpPanelLayout.setPanelState(PopUpPanelLayout.PanelState.COLLAPSED);
+            slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
         }
     }
 }

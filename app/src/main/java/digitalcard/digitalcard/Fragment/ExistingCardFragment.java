@@ -83,10 +83,14 @@ public class ExistingCardFragment extends Fragment implements View.OnClickListen
 
             case R.id.button_done:
                 Log.e("edittext", "card name : " + etCardName.getText() + ", barcode number : " + etBarcodeNumber.getText());
-                if (etCardName.getText().toString().equals(""))
+                if (etCardName.getText().toString().equals("")) {
                     Toast.makeText(getActivity(), "Card name must be filled", Toast.LENGTH_SHORT).show();
-                else if (etBarcodeNumber.getText().toString().equals(""))
+                    etCardName.requestFocus();
+                }
+                else if (etBarcodeNumber.getText().toString().equals("")) {
                     Toast.makeText(getActivity(), "Barcode number must be filled", Toast.LENGTH_SHORT).show();
+                    etBarcodeNumber.requestFocus();
+                }
                 else {
                     Toast.makeText(getActivity(), "You add a new card", Toast.LENGTH_SHORT).show();
 

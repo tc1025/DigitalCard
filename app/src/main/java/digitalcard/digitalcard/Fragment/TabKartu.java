@@ -24,7 +24,6 @@ import java.util.List;
 import digitalcard.digitalcard.Database.CardDB;
 import digitalcard.digitalcard.MainActivity;
 import digitalcard.digitalcard.Model.CardList;
-import digitalcard.digitalcard.PopUpPanel.PopUpPanelLayout;
 import digitalcard.digitalcard.R;
 import digitalcard.digitalcard.Util.Utilities;
 
@@ -143,7 +142,7 @@ public class TabKartu extends Fragment {
                     ft.replace(R.id.drag_view, cardOverViewFragment, "CardOverview").commit();
 
                     if (getContext() instanceof MainActivity) {
-                        ((MainActivity) getContext()).getSlidingPanel().setPanelState(PopUpPanelLayout.PanelState.EXPANDED);
+                        ((MainActivity) getContext()).getSlidingPanel().setPanelState(com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelState.EXPANDED);
                     }
 //                    CardOverviewFragments cardOverviewFragments = new CardOverviewFragments();
 //

@@ -1,12 +1,21 @@
 package digitalcard.digitalcard.Fragment;
 
+import android.Manifest;
+import android.content.Context;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +25,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;
@@ -51,6 +63,9 @@ public class CardOverViewFragment extends Fragment implements View.OnClickListen
     String title, cardName, barcodeNumber;
     int cardID;
 
+    private GoogleApiClient mGoogleApiClient;
+    Location location;
+
     private List<CardList> cardLists = new ArrayList<>();
 
     @Nullable
@@ -59,6 +74,10 @@ public class CardOverViewFragment extends Fragment implements View.OnClickListen
         rootView = inflater.inflate(R.layout.fragment_card_overview, container, false);
         toolbar = rootView.findViewById(R.id.toolbar);
         popupDialog = new PopupBarcodeDialog(getActivity());
+
+        if (isPermissionGranted(Manifest.permission.ACCESS_FINE_LOCATION)) {
+            initGoogleServices();
+        }
 
         tvTitle = toolbar.getTxtTitle();
         btnLocation = toolbar.getBtnLocation();
@@ -83,20 +102,30 @@ public class CardOverViewFragment extends Fragment implements View.OnClickListen
 
         convertNumberToBarcode(barcodeNumber, false);
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (isPermissionGranted(Manifest.permission.ACCESS_FINE_LOCATION)) {
+                initGoogleServices();
+            }
+        } else {
+            initGoogleServices();
+        }
+
         return rootView;
     }
 
     @Override
     public void onClick(View v) {
+        FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
         switch(v.getId()){
             case R.id.location_button:
-                LocationFragment locationFragment = new LocationFragment();
-                Bundle bundle = new Bundle();
-                locationFragment.setArguments(bundle);
-
-                FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-                ft.addToBackStack(null);
-                ft.replace(R.id.drag_view, locationFragment, "LocationCard").commit();
+                    LocationFragment locationFragment = new LocationFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putDouble(Utilities.BUNNDLE_LOCATION_LATITUDE, location != null ? location.getLatitude() : 0.0);
+                    bundle.putDouble(Utilities.BUNNDLE_LOCATION_LONGITUDE, location != null ? location.getLongitude() : 0.0);
+                    bundle.putString(Utilities.BUNNDLE_CARD_CATEGORY, cardName);
+                    locationFragment.setArguments(bundle);
+                    ft.addToBackStack(null);
+                    ft.replace(R.id.drag_view, locationFragment, "LocationCard").commit();
                 break;
 
             case R.id.barcode_image:
@@ -137,6 +166,62 @@ public class CardOverViewFragment extends Fragment implements View.OnClickListen
                 break;
         }
     }
+
+    private boolean isPermissionGranted(String permission) {
+        return ContextCompat.checkSelfPermission(Objects.requireNonNull(getContext()), permission) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    private void initGoogleServices() {
+        if (mGoogleApiClient == null) {
+            mGoogleApiClient = new GoogleApiClient.Builder(
+                    getActivity(),
+                    connectionCallbacks,
+                    connectionFailedListener)
+                    .addApi(LocationServices.API)
+                    .build();
+            if (!mGoogleApiClient.isConnected()) {
+                mGoogleApiClient.connect();
+            }
+        }
+    }
+
+    private GoogleApiClient.ConnectionCallbacks connectionCallbacks = new GoogleApiClient.ConnectionCallbacks() {
+        @Override
+        public void onConnectionSuspended(int arg0) {
+            //
+        }
+
+        @Override
+        public void onConnected(Bundle arg0) {
+            try {
+                Location userLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+                if (userLocation != null) {
+                    location = userLocation;
+                } else {
+                    LocationManager locationService =
+                            (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+                    Location locationGPS = locationService.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                    if (locationGPS != null) {
+                        location = locationGPS;
+                    } else {
+                        Criteria criteria = new Criteria();
+                        criteria.setAccuracy(Criteria.ACCURACY_COARSE);
+                        String provider = locationService.getBestProvider(criteria, true);
+                        location = locationService.getLastKnownLocation(provider);
+                    }
+                }
+            } catch (SecurityException e) {
+                e.printStackTrace();
+            }
+        }
+    };
+
+    private GoogleApiClient.OnConnectionFailedListener connectionFailedListener = new GoogleApiClient.OnConnectionFailedListener() {
+        @Override
+        public void onConnectionFailed(ConnectionResult arg0) {
+            //
+        }
+    };
 
     public void convertNumberToBarcode(String barcodeNumber, Boolean dialogBarcode) {
         Bitmap bitmap = null;

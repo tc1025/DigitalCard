@@ -13,8 +13,8 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.google.zxing.Result;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
-import digitalcard.digitalcard.PopUpPanel.PopUpPanelLayout;
 import digitalcard.digitalcard.R;
 import digitalcard.digitalcard.Util.CustomAppCompatActivity;
 
@@ -26,7 +26,7 @@ public class CameraActivity extends CustomAppCompatActivity implements digitalca
 
     public static int               OPEN_FRAGMENT_SMARTWARRANTY   = 0;
 
-    private PopUpPanelLayout mSlidingLayout;
+    private SlidingUpPanelLayout mSlidingLayout;
     private boolean                 mSlidingOpen            = false;
     private int                     flag_fragment           = -1;
 

@@ -70,7 +70,6 @@ public class RegistrationCardFragment extends Fragment implements View.OnClickLi
 
         tvTitle.setText(title);
         regIdNumber.setInputType(InputType.TYPE_CLASS_NUMBER);
-        regDOB.setText(dateFormat);
 
         regDOB.setOnClickListener(this);
         regGender.setOnClickListener(this);
@@ -88,7 +87,7 @@ public class RegistrationCardFragment extends Fragment implements View.OnClickLi
 
         switch (v.getId()){
             case R.id.register_DOB:
-                new DatePickerDialog(getContext(), date, 1990, 1, 1).show();
+                new DatePickerDialog(getContext(), R.style.DatePickerDialogTheme, date, 1990, 1, 1).show();
                 break;
 
             case R.id.back_button:
@@ -105,8 +104,10 @@ public class RegistrationCardFragment extends Fragment implements View.OnClickLi
                     Toast.makeText(getActivity(), "Name field must be filled", Toast.LENGTH_SHORT).show();
                 } else if (regIdNumber.getText().toString().equals("")) {
                     Toast.makeText(getActivity(), "Id number field must be filled", Toast.LENGTH_SHORT).show();
-                } else if (rbGender.getText().toString().equals("")) {
-                    Toast.makeText(getActivity(), "Gender field must be filled", Toast.LENGTH_SHORT).show();
+                } else if (regIdNumber.getText().toString().length() != 16) {
+                    Toast.makeText(getActivity(), "Id number length must 16 digits", Toast.LENGTH_SHORT).show();
+                } else if (genderId == -1) {
+                    Toast.makeText(getActivity(), "Gender field must be choose", Toast.LENGTH_SHORT).show();
                 } else if (regAddress.getText().toString().equals("")) {
                     Toast.makeText(getActivity(), "Address field must be filled", Toast.LENGTH_SHORT).show();
                 } else if (regDOB.getText().toString().equals("")) {

@@ -83,7 +83,7 @@ public class CardListAdapter extends RecyclerView.Adapter<CardListAdapter.ViewHo
                             bundle.putString(Utilities.BUNNDLE_CARD_CATEGORY, data.cardCategory);
                             registrationCardFragment.setArguments(bundle);
 
-                            ((MainActivity)context).getSupportFragmentManager().beginTransaction()
+                            ((MainActivity) context).getSupportFragmentManager().beginTransaction()
                                     .replace(R.id.drag_view, registrationCardFragment, "AddCard")
                                     .addToBackStack(null)
                                     .commit();

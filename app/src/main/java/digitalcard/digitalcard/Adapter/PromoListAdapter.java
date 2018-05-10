@@ -1,7 +1,9 @@
 package digitalcard.digitalcard.Adapter;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,9 +15,14 @@ import android.widget.Toast;
 
 import java.util.List;
 
+import digitalcard.digitalcard.Fragment.DetailPromoFragment;
+import digitalcard.digitalcard.MainActivity;
 import digitalcard.digitalcard.Model.CardList;
 import digitalcard.digitalcard.Model.PromoList;
 import digitalcard.digitalcard.R;
+import digitalcard.digitalcard.Util.Utilities;
+
+import static java.security.AccessController.getContext;
 
 public class PromoListAdapter extends RecyclerView.Adapter<PromoListAdapter.ViewHolder> {
     Context context;
@@ -53,7 +60,21 @@ public class PromoListAdapter extends RecyclerView.Adapter<PromoListAdapter.View
         holder.llPromoCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, "You choose " + data.getMerchant() + " promo", Toast.LENGTH_SHORT).show();
+                DetailPromoFragment detailPromoFragment = new DetailPromoFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString(Utilities.BUNNDLE_PROMO_MERCHANT, data.getMerchant());
+                bundle.putString(Utilities.BUNNDLE_PROMO_TITLE, data.getTitle());
+                bundle.putString(Utilities.BUNNDLE_PROMO_DESCRIPTION, data.getDescription());
+                detailPromoFragment.setArguments(bundle);
+
+                ((MainActivity) context).getSupportFragmentManager().beginTransaction()
+                        .addToBackStack(null)
+                        .replace(R.id.drag_view, detailPromoFragment, "DetailPromoFragment")
+                        .commit();
+
+                if (context instanceof MainActivity) {
+                    ((MainActivity) context).getSlidingPanel().setPanelState(com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelState.EXPANDED);
+                }
             }
         });
     }
