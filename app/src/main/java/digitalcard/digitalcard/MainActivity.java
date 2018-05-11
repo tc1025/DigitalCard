@@ -10,6 +10,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -17,9 +18,11 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.menu.MenuBuilder;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -29,6 +32,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -46,7 +50,8 @@ import digitalcard.digitalcard.Util.Utilities;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
     LinearLayout mainLayout;
     SlidingUpPanelLayout slidingUpPanelLayout;
-    ImageButton btnAdd, btnMenu;
+    ImageButton btnMenu;
+    FloatingActionButton btnAdd;
 
     ExistingCardFragment fAddCard;
     CategoryCardFragment fcategoryCardFragment;
@@ -60,6 +65,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
         slidingUpPanelLayout = findViewById(R.id.popup_layout);
         slidingUpPanelLayout.addPanelSlideListener(new PanelSlidingListener());
         slidingUpPanelLayout.setFadeOnClickListener(new FadeOnClickListener());
@@ -68,10 +76,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         fcategoryCardFragment = new CategoryCardFragment();
 
         btnAdd = findViewById(R.id.add_button);
-        btnMenu = findViewById(R.id.menu_button);
+//        btnMenu = findViewById(R.id.menu_button);
 
         btnAdd.setOnClickListener(this);
-        btnMenu.setOnClickListener(this);
+//        btnMenu.setOnClickListener(this);
 
         final TabLayout tabLayout = findViewById(R.id.tab_layout);
         tabLayout.addTab(tabLayout.newTab().setText(R.string.card_text));
@@ -105,6 +113,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.button_menu, menu);
+
+        if(menu instanceof MenuBuilder){
+
+            MenuBuilder menuBuilder = (MenuBuilder) menu;
+            menuBuilder.setOptionalIconsVisible(true);
+        }
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.item_account:
+                break;
+            case R.id.item_settings:
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
     private boolean isPermissionGranted(String permission) {
         return ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED;
     }
@@ -119,9 +152,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 ft.replace(R.id.drag_view, fcategoryCardFragment, "AddNewCard").commit();
                 slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
                 break;
-            case R.id.menu_button:
-                Toast.makeText(this, "Menu button", Toast.LENGTH_SHORT).show();
-                break;
+//            case R.id.menu_button:
+//                Toast.makeText(this, "Menu button", Toast.LENGTH_SHORT).show();
+//                break;
         }
     }
 
@@ -149,6 +182,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             super.onBackPressed();
         }
     }
+
+//    private void showMenu(View view){
+//        PopupMenu popupMenu = new PopupMenu(this, view);
+//        popupMenu.setOnMenuItemClickListener();
+//    }
 
     private void validateAllPermissions() {
         String[] permissions = Utilities.ALL_PERMISSIONS;

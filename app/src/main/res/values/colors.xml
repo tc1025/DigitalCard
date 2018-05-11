@@ -11,6 +11,6 @@
     <color name="grey_background">#EEEEEE</color>
     <color name="grey_button">#616161</color>
 
-    <color name="start1">#dce35b</color>
-    <color name="start2">#45b649</color>
+    <color name="start1">#45b649</color>
+    <color name="start2">#dce35b</color>
 </resources>
