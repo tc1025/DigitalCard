@@ -16,7 +16,6 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import digitalcard.digitalcard.Fragment.AddCardFragment;
 import digitalcard.digitalcard.Fragment.CategoryCardFragment;
-import digitalcard.digitalcard.PopUpPanel.PopUpPanelLayout;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
     LinearLayout mainLayout;

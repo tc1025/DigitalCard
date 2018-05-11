@@ -23,7 +23,6 @@ import java.util.List;
 import digitalcard.digitalcard.Database.CardDB;
 import digitalcard.digitalcard.MainActivity;
 import digitalcard.digitalcard.Model.CardList;
-import digitalcard.digitalcard.PopUpPanel.PopUpPanelLayout;
 import digitalcard.digitalcard.R;
 import digitalcard.digitalcard.Util.Utilities;
 
