@@ -26,4 +26,8 @@
         <item name="android:windowExitAnimation">@anim/popup_above_out</item>
     </style>
 
+    <style name="DatePickerDialogTheme" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorAccent">@color/start2</item>
+    </style>
+
 </resources>

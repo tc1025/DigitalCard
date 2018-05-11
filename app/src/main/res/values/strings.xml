@@ -1,10 +1,9 @@
 <resources>
-    <string name="app_name">Digital Card</string>
+    <string name="app_name">DigiCard</string>
 
     <string name="imageButton_plus_description">add new card</string>
     <string name="imageButton_menu_description">menu</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="card_text">Card</string>
     <string name="promo_text">Promo</string>
@@ -13,5 +12,9 @@
 
     <string name="done_text">Done</string>
     <string name="cancel_text">Cancel</string>
+
+    <!--dialog-->
+    <string name="dialog_header_location_null">Location not Found</string>
+    <string name="dialog_content_location_null">Please check if internet connection or GPS services is active.</string>
 
 </resources>

@@ -1,5 +1,6 @@
 package digitalcard.digitalcard.Fragment;
 
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -8,11 +9,17 @@ import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
 import java.util.Random;
 
 import digitalcard.digitalcard.Module.DoubleButton;
@@ -31,9 +38,14 @@ public class RegistrationCardFragment extends Fragment implements View.OnClickLi
 
     TextView tvTitle;
     LinearLayout btnBack, btnCancel, btnDone;
-    EditText regName, regIdNumber, regGender, regAddress, regDOB;
+    EditText regName, regIdNumber, regAddress, regDOB;
+    RadioGroup regGender;
+    RadioButton rbGender;
 
     String title;
+
+    Calendar calendar = Calendar.getInstance();
+    String dateFormat = "dd/MM/yyyy";
 
     @Nullable
     @Override
@@ -45,7 +57,7 @@ public class RegistrationCardFragment extends Fragment implements View.OnClickLi
 
         regName = rootView.findViewById(R.id.register_name);
         regIdNumber = rootView.findViewById(R.id.register_id_number);
-        regGender = rootView.findViewById(R.id.register_gender);
+        regGender = rootView.findViewById(R.id.radio_gender);
         regAddress = rootView.findViewById(R.id.register_address);
         regDOB = rootView.findViewById(R.id.register_DOB);
 
@@ -59,6 +71,8 @@ public class RegistrationCardFragment extends Fragment implements View.OnClickLi
         tvTitle.setText(title);
         regIdNumber.setInputType(InputType.TYPE_CLASS_NUMBER);
 
+        regDOB.setOnClickListener(this);
+        regGender.setOnClickListener(this);
         btnBack.setOnClickListener(this);
         btnCancel.setOnClickListener(this);
         btnDone.setOnClickListener(this);
@@ -68,7 +82,14 @@ public class RegistrationCardFragment extends Fragment implements View.OnClickLi
 
     @Override
     public void onClick(View v) {
+        int genderId = regGender.getCheckedRadioButtonId();
+        rbGender = rootView.findViewById(genderId);
+
         switch (v.getId()){
+            case R.id.register_DOB:
+                new DatePickerDialog(getContext(), R.style.DatePickerDialogTheme, date, 1990, 1, 1).show();
+                break;
+
             case R.id.back_button:
                 getActivity().onBackPressed();
                 break;
@@ -83,8 +104,10 @@ public class RegistrationCardFragment extends Fragment implements View.OnClickLi
                     Toast.makeText(getActivity(), "Name field must be filled", Toast.LENGTH_SHORT).show();
                 } else if (regIdNumber.getText().toString().equals("")) {
                     Toast.makeText(getActivity(), "Id number field must be filled", Toast.LENGTH_SHORT).show();
-                } else if (regGender.getText().toString().equals("")) {
-                    Toast.makeText(getActivity(), "Gender field must be filled", Toast.LENGTH_SHORT).show();
+                } else if (regIdNumber.getText().toString().length() != 16) {
+                    Toast.makeText(getActivity(), "Id number length must 16 digits", Toast.LENGTH_SHORT).show();
+                } else if (genderId == -1) {
+                    Toast.makeText(getActivity(), "Gender field must be choose", Toast.LENGTH_SHORT).show();
                 } else if (regAddress.getText().toString().equals("")) {
                     Toast.makeText(getActivity(), "Address field must be filled", Toast.LENGTH_SHORT).show();
                 } else if (regDOB.getText().toString().equals("")) {
@@ -116,5 +139,20 @@ public class RegistrationCardFragment extends Fragment implements View.OnClickLi
                 }
                 break;
         }
+    }
+
+    DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+        @Override
+        public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+            calendar.set(Calendar.YEAR, year);
+            calendar.set(Calendar.MONTH, month);
+            calendar.set(Calendar.DAY_OF_YEAR, dayOfMonth);
+            updateDate();
+        }
+    };
+
+    private void updateDate() {
+        SimpleDateFormat sdf = new SimpleDateFormat(dateFormat, Locale.US);
+        regDOB.setText(sdf.format(calendar.getTime()));
     }
 }

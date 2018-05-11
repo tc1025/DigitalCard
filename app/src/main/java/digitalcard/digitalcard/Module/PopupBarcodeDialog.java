@@ -20,7 +20,7 @@ import java.util.Objects;
 
 import digitalcard.digitalcard.R;
 
-public class PopupDialog extends Dialog{
+public class PopupBarcodeDialog extends Dialog{
     private Context context;
 
     private ImageView imgBarcode;
@@ -29,7 +29,7 @@ public class PopupDialog extends Dialog{
 
     private int brightness;
 
-    public PopupDialog(@NonNull Context context) {
+    public PopupBarcodeDialog(@NonNull Context context) {
         super(context);
         this.context = context;
     }

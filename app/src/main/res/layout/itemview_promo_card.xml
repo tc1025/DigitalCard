@@ -2,25 +2,27 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="200dp"
+    android:layout_marginTop="6dp"
+    android:layout_marginBottom="6dp"
+    android:layout_marginStart="16dp"
+    android:layout_marginEnd="16dp"
     android:layout_gravity="center"
     android:orientation="vertical"
-    android:layout_marginStart="24dp"
-    android:layout_marginEnd="24dp"
     android:background="@drawable/dialog_background"
-    android:id="@+id/dialog_activity">
+    android:id="@+id/promo_card">
     <ImageView
-        android:id="@+id/barcode_image_dialog"
+        android:id="@+id/promo_image"
+        android:layout_weight="1"
         android:layout_width="match_parent"
-        android:layout_height="150dp" />
+        android:layout_height="0dp" />
 
     <TextView
-        android:id="@+id/barcode_number_dialog"
+        android:id="@+id/promo_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:text="1234 1234 1234 1234"
-        android:textSize="24sp"
+        android:textSize="14sp"
         android:layout_marginTop="8dp"
-        android:layout_marginBottom="24dp"/>
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="16dp"/>
 </LinearLayout>

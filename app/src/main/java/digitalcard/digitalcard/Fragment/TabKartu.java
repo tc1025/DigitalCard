@@ -3,6 +3,7 @@ package digitalcard.digitalcard.Fragment;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -34,6 +35,24 @@ public class TabKartu extends Fragment {
     FragmentTransaction ft;
 
     RecyclerView rvCard;
+    ListCardAdapter adapter;
+
+    int cardCount = 0;
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        adapter.notifyDataSetChanged();
+
+        cardListArrayList.clear();
+        loadCard();
+        fillCardList();
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -56,13 +75,14 @@ public class TabKartu extends Fragment {
         if (!cardLists.isEmpty()) {
             for (CardList data : cardLists) {
 //                int cardId = data.getId();
-                cardListArrayList.add(new CardList(data.getCardName(), data.getCardType(), data.getBarcodeNumber()));
+                cardListArrayList.add(new CardList(data.getId(), data.getCardName(), data.getCardType(), data.getBarcodeNumber()));
             }
         }
+        cardCount = cardListArrayList.size();
     }
 
     private void fillCardList(){
-        ListCardAdapter adapter = new ListCardAdapter(getContext(), cardListArrayList);
+        adapter = new ListCardAdapter(getContext(), cardListArrayList);
         rvCard.setAdapter(adapter);
         Log.e("asd", cardListArrayList.size() + " size");
     }
@@ -111,6 +131,7 @@ public class TabKartu extends Fragment {
 
                     CardOverViewFragment cardOverViewFragment = new CardOverViewFragment();
                     Bundle bundle = new Bundle();
+                    bundle.putInt(Utilities.BUNNDLE_CARD_ID, position);
                     bundle.putString(Utilities.BUNNDLE_CARD_NAME, data.cardName);
                     bundle.putString(Utilities.BUNNDLE_CARD_CATEGORY, data.cardType);
                     bundle.putString(Utilities.BUNNDLE_BARCODE_NUMBER, data.barcodeNumber);

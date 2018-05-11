@@ -28,7 +28,7 @@ import digitalcard.digitalcard.Util.Utilities;
  * Created by viks on 16/03/2018.
  */
 
-public class AddCardFragment extends Fragment implements View.OnClickListener{
+public class ExistingCardFragment extends Fragment implements View.OnClickListener{
     View rootView;
     Toolbar toolbar;
     DoubleButton btnAction;
@@ -83,10 +83,14 @@ public class AddCardFragment extends Fragment implements View.OnClickListener{
 
             case R.id.button_done:
                 Log.e("edittext", "card name : " + etCardName.getText() + ", barcode number : " + etBarcodeNumber.getText());
-                if (etCardName.getText().toString().equals(""))
+                if (etCardName.getText().toString().equals("")) {
                     Toast.makeText(getActivity(), "Card name must be filled", Toast.LENGTH_SHORT).show();
-                else if (etBarcodeNumber.getText().toString().equals(""))
+                    etCardName.requestFocus();
+                }
+                else if (etBarcodeNumber.getText().toString().equals("")) {
                     Toast.makeText(getActivity(), "Barcode number must be filled", Toast.LENGTH_SHORT).show();
+                    etBarcodeNumber.requestFocus();
+                }
                 else {
                     Toast.makeText(getActivity(), "You add a new card", Toast.LENGTH_SHORT).show();
 
