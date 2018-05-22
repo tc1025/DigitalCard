@@ -38,11 +38,10 @@
 
             <TextView
                 android:id="@+id/card_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:gravity="center"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="8dp"
-                android:layout_marginTop="16dp"
                 android:text="test"
                 android:textSize="14sp" />
 
@@ -101,8 +100,9 @@
                         android:background="#E3E3E3" />
 
                     <TextView
+                        android:id="@+id/notes"
                         android:layout_width="match_parent"
-                        android:layout_height="48dp"
+                        android:layout_height="wrap_content"
                         android:layout_marginBottom="8dp"
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="8dp"

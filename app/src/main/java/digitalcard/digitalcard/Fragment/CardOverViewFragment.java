@@ -2,6 +2,7 @@ package digitalcard.digitalcard.Fragment;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.location.Criteria;
@@ -19,15 +20,20 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.Places;
+import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;
@@ -42,6 +48,7 @@ import java.util.Objects;
 
 import digitalcard.digitalcard.Database.CardDB;
 import digitalcard.digitalcard.Model.CardList;
+import digitalcard.digitalcard.Module.EditDialog;
 import digitalcard.digitalcard.Module.PopupBarcodeDialog;
 import digitalcard.digitalcard.Module.Toolbar;
 import digitalcard.digitalcard.R;
@@ -52,16 +59,18 @@ import static android.graphics.Color.WHITE;
 
 public class CardOverViewFragment extends Fragment implements View.OnClickListener{
     View rootView;
+    CardDB cardDB;
     Toolbar toolbar;
     PopupBarcodeDialog popupDialog;
+    EditDialog editDialog;
 
-    TextView tvTitle, tvCardName, tvBarcodeNumber;
+    TextView tvTitle, tvCardName, tvBarcodeNumber, tvNotes;
     ImageButton btnLocation, btnDelete;
-    ImageView imgBarcode, dialogImgBarcode;
+    ImageView imgBarcode, dialogImgBarcode, imgLogo;
     LinearLayout dialogActivity;
 
     String title, cardName, barcodeNumber;
-    int cardID;
+    int cardID, logo, backgroundColor;
 
     private GoogleApiClient mGoogleApiClient;
     Location location;
@@ -72,8 +81,11 @@ public class CardOverViewFragment extends Fragment implements View.OnClickListen
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_card_overview, container, false);
+        cardDB = new CardDB(getActivity());
+
         toolbar = rootView.findViewById(R.id.toolbar);
         popupDialog = new PopupBarcodeDialog(getActivity());
+        editDialog = new EditDialog(getActivity());
 
         if (isPermissionGranted(Manifest.permission.ACCESS_FINE_LOCATION)) {
             initGoogleServices();
@@ -85,20 +97,28 @@ public class CardOverViewFragment extends Fragment implements View.OnClickListen
         tvBarcodeNumber = rootView.findViewById(R.id.barcode_number);
         imgBarcode = rootView.findViewById(R.id.barcode_image);
         btnDelete = rootView.findViewById(R.id.delete_card);
+        imgLogo = rootView.findViewById(R.id.merchant_logo);
+        tvNotes = rootView.findViewById(R.id.notes);
 
         assert getArguments() != null;
-        cardID = getArguments().getInt(Utilities.BUNNDLE_CARD_ID);
-        title = getArguments().getString(Utilities.BUNNDLE_CARD_CATEGORY);
-        cardName = getArguments().getString(Utilities.BUNNDLE_CARD_NAME);
-        barcodeNumber = getArguments().getString(Utilities.BUNNDLE_BARCODE_NUMBER);
+        cardID = getArguments().getInt(Utilities.BUNDLE_CARD_ID);
+        title = getArguments().getString(Utilities.BUNDLE_CARD_CATEGORY);
+        cardName = getArguments().getString(Utilities.BUNDLE_CARD_NAME);
+        barcodeNumber = getArguments().getString(Utilities.BUNDLE_BARCODE_NUMBER);
+        logo = getArguments().getInt(Utilities.BUNDLE_CARD_LOGO);
+        backgroundColor = getArguments().getInt(Utilities.BUNDLE_CARD_BACKGROUND);
 
         tvTitle.setText(title);
         tvCardName.setText(cardName);
         tvBarcodeNumber.setText(barcodeNumber);
+        imgLogo.setImageResource(logo);
+        imgLogo.setBackgroundColor(backgroundColor);
 
         btnLocation.setOnClickListener(this);
         imgBarcode.setOnClickListener(this);
         btnDelete.setOnClickListener(this);
+        tvCardName.setOnClickListener(this);
+        tvNotes.setOnClickListener(this);
 
         convertNumberToBarcode(barcodeNumber, false);
 
@@ -116,16 +136,36 @@ public class CardOverViewFragment extends Fragment implements View.OnClickListen
     @Override
     public void onClick(View v) {
         FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-        switch(v.getId()){
+        switch (v.getId()) {
+            case R.id.card_name:
+                popUpEdit("cardName");
+                break;
+
+            case R.id.notes:
+                popUpEdit("cardNotes");
+                break;
+
             case R.id.location_button:
                     LocationFragment locationFragment = new LocationFragment();
                     Bundle bundle = new Bundle();
-                    bundle.putDouble(Utilities.BUNNDLE_LOCATION_LATITUDE, location != null ? location.getLatitude() : 0.0);
-                    bundle.putDouble(Utilities.BUNNDLE_LOCATION_LONGITUDE, location != null ? location.getLongitude() : 0.0);
-                    bundle.putString(Utilities.BUNNDLE_CARD_CATEGORY, cardName);
+                    bundle.putDouble(Utilities.BUNDLE_LOCATION_LATITUDE, location != null ? location.getLatitude() : 0.0);
+                    bundle.putDouble(Utilities.BUNDLE_LOCATION_LONGITUDE, location != null ? location.getLongitude() : 0.0);
+                    bundle.putString(Utilities.BUNDLE_CARD_CATEGORY, cardName);
                     locationFragment.setArguments(bundle);
                     ft.addToBackStack(null);
                     ft.replace(R.id.drag_view, locationFragment, "LocationCard").commit();
+
+//                try {
+//                    Intent intent =
+//                            new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN)
+//                                    .build(getActivity());
+//                    startActivityForResult(intent, 1);
+//                } catch (GooglePlayServicesRepairableException e) {
+//                    // TODO: Handle the error.
+//                } catch (GooglePlayServicesNotAvailableException e) {
+//                    // TODO: Handle the error.
+//                }
+
                 break;
 
             case R.id.barcode_image:
@@ -147,11 +187,10 @@ public class CardOverViewFragment extends Fragment implements View.OnClickListen
                 break;
 
             case R.id.delete_card:
-                CardDB cardDB = new CardDB(getActivity());
                 List<CardList> tempCardLists = cardDB.getAllCardList();
                 if (!tempCardLists.isEmpty())
                     for (CardList data : tempCardLists) {
-                        cardLists.add(new CardList(data.getId(), data.getCardType(), data.getCardName(), data.getBarcodeNumber()));
+                        cardLists.add(new CardList(data.getId(), data.getCardType(), data.getCardName(), data.getBarcodeNumber(), data.getCardIcon(), data.getCardBackground()));
                     }
                 CardList deleteTarget = cardLists.get(cardID);
                 cardDB.deleteCard(deleteTarget);
@@ -167,6 +206,75 @@ public class CardOverViewFragment extends Fragment implements View.OnClickListen
         }
     }
 
+    public void popUpEdit (final String editSection) {
+        editDialog.show();
+        if (editDialog.isShowing()) {
+            TextView tvTitle = editDialog.getTvTitle();
+            final EditText etEdit = editDialog.getEtEdit();
+            Button btnDone = editDialog.getBtnDone();
+            Button btnCancel = editDialog.getBtnCancel();
+
+            switch (editSection) {
+                case "cardName":
+                    tvTitle.setText("Input new card name");
+                    break;
+
+                case "cardNotes":
+                    tvTitle.setText("Input notes here");
+                    break;
+            }
+
+            btnCancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    editDialog.dismiss();
+                }
+            });
+
+            btnDone.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String getEdited = etEdit.getText().toString();
+                    CardList cardList = new CardList();
+                    cardList.cardType = title;
+                    cardList.barcodeNumber = barcodeNumber;
+                    cardList.cardIcon = logo;
+                    cardList.cardBackground = backgroundColor;
+
+                    switch (editSection) {
+                        case "cardName":
+                            cardDB.updateCard(new CardList(getEdited, cardList.cardType, cardList.barcodeNumber, cardList.cardIcon, cardList.cardBackground));
+                            tvCardName.setText(getEdited);
+                            break;
+                        case "cardNotes":
+                            tvNotes.setText(getEdited);
+                            break;
+                    }
+
+                    editDialog.dismiss();
+                }
+            });
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 1) {
+            if (resultCode == 1) {
+                Place place = PlaceAutocomplete.getPlace(getActivity(), data);
+                Log.i("asd", "Place: " + place.getName());
+            } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
+                Status status = PlaceAutocomplete.getStatus(getActivity(), data);
+                // TODO: Handle the error.
+                Log.i("asdf", status.getStatusMessage());
+
+            } else if (resultCode == 2) {
+                // The user canceled the operation.
+            }
+        }
+
+    }
+
     private boolean isPermissionGranted(String permission) {
         return ContextCompat.checkSelfPermission(Objects.requireNonNull(getContext()), permission) == PackageManager.PERMISSION_GRANTED;
     }
@@ -178,6 +286,8 @@ public class CardOverViewFragment extends Fragment implements View.OnClickListen
                     connectionCallbacks,
                     connectionFailedListener)
                     .addApi(LocationServices.API)
+                    .addApi(Places.GEO_DATA_API)
+                    .addApi(Places.PLACE_DETECTION_API)
                     .build();
             if (!mGoogleApiClient.isConnected()) {
                 mGoogleApiClient.connect();

@@ -1,7 +1,6 @@
 package digitalcard.digitalcard.Fragment;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -35,6 +34,7 @@ public class TabKartu extends Fragment {
     FragmentTransaction ft;
 
     RecyclerView rvCard;
+    LinearLayout llNoCard;
     ListCardAdapter adapter;
 
     int cardCount = 0;
@@ -59,6 +59,8 @@ public class TabKartu extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_tab_kartu, container, false);
 
         rvCard = rootView.findViewById(R.id.rv_card);
+        llNoCard = rootView.findViewById(R.id.ll_no_card);
+
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getContext(), 2);
         rvCard.setLayoutManager(mLayoutManager);
         rvCard.setItemAnimator(new DefaultItemAnimator());
@@ -75,7 +77,7 @@ public class TabKartu extends Fragment {
         if (!cardLists.isEmpty()) {
             for (CardList data : cardLists) {
 //                int cardId = data.getId();
-                cardListArrayList.add(new CardList(data.getId(), data.getCardName(), data.getCardType(), data.getBarcodeNumber()));
+                cardListArrayList.add(new CardList(data.getId(), data.getCardType(), data.getCardName(), data.getBarcodeNumber(), data.getCardIcon(), data.getCardBackground()));
             }
         }
         cardCount = cardListArrayList.size();
@@ -104,7 +106,7 @@ public class TabKartu extends Fragment {
             }
         }
 
-        public ListCardAdapter(Context mContext, List<CardList> cardLists) {
+        ListCardAdapter(Context mContext, List<CardList> cardLists) {
             this.mContext = mContext;
             this.cardLists = cardLists;
         }
@@ -121,20 +123,30 @@ public class TabKartu extends Fragment {
 
             holder.cardName.setText(data.getCardName());
             holder.cardName.setSingleLine(true);
+            holder.cardIcon.setImageResource(data.cardIcon);
+            holder.cardIcon.setBackgroundColor(data.cardBackground);
+            holder.card.setBackgroundColor(data.cardBackground);
+
+            switch (data.cardType) {
+                case "Starbucks":
+                    holder.cardName.setTextColor(0xFFFFFFFF);
+                    break;
+                case "Lottemart":
+                    holder.cardName.setTextColor(0xFFFFFFFF);
+                    break;
+            }
 
             holder.card.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Toast.makeText(mContext, "Card name : " + data.cardName
-                            + ", card type : " + data.cardType
-                            + ", card barcode : " + data.barcodeNumber, Toast.LENGTH_SHORT).show();
-
                     CardOverViewFragment cardOverViewFragment = new CardOverViewFragment();
                     Bundle bundle = new Bundle();
-                    bundle.putInt(Utilities.BUNNDLE_CARD_ID, position);
-                    bundle.putString(Utilities.BUNNDLE_CARD_NAME, data.cardName);
-                    bundle.putString(Utilities.BUNNDLE_CARD_CATEGORY, data.cardType);
-                    bundle.putString(Utilities.BUNNDLE_BARCODE_NUMBER, data.barcodeNumber);
+                    bundle.putInt(Utilities.BUNDLE_CARD_ID, position);
+                    bundle.putString(Utilities.BUNDLE_CARD_NAME, data.cardName);
+                    bundle.putString(Utilities.BUNDLE_CARD_CATEGORY, data.cardType);
+                    bundle.putString(Utilities.BUNDLE_BARCODE_NUMBER, data.barcodeNumber);
+                    bundle.putInt(Utilities.BUNDLE_CARD_LOGO, data.cardIcon);
+                    bundle.putInt(Utilities.BUNDLE_CARD_BACKGROUND, data.cardBackground);
                     cardOverViewFragment.setArguments(bundle);
 
                     ft = getActivity().getSupportFragmentManager().beginTransaction();
@@ -144,27 +156,6 @@ public class TabKartu extends Fragment {
                     if (getContext() instanceof MainActivity) {
                         ((MainActivity) getContext()).getSlidingPanel().setPanelState(com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelState.EXPANDED);
                     }
-//                    CardOverviewFragments cardOverviewFragments = new CardOverviewFragments();
-//
-//                    Bundle bundle = new Bundle();
-//                    bundle.putString("textNama" , data.getName());
-//                    bundle.putInt("background" , data.getBackground());
-//                    bundle.putInt("logo" , data.getThumbnail());
-//                    bundle.putInt("id" , position);
-//                    bundle.putString("textNamaOwner" , data.getOwnername());
-//                    bundle.putString("serialNumber" , data.getSerialNumber());
-//                    bundle.putString("note" , data.getNote());
-//                    bundle.putString("depan" , data.getFotoDepan());
-//                    bundle.putString("belakang" , data.getFotoBelakang());
-//                    cardOverviewFragments.setArguments(bundle);
-//
-//                    ft = getSupportFragmentManager().beginTransaction();
-//                    ft.addToBackStack(null);
-//                    ft.replace(R.id.drag_view, cardOverviewFragments, "AddCards").commit();
-//
-//                    //Expand sliding panel and set status
-//                    mSlidingLayout.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
-//                    mSlidingOpen = true;
                 }
             });
 
@@ -172,18 +163,13 @@ public class TabKartu extends Fragment {
 
         @Override
         public int getItemCount() {
-//            RelativeLayout kosong = (RelativeLayout) findViewById(R.id.kosong);
-//            LinearLayout isi = (LinearLayout) findViewById(R.id.isi);
-//
-//            if(cardListArrayList.size() == 0){
-//                kosong.setVisibility(View.VISIBLE);
-//                isi.setVisibility(View.GONE);
-//                testadd.setVisibility(View.GONE);
-//            }else {
-//                isi.setVisibility(View.VISIBLE);
-//                kosong.setVisibility(View.GONE);
-//                testadd.setVisibility(View.VISIBLE);
-//            }
+            if (cardListArrayList.size() == 0) {
+                rvCard.setVisibility(View.GONE);
+                llNoCard.setVisibility(View.VISIBLE);
+            } else {
+                rvCard.setVisibility(View.VISIBLE);
+                llNoCard.setVisibility(View.GONE);
+            }
             return cardListArrayList.size();
         }
     }

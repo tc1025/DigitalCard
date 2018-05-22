@@ -19,7 +19,9 @@ public class CardDB extends SQLiteOpenHelper {
     private static final String id_key = "id";
     private static final String card_name = "card_names";
     private static final String card_type = "card_types";
-    private static final String barcode_number = "barcodeNumber";
+    private static final String barcode_number = "barcode_number";
+    private static final String card_logo = "card_logo";
+    private static final String card_background = "card_background";
     private static final String notes = "notes";
     private static final String front_view = "frontView";
     private static final String back_view = "backView";
@@ -37,7 +39,9 @@ public class CardDB extends SQLiteOpenHelper {
                 + id_key + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + card_type + " TEXT, "
                 + card_name + " TEXT, "
-                + barcode_number + " TEXT"+ ")";
+                + barcode_number + " TEXT, "
+                + card_logo + " INTEGER, "
+                + card_background + " INTEGER " + ")";
         db.execSQL(CREATE_CARD_TABLE);
     }
 
@@ -54,6 +58,8 @@ public class CardDB extends SQLiteOpenHelper {
         values.put(card_name, cardList.getCardName());
         values.put(card_type, cardList.getCardType());
         values.put(barcode_number, cardList.getBarcodeNumber());
+        values.put(card_logo, cardList.getCardIcon());
+        values.put(card_background, cardList.getCardBackground());
 
         db.insert(TABLE_CARDLIST,  null,values);
         db.close();
@@ -66,6 +72,8 @@ public class CardDB extends SQLiteOpenHelper {
         values.put(card_name, cardList.getCardName());
         values.put(card_type, cardList.getCardType());
         values.put(barcode_number, cardList.getBarcodeNumber());
+        values.put(card_logo, cardList.getCardIcon());
+        values.put(card_background, cardList.getCardBackground());
 
         db.update(TABLE_CARDLIST, values,"id=" + id_key, null );
         db.close();
@@ -91,6 +99,8 @@ public class CardDB extends SQLiteOpenHelper {
                 cardList.setCardName(cursor.getString(2));
                 cardList.setCardType(cursor.getString(1));
                 cardList.setBarcodeNumber(cursor.getString(3));
+                cardList.setCardIcon(cursor.getInt(4));
+                cardList.setCardBackground(cursor.getInt(5));
 
                 data.add(cardList);
             } while (cursor.moveToNext());

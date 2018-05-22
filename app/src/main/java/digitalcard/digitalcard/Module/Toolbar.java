@@ -6,6 +6,7 @@ import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -18,9 +19,10 @@ import digitalcard.digitalcard.R;
 
 public class Toolbar extends LinearLayout {
     TextView txtTitle;
-    LinearLayout btnBack;
+    LinearLayout btnBack, panelMiddle;
     RelativeLayout panel;
     ImageButton btnLocation;
+    ImageView imgDropdown;
 
     Boolean backButton, locationButton;
 
@@ -40,13 +42,18 @@ public class Toolbar extends LinearLayout {
 
         panel = (RelativeLayout) getChildAt(0);
         btnBack = (LinearLayout) panel.getChildAt(0);
-        txtTitle = (TextView) panel.getChildAt(1);
+        panelMiddle = (LinearLayout) panel.getChildAt(1);
+        txtTitle = (TextView) panelMiddle.getChildAt(0);
+        imgDropdown = (ImageView) panelMiddle.getChildAt(1);
         btnLocation = (ImageButton) panel.getChildAt(2);
 
-        if (!backButton)
+        if (!backButton) {
             btnBack.setVisibility(GONE);
-        else
+            imgDropdown.setVisibility(VISIBLE);
+        } else {
             btnBack.setVisibility(VISIBLE);
+            imgDropdown.setVisibility(GONE);
+        }
 
         if (!locationButton)
             btnLocation.setVisibility(GONE);

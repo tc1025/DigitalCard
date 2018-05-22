@@ -43,6 +43,7 @@ public class RegistrationCardFragment extends Fragment implements View.OnClickLi
     RadioButton rbGender;
 
     String title;
+    int logo, backgroundColor;
 
     Calendar calendar = Calendar.getInstance();
     String dateFormat = "dd/MM/yyyy";
@@ -61,7 +62,10 @@ public class RegistrationCardFragment extends Fragment implements View.OnClickLi
         regAddress = rootView.findViewById(R.id.register_address);
         regDOB = rootView.findViewById(R.id.register_DOB);
 
-        title = getArguments().getString(Utilities.BUNNDLE_CARD_CATEGORY);
+        assert getArguments() != null;
+        title = getArguments().getString(Utilities.BUNDLE_CARD_CATEGORY);
+        logo = getArguments().getInt(Utilities.BUNDLE_CARD_LOGO);
+        backgroundColor = getArguments().getInt(Utilities.BUNDLE_CARD_BACKGROUND);
 
         tvTitle = toolbar.getTxtTitle();
         btnBack = toolbar.getBtnBack();
@@ -128,9 +132,11 @@ public class RegistrationCardFragment extends Fragment implements View.OnClickLi
 
                     DetailCardFragment detailCardFragment = new DetailCardFragment();
                     Bundle bundle = new Bundle();
-                    bundle.putString(Utilities.BUNNDLE_CARD_NAME, title);
-                    bundle.putString(Utilities.BUNNDLE_BARCODE_NUMBER, randomBarcode);
-                    bundle.putString(Utilities.BUNNDLE_CARD_CATEGORY, title);
+                    bundle.putString(Utilities.BUNDLE_CARD_NAME, title);
+                    bundle.putString(Utilities.BUNDLE_BARCODE_NUMBER, randomBarcode);
+                    bundle.putString(Utilities.BUNDLE_CARD_CATEGORY, title);
+                    bundle.putInt(Utilities.BUNDLE_CARD_LOGO, logo);
+                    bundle.putInt(Utilities.BUNDLE_CARD_BACKGROUND, backgroundColor);
                     detailCardFragment.setArguments(bundle);
 
                     FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();

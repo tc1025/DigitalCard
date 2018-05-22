@@ -23,6 +23,7 @@ public class TabPromo extends Fragment {
     View rootView;
 
     RecyclerView rvPromo;
+    LinearLayout llNoPromo;
 
     List<PromoList> promoLists;
     PromoListAdapter promoListAdapter;
@@ -35,6 +36,8 @@ public class TabPromo extends Fragment {
         promoListAdapter = new PromoListAdapter(getContext(), promoLists);
 
         rvPromo = rootView.findViewById(R.id.rv_promo);
+        llNoPromo = rootView.findViewById(R.id.ll_no_promo);
+
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         mLayoutManager.offsetChildrenVertical(LinearLayout.VERTICAL);
         rvPromo.setLayoutManager(mLayoutManager);
@@ -88,5 +91,13 @@ public class TabPromo extends Fragment {
         }
 
         promoListAdapter.notifyDataSetChanged();
+
+        if (promoListAdapter.getItemCount() == 0) {
+            llNoPromo.setVisibility(View.VISIBLE);
+            rvPromo.setVisibility(View.GONE);
+        } else {
+            llNoPromo.setVisibility(View.GONE);
+            rvPromo.setVisibility(View.VISIBLE);
+        }
     }
 }

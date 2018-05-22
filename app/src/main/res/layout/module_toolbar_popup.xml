@@ -25,14 +25,26 @@
                 android:text="@string/back_text"/>
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/card_title"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:textColor="@android:color/black"
-            android:text="@string/add_new_card_text"
-            android:layout_centerInParent="true"/>
+            android:layout_centerInParent="true"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/card_title"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="@string/add_new_card_text"
+                android:textColor="@android:color/black"
+                android:textSize="16sp" />
+
+            <ImageView
+                android:id="@+id/img_dropdown"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_dropdown" />
+        </LinearLayout>
 
         <ImageButton
             android:id="@+id/location_button"

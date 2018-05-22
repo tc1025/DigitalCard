@@ -58,11 +58,14 @@ public class CardListAdapter extends RecyclerView.Adapter<CardListAdapter.ViewHo
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         final CardList data = cardLists.get(position);
-
+        int cardBackground = 0;
 //        if (data.getThumbnail() != 0)
 //            Glide.with(context).load(data.getThumbnail()).into(holder.logo);
 
         holder.name.setText(data.cardCategory);
+        holder.logo.setImageResource(data.cardIcon);
+        holder.logo.setBackgroundColor(data.cardBackground);
+
         holder.panel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -80,7 +83,9 @@ public class CardListAdapter extends RecyclerView.Adapter<CardListAdapter.ViewHo
                         public void onClick(View v) {
                             RegistrationCardFragment registrationCardFragment = new RegistrationCardFragment();
                             Bundle bundle = new Bundle();
-                            bundle.putString(Utilities.BUNNDLE_CARD_CATEGORY, data.cardCategory);
+                            bundle.putString(Utilities.BUNDLE_CARD_CATEGORY, data.cardCategory);
+                            bundle.putInt(Utilities.BUNDLE_CARD_LOGO, data.cardIcon);
+                            bundle.putInt(Utilities.BUNDLE_CARD_BACKGROUND, data.cardBackground);
                             registrationCardFragment.setArguments(bundle);
 
                             ((MainActivity) context).getSupportFragmentManager().beginTransaction()
@@ -96,7 +101,9 @@ public class CardListAdapter extends RecyclerView.Adapter<CardListAdapter.ViewHo
                         public void onClick(View v) {
                             ExistingCardFragment existingCardFragment = new ExistingCardFragment();
                             Bundle bundle = new Bundle();
-                            bundle.putString(Utilities.BUNNDLE_CARD_CATEGORY, data.cardCategory);
+                            bundle.putString(Utilities.BUNDLE_CARD_CATEGORY, data.cardCategory);
+                            bundle.putInt(Utilities.BUNDLE_CARD_LOGO, data.cardIcon);
+                            bundle.putInt(Utilities.BUNDLE_CARD_BACKGROUND, data.cardBackground);
                             existingCardFragment.setArguments(bundle);
 
                             ((MainActivity)context).getSupportFragmentManager().beginTransaction()

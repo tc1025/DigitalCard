@@ -7,13 +7,19 @@
     android:layout_marginStart="36dp"
     android:layout_marginEnd="36dp"
     android:layout_gravity="center">
-
     <TextView
+        android:id="@+id/dialog_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:textSize="24sp"
+        android:text="Title here"/>
+
+    <EditText
+        android:id="@+id/dialog_edit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="24sp"
-        android:layout_marginTop="16dp"
-        android:text="Do you already have this member card?"/>
+        android:textSize="16sp"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -23,21 +29,21 @@
         android:layout_marginBottom="16dp"
         android:gravity="center_vertical">
         <Button
-            android:id="@+id/btn_yes"
+            android:id="@+id/btn_done"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="55dp"
             android:layout_weight="1"
-            android:text="Yes, add existing member card"/>
+            android:text="@string/done_text"/>
 
         <View
             android:layout_width="2dp"
             android:layout_height="55dp"/>
 
         <Button
-            android:id="@+id/btn_no"
+            android:id="@+id/btn_cancel"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="55dp"
             android:layout_weight="1"
-            android:text="No, register now"/>
+            android:text="@string/cancel_text"/>
     </LinearLayout>
 </LinearLayout>

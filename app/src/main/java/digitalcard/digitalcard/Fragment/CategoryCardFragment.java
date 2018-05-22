@@ -70,21 +70,48 @@ public class CategoryCardFragment extends Fragment implements View.OnClickListen
     }
 
     public void getData(){
-        int logo = 0;
         String[] cardCategory = new String[]{
-            "Alfamart / Alfamidi",
+                "Alfamart",
+                "Alfamidi",
                 "Indomaret",
                 "Starbucks",
                 "Lottemart",
                 "ACE Hardware",
         };
 
+        int[] logo = new int[]{
+                R.drawable.store_alfamart,
+                R.drawable.store_alfamidi,
+                R.drawable.store_indomaret,
+                R.drawable.store_starbucks,
+                R.drawable.store_lottemart,
+                R.drawable.store_ace,
+        };
+
+        int[] backgroundColor = new int[]{
+                colour.bgAlfamart,
+                colour.bgAlfamidi,
+                colour.bgIndomaret,
+                colour.bgStarbucks,
+                colour.bgLottemart,
+                colour.bgAce,
+        };
+
         CardList cardList;
-        for (String aCardCategory : cardCategory) {
-            cardList = new CardList(aCardCategory, logo);
+        for (int i = 0; i < cardCategory.length; i++) {
+            cardList = new CardList(cardCategory[i], logo[i], backgroundColor[i]);
             cardLists.add(cardList);
         }
 
         cardListAdapter.notifyDataSetChanged();
+    }
+
+    class colour {
+        static final int bgAlfamart = 0xFFFFFFFF;
+        static final int bgAlfamidi = 0xFFFFFFFF;
+        static final int bgIndomaret = 0xFFFFFFFF;
+        static final int bgStarbucks = 0xFF00704A;
+        static final int bgLottemart = 0xFFDA291C;
+        static final int bgAce = 0xFFFFFFFF;
     }
 }

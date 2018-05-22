@@ -55,9 +55,9 @@ public class LocationFragment extends Fragment implements View.OnClickListener {
 
         merchantLocation = rootView.findViewById(R.id.merchant_location);
         assert getArguments() != null;
-        latitude = getArguments().getDouble(Utilities.BUNNDLE_LOCATION_LATITUDE);
-        longitude = getArguments().getDouble(Utilities.BUNNDLE_LOCATION_LONGITUDE);
-        title = getArguments().getString(Utilities.BUNNDLE_CARD_CATEGORY);
+        latitude = getArguments().getDouble(Utilities.BUNDLE_LOCATION_LATITUDE);
+        longitude = getArguments().getDouble(Utilities.BUNDLE_LOCATION_LONGITUDE);
+        title = getArguments().getString(Utilities.BUNDLE_CARD_CATEGORY);
 
         btnBack = toolbar.getBtnBack();
         tvTitle = toolbar.getTxtTitle();

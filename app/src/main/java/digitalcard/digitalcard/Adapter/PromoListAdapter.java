@@ -3,7 +3,6 @@ package digitalcard.digitalcard.Adapter;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,18 +10,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.List;
 
 import digitalcard.digitalcard.Fragment.DetailPromoFragment;
 import digitalcard.digitalcard.MainActivity;
-import digitalcard.digitalcard.Model.CardList;
 import digitalcard.digitalcard.Model.PromoList;
 import digitalcard.digitalcard.R;
 import digitalcard.digitalcard.Util.Utilities;
-
-import static java.security.AccessController.getContext;
 
 public class PromoListAdapter extends RecyclerView.Adapter<PromoListAdapter.ViewHolder> {
     Context context;
@@ -62,9 +57,9 @@ public class PromoListAdapter extends RecyclerView.Adapter<PromoListAdapter.View
             public void onClick(View v) {
                 DetailPromoFragment detailPromoFragment = new DetailPromoFragment();
                 Bundle bundle = new Bundle();
-                bundle.putString(Utilities.BUNNDLE_PROMO_MERCHANT, data.getMerchant());
-                bundle.putString(Utilities.BUNNDLE_PROMO_TITLE, data.getTitle());
-                bundle.putString(Utilities.BUNNDLE_PROMO_DESCRIPTION, data.getDescription());
+                bundle.putString(Utilities.BUNDLE_PROMO_MERCHANT, data.getMerchant());
+                bundle.putString(Utilities.BUNDLE_PROMO_TITLE, data.getTitle());
+                bundle.putString(Utilities.BUNDLE_PROMO_DESCRIPTION, data.getDescription());
                 detailPromoFragment.setArguments(bundle);
 
                 ((MainActivity) context).getSupportFragmentManager().beginTransaction()

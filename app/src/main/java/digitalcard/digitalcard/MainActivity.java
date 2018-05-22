@@ -1,55 +1,37 @@
 package digitalcard.digitalcard;
 
-import android.Manifest;
-import android.content.Context;
 import android.content.pm.PackageManager;
-import android.location.Criteria;
-import android.location.Location;
-import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.PersistableBundle;
-import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewParent;
-import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import digitalcard.digitalcard.Fragment.ExistingCardFragment;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationServices;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import digitalcard.digitalcard.Fragment.CategoryCardFragment;
+import digitalcard.digitalcard.Fragment.MenuFragment;
+import digitalcard.digitalcard.Module.MenuPopupDialog;
 import digitalcard.digitalcard.Util.Utilities;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
-    LinearLayout mainLayout;
+    LinearLayout mainLayout, btnAccount, btnSettings, btnInfo;
     SlidingUpPanelLayout slidingUpPanelLayout;
     ImageButton btnAdd, btnMenu;
 
-    ExistingCardFragment fAddCard;
-    CategoryCardFragment fcategoryCardFragment;
+    CategoryCardFragment categoryCardFragment;
+    MenuFragment menuFragment;
     FragmentTransaction ft;
     private int flag_fragment = -1;
     public static int OPEN_FRAGMENT_ADD_CARDS = 1;
@@ -64,8 +46,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         slidingUpPanelLayout.addPanelSlideListener(new PanelSlidingListener());
         slidingUpPanelLayout.setFadeOnClickListener(new FadeOnClickListener());
 
-        fAddCard = new ExistingCardFragment();
-        fcategoryCardFragment = new CategoryCardFragment();
+        categoryCardFragment = new CategoryCardFragment();
+        menuFragment = new MenuFragment();
 
         btnAdd = findViewById(R.id.add_button);
         btnMenu = findViewById(R.id.menu_button);
@@ -113,14 +95,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.add_button:
-                Toast.makeText(this, "Add button", Toast.LENGTH_SHORT).show();
                 ft = getSupportFragmentManager().beginTransaction();
                 ft.addToBackStack(null);
-                ft.replace(R.id.drag_view, fcategoryCardFragment, "AddNewCard").commit();
+                ft.replace(R.id.drag_view, categoryCardFragment, "AddNewCard").commit();
                 slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
                 break;
+
             case R.id.menu_button:
-                Toast.makeText(this, "Menu button", Toast.LENGTH_SHORT).show();
+                ft = getSupportFragmentManager().beginTransaction();
+                ft.addToBackStack(null);
+                ft.replace(R.id.drag_view, menuFragment, "Menu").commit();
+                slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
                 break;
         }
     }
@@ -133,6 +118,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             this.finish();
             System.exit(0);
         } else if (fragment.getTag().equals("AddNewCard")) {
+            slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+        } else if (fragment.getTag().equals("Menu")) {
             slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
         } else if (fragment.getTag().equals("CardOverview")) {
             slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
