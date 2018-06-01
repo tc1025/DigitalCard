@@ -132,6 +132,7 @@ public class ExistingCardFragment extends Fragment implements View.OnClickListen
             if (data != null) {
                 String serialNumber = data.getStringExtra("CODE_DATA");
                 etBarcodeNumber.setText(serialNumber);
+                Toast.makeText(getActivity(),data.getStringExtra("CODE_TYPE"),Toast.LENGTH_SHORT).show();
             }
         }
     }

@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#757575</color>
     <color name="colorPrimaryDark">#616161</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorAccent">#ee0979</color>
 
     <color name="colorAppGradientBgStart">#4A2E68</color>
     <color name="colorAppGradientBgCenter">#E6756B</color>
@@ -10,7 +10,8 @@
 
     <color name="grey_background">#EEEEEE</color>
     <color name="grey_button">#616161</color>
+    <color name="light_grey">#d3d3d3</color>
 
-    <color name="start1">#fa709a</color>
-    <color name="start2">#F99305</color>
+    <color name="start1">#ee0979</color>
+    <color name="start2">#ff6a00</color>
 </resources>

@@ -3,15 +3,23 @@ package digitalcard.digitalcard;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.menu.MenuBuilder;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewParent;
+import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -28,7 +36,8 @@ import digitalcard.digitalcard.Util.Utilities;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
     LinearLayout mainLayout, btnAccount, btnSettings, btnInfo;
     SlidingUpPanelLayout slidingUpPanelLayout;
-    ImageButton btnAdd, btnMenu;
+    ImageButton btnMenu;
+    FloatingActionButton btnAdd;
 
     CategoryCardFragment categoryCardFragment;
     MenuFragment menuFragment;
@@ -42,6 +51,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        final Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
         slidingUpPanelLayout = findViewById(R.id.popup_layout);
         slidingUpPanelLayout.addPanelSlideListener(new PanelSlidingListener());
         slidingUpPanelLayout.setFadeOnClickListener(new FadeOnClickListener());
@@ -50,10 +62,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         menuFragment = new MenuFragment();
 
         btnAdd = findViewById(R.id.add_button);
-        btnMenu = findViewById(R.id.menu_button);
+//        btnMenu = findViewById(R.id.menu_button);
 
         btnAdd.setOnClickListener(this);
-        btnMenu.setOnClickListener(this);
+//        btnMenu.setOnClickListener(this);
 
         final TabLayout tabLayout = findViewById(R.id.tab_layout);
         tabLayout.addTab(tabLayout.newTab().setText(R.string.card_text));
@@ -62,7 +74,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         final ViewPager viewPager = findViewById(R.id.pager);
-        final digitalcard.digitalcard.Adapter.PagerAdapter adapter = new digitalcard.digitalcard.Adapter.PagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount()) {
+        viewPager.setClipToPadding(false);
+        viewPager.setPadding(20,0,20,0);
+        final CustomPagerAdapter adapter = new CustomPagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount()) {
         };
         viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
@@ -87,6 +101,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.button_menu, menu);
+
+        if(menu instanceof MenuBuilder){
+
+            MenuBuilder menuBuilder = (MenuBuilder) menu;
+            menuBuilder.setOptionalIconsVisible(true);
+        }
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.item_account:
+                break;
+            case R.id.item_settings:
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
     private boolean isPermissionGranted(String permission) {
         return ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED;
     }
@@ -107,6 +146,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 ft.replace(R.id.drag_view, menuFragment, "Menu").commit();
                 slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
                 break;
+//            case R.id.menu_button:
+//                Toast.makeText(this, "Menu button", Toast.LENGTH_SHORT).show();
+//                break;
         }
     }
 
@@ -136,6 +178,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             super.onBackPressed();
         }
     }
+
+//    private void showMenu(View view){
+//        PopupMenu popupMenu = new PopupMenu(this, view);
+//        popupMenu.setOnMenuItemClickListener();
+//    }
 
     private void validateAllPermissions() {
         String[] permissions = Utilities.ALL_PERMISSIONS;

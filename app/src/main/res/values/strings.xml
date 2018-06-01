@@ -3,6 +3,9 @@
 
     <string name="imageButton_plus_description">add new card</string>
     <string name="imageButton_menu_description">menu</string>
+    
+    <string name="account">Account</string>
+    <string name="settings">Settings</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="card_text">Card</string>
