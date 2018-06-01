@@ -19,8 +19,8 @@ import digitalcard.digitalcard.R;
 
 public class Toolbar extends LinearLayout {
     TextView txtTitle;
-    LinearLayout btnBack, panelMiddle;
-    RelativeLayout panel;
+    LinearLayout btnBack;
+    RelativeLayout panel, panelMiddle;
     ImageButton btnLocation;
     ImageView imgDropdown;
 
@@ -42,7 +42,7 @@ public class Toolbar extends LinearLayout {
 
         panel = (RelativeLayout) getChildAt(0);
         btnBack = (LinearLayout) panel.getChildAt(0);
-        panelMiddle = (LinearLayout) panel.getChildAt(1);
+        panelMiddle = (RelativeLayout) panel.getChildAt(1);
         txtTitle = (TextView) panelMiddle.getChildAt(0);
         imgDropdown = (ImageView) panelMiddle.getChildAt(1);
         btnLocation = (ImageButton) panel.getChildAt(2);

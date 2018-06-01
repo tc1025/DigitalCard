@@ -25,26 +25,27 @@
                 android:text="@string/back_text"/>
         </LinearLayout>
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:gravity="center_horizontal"
-            android:orientation="vertical">
+            android:layout_height="56dp"
+            android:layout_centerInParent="true">
             <TextView
                 android:id="@+id/card_title"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:text="@string/add_new_card_text"
                 android:textColor="@android:color/black"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:layout_centerInParent="true"/>
 
             <ImageView
                 android:id="@+id/img_dropdown"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_dropdown" />
-        </LinearLayout>
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_dropdown"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentBottom="true"/>
+        </RelativeLayout>
 
         <ImageButton
             android:id="@+id/location_button"

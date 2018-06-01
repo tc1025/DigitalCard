@@ -39,6 +39,7 @@ import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -47,6 +48,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import digitalcard.digitalcard.Database.CardDB;
+import digitalcard.digitalcard.MainActivity;
 import digitalcard.digitalcard.Model.CardList;
 import digitalcard.digitalcard.Module.EditDialog;
 import digitalcard.digitalcard.Module.PopupBarcodeDialog;
@@ -195,13 +197,19 @@ public class CardOverViewFragment extends Fragment implements View.OnClickListen
                 CardList deleteTarget = cardLists.get(cardID);
                 cardDB.deleteCard(deleteTarget);
 
-                TabKartu tabKartu = new TabKartu();
-                ft = Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction();
-                ft.detach(tabKartu);
-                ft.attach(tabKartu);
-                ft.commit();
+//                TabKartu tabKartu = new TabKartu();
+//                ft = Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction();
+//                ft.detach(tabKartu);
+//                ft.attach(tabKartu);
+//                ft.commit();
 
-                getActivity().onBackPressed();
+                Intent intent = new Intent(getActivity(), MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+
+//                if (getContext() instanceof MainActivity) {
+//                    ((MainActivity) getContext()).getSlidingPanel().setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+//                }
                 break;
         }
     }
