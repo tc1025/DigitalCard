@@ -24,6 +24,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import digitalcard.digitalcard.Adapter.CustomPagerAdapter;
 import digitalcard.digitalcard.Fragment.ExistingCardFragment;
 
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
@@ -140,12 +141,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
                 break;
 
-            case R.id.menu_button:
-                ft = getSupportFragmentManager().beginTransaction();
-                ft.addToBackStack(null);
-                ft.replace(R.id.drag_view, menuFragment, "Menu").commit();
-                slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
-                break;
+//            case R.id.menu_button:
+//                ft = getSupportFragmentManager().beginTransaction();
+//                ft.addToBackStack(null);
+//                ft.replace(R.id.drag_view, menuFragment, "Menu").commit();
+//                slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
+//                break;
 //            case R.id.menu_button:
 //                Toast.makeText(this, "Menu button", Toast.LENGTH_SHORT).show();
 //                break;
