@@ -17,108 +17,166 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <digitalcard.digitalcard.Module.DoubleButton
             android:id="@+id/btn_action"
             android:layout_width="match_parent"
             android:layout_height="56dp"
-            android:layout_alignParentBottom="true"/>
+            android:layout_alignParentBottom="true" />
 
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginBottom="56dp">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginTop="30dp">
+                android:layout_marginTop="30dp"
+                android:orientation="vertical">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
+                    android:layout_marginEnd="16dp"
                     android:layout_marginStart="16dp"
-                    android:layout_marginEnd="16dp">
+                    android:orientation="vertical">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
                         android:text="Name"
                         android:textSize="14sp" />
+
                     <EditText
                         android:id="@+id/register_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Input your full name"/>
+                        android:hint="Input your full name" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_marginStart="16dp"
+                    android:layout_height="match_parent"
                     android:layout_marginEnd="16dp"
-                    android:layout_marginTop="16dp">
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:orientation="vertical">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
-                        android:text="ID Number"
+                        android:text="Identity Number"
                         android:textSize="14sp" />
+
                     <EditText
                         android:id="@+id/register_id_number"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Input your identity number"/>
+                        android:hint="KTP (16 digits)" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_marginStart="16dp"
                     android:layout_marginEnd="16dp"
-                    android:layout_marginTop="16dp">
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:orientation="vertical">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
                         android:text="Gender"
                         android:textSize="14sp" />
+
                     <RadioGroup
                         android:id="@+id/radio_gender"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
+
                         <RadioButton
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Male"/>
+                            android:text="Male" />
+
                         <RadioButton
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="16dp"
-                            android:text="Female"/>
+                            android:text="Female" />
                     </RadioGroup>
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_marginStart="16dp"
                     android:layout_marginEnd="16dp"
-                    android:layout_marginTop="16dp">
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:orientation="vertical">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
                         android:text="Address"
                         android:textSize="14sp" />
+
                     <EditText
                         android:id="@+id/register_address"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Input your address"/>
+                        android:hint="Input your address" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:text="Date of Birth"
+                        android:textSize="14sp" />
+
+                    <EditText
+                        android:id="@+id/register_DOB"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:focusableInTouchMode="false"
+                        android:hint="dd/mm/yyyy" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:text="Card Name"
+                        android:textSize="14sp" />
+
+                    <EditText
+                        android:id="@+id/register_card_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Input this card name" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -127,19 +185,27 @@
                     android:orientation="vertical"
                     android:layout_marginStart="16dp"
                     android:layout_marginEnd="16dp"
-                    android:layout_marginTop="16dp">
+                    android:layout_marginTop="32dp">
+                    <TextView
+                        android:id="@+id/register_captcha_generator"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:layout_gravity="center"
+                        android:text="123123"/>
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
-                        android:text="Date of Birth"
+                        android:text="Captcha"
                         android:textSize="14sp" />
                     <EditText
-                        android:id="@+id/register_DOB"
+                        android:id="@+id/register_captcha"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="dd/mm/yyyy"
-                        android:focusableInTouchMode="false"/>
+                        android:hint="Input captcha"
+                        android:inputType="textCapCharacters"/>
                 </LinearLayout>
             </LinearLayout>
         </ScrollView>

@@ -27,8 +27,6 @@ public class PopupBarcodeDialog extends Dialog{
     private TextView tvBarcodeNumber;
     private LinearLayout llDialogActivity;
 
-    private int brightness;
-
     public PopupBarcodeDialog(@NonNull Context context) {
         super(context);
         this.context = context;
@@ -42,29 +40,8 @@ public class PopupBarcodeDialog extends Dialog{
 
         Objects.requireNonNull(getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
-        try{
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                if (Settings.System.canWrite(context))
-                Settings.System.putInt(context.getContentResolver(),
-                        Settings.System.SCREEN_BRIGHTNESS_MODE,
-                        Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL);
-            }
-
-            brightness = Settings.System.getInt(context.getContentResolver(),
-                    Settings.System.SCREEN_BRIGHTNESS);
-        }
-        catch(Settings.SettingNotFoundException e){
-            Log.e("Error", "Cannot access system brightness");
-            e.printStackTrace();
-        }
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (Settings.System.canWrite(context))
-            Settings.System.putInt(context.getContentResolver(), Settings.System.SCREEN_BRIGHTNESS, brightness);
-        }
         WindowManager.LayoutParams layoutpars = getWindow().getAttributes();
-        layoutpars.screenBrightness = brightness / (float)255;
-        Log.e("tommy", "normal " + brightness + ", changes " + brightness / (float)255);
+        layoutpars.screenBrightness = 1;
         getWindow().setAttributes(layoutpars);
 
         imgBarcode = findViewById(R.id.barcode_image_dialog);

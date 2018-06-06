@@ -1,6 +1,7 @@
 package digitalcard.digitalcard.Fragment;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -9,6 +10,7 @@ import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -36,13 +38,14 @@ public class RegistrationCardFragment extends Fragment implements View.OnClickLi
     Toolbar toolbar;
     DoubleButton action;
 
-    TextView tvTitle;
+    TextView tvTitle, tvCaptchaGenerator;
     LinearLayout btnBack, btnCancel, btnDone;
-    EditText regName, regIdNumber, regAddress, regDOB;
+    EditText regName, regIdNumber, regAddress, regDOB, regCaptcha, regCardName;
     RadioGroup regGender;
     RadioButton rbGender;
 
-    String title;
+    String title, captcha = "";
+    int logo, backgroundColor;
 
     Calendar calendar = Calendar.getInstance();
     String dateFormat = "dd/MM/yyyy";
@@ -61,12 +64,29 @@ public class RegistrationCardFragment extends Fragment implements View.OnClickLi
         regAddress = rootView.findViewById(R.id.register_address);
         regDOB = rootView.findViewById(R.id.register_DOB);
 
-        title = getArguments().getString(Utilities.BUNNDLE_CARD_CATEGORY);
+        assert getArguments() != null;
+        title = getArguments().getString(Utilities.BUNDLE_CARD_CATEGORY);
+        logo = getArguments().getInt(Utilities.BUNDLE_CARD_LOGO);
+        backgroundColor = getArguments().getInt(Utilities.BUNDLE_CARD_BACKGROUND);
 
         tvTitle = toolbar.getTxtTitle();
         btnBack = toolbar.getBtnBack();
         btnCancel = action.getBtnLeft();
         btnDone = action.getBtnRight();
+        tvCaptchaGenerator = rootView.findViewById(R.id.register_captcha_generator);
+        regCaptcha = rootView.findViewById(R.id.register_captcha);
+        regCardName = rootView.findViewById(R.id.register_card_name);
+
+        Random r = new Random();
+        String code = "";
+        for (int i = 0; i < 5; i++) {
+            if (i < 2)
+                code = code + (char) (r.nextInt(26) + 'a');
+            else
+                code = code + r.nextInt(10);
+        }
+        captcha = code.toUpperCase();
+        tvCaptchaGenerator.setText(captcha);
 
         tvTitle.setText(title);
         regIdNumber.setInputType(InputType.TYPE_CLASS_NUMBER);
@@ -78,6 +98,13 @@ public class RegistrationCardFragment extends Fragment implements View.OnClickLi
         btnDone.setOnClickListener(this);
 
         return rootView;
+    }
+
+    @Override
+    public void onDestroyView() {
+        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(rootView.getWindowToken(), 0);
+        super.onDestroyView();
     }
 
     @Override
@@ -112,6 +139,10 @@ public class RegistrationCardFragment extends Fragment implements View.OnClickLi
                     Toast.makeText(getActivity(), "Address field must be filled", Toast.LENGTH_SHORT).show();
                 } else if (regDOB.getText().toString().equals("")) {
                     Toast.makeText(getActivity(), "Date of birth field must be filled", Toast.LENGTH_SHORT).show();
+                } else if (regCardName.getText().toString().equals("")) {
+                    Toast.makeText(getActivity(), "Card name field must be filled", Toast.LENGTH_SHORT).show();
+                } else if (!regCaptcha.getText().toString().equals(captcha)) {
+                    Toast.makeText(getActivity(), "Captcha not matched", Toast.LENGTH_SHORT).show();
                 } else {
                     Random random = new Random();
                     String randomBarcode = "";
@@ -128,9 +159,11 @@ public class RegistrationCardFragment extends Fragment implements View.OnClickLi
 
                     DetailCardFragment detailCardFragment = new DetailCardFragment();
                     Bundle bundle = new Bundle();
-                    bundle.putString(Utilities.BUNNDLE_CARD_NAME, title);
-                    bundle.putString(Utilities.BUNNDLE_BARCODE_NUMBER, randomBarcode);
-                    bundle.putString(Utilities.BUNNDLE_CARD_CATEGORY, title);
+                    bundle.putString(Utilities.BUNDLE_CARD_NAME, regCardName.getText().toString());
+                    bundle.putString(Utilities.BUNDLE_BARCODE_NUMBER, randomBarcode);
+                    bundle.putString(Utilities.BUNDLE_CARD_CATEGORY, title);
+                    bundle.putInt(Utilities.BUNDLE_CARD_LOGO, logo);
+                    bundle.putInt(Utilities.BUNDLE_CARD_BACKGROUND, backgroundColor);
                     detailCardFragment.setArguments(bundle);
 
                     FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
