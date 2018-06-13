@@ -6,6 +6,7 @@ import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -19,10 +20,11 @@ import digitalcard.digitalcard.R;
 public class Toolbar extends LinearLayout {
     TextView txtTitle;
     LinearLayout btnBack;
-    RelativeLayout panel;
-    ImageButton btnLocation;
+    RelativeLayout panel, panelMiddle;
+    ImageButton btnLocation, btnDelete;
+    ImageView imgDropdown;
 
-    Boolean backButton, locationButton;
+    Boolean backButton, cardOverviewStyle;
 
     public Toolbar(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -33,25 +35,34 @@ public class Toolbar extends LinearLayout {
 
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.Toolbar);
         backButton = ta.getBoolean(R.styleable.Toolbar_backButton, true);
-        locationButton = ta.getBoolean(R.styleable.Toolbar_locationButton, false);
+        cardOverviewStyle = ta.getBoolean(R.styleable.Toolbar_cardOverviewStyle, false);
 
         setOrientation(LinearLayout.HORIZONTAL);
         setGravity(Gravity.CENTER_VERTICAL);
 
         panel = (RelativeLayout) getChildAt(0);
         btnBack = (LinearLayout) panel.getChildAt(0);
-        txtTitle = (TextView) panel.getChildAt(1);
+        panelMiddle = (RelativeLayout) panel.getChildAt(1);
+        txtTitle = (TextView) panelMiddle.getChildAt(0);
+        imgDropdown = (ImageView) panelMiddle.getChildAt(1);
         btnLocation = (ImageButton) panel.getChildAt(2);
+        btnDelete = (ImageButton) panel.getChildAt(3);
 
-        if (!backButton)
+        if (!backButton) {
             btnBack.setVisibility(GONE);
-        else
+            imgDropdown.setVisibility(VISIBLE);
+        } else {
             btnBack.setVisibility(VISIBLE);
+            imgDropdown.setVisibility(GONE);
+        }
 
-        if (!locationButton)
+        if (!cardOverviewStyle){
             btnLocation.setVisibility(GONE);
-        else
+            btnDelete.setVisibility(GONE);
+        } else {
             btnLocation.setVisibility(VISIBLE);
+            btnDelete.setVisibility(VISIBLE);
+        }
     }
 
     public TextView getTxtTitle(){
@@ -64,5 +75,9 @@ public class Toolbar extends LinearLayout {
 
     public ImageButton getBtnLocation(){
         return btnLocation;
+    }
+
+    public ImageButton getBtnDelete(){
+        return btnDelete;
     }
 }

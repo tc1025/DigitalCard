@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,8 +40,6 @@ public class CategoryCardFragment extends Fragment implements View.OnClickListen
     List<CardList> cardLists;
     CardListAdapter cardListAdapter;
 
-    Boolean mKeyboardStatus = false;
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -67,28 +66,10 @@ public class CategoryCardFragment extends Fragment implements View.OnClickListen
     }
 
     @Override
-    public void onDetach() {
-        super.onDetach();
+    public void onDestroyView() {
         InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
-
-    }
-
-    /*buat hide keyboard*/
-    public void dismissKeyboard(){
-        InputMethodManager imm =(InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
-        mKeyboardStatus = false;
-    }
-
-    public void showKeyboard(){
-        InputMethodManager imm =(InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
-        mKeyboardStatus = true;
-    }
-
-    private boolean isKeyboardActive(){
-        return mKeyboardStatus;
+        imm.hideSoftInputFromWindow(rootview.getWindowToken(), 0);
+        super.onDestroyView();
     }
 
     @Override
@@ -97,21 +78,48 @@ public class CategoryCardFragment extends Fragment implements View.OnClickListen
     }
 
     public void getData(){
-        int logo = 0;
         String[] cardCategory = new String[]{
-            "Alfamart / Alfamidi",
+                "Alfamart",
+                "Alfamidi",
                 "Indomaret",
                 "Starbucks",
                 "Lottemart",
                 "ACE Hardware",
         };
 
+        int[] logo = new int[]{
+                R.drawable.store_alfamart,
+                R.drawable.store_alfamidi,
+                R.drawable.store_indomaret,
+                R.drawable.store_starbucks,
+                R.drawable.store_lottemart,
+                R.drawable.store_ace,
+        };
+
+        int[] backgroundColor = new int[]{
+                colour.bgAlfamart,
+                colour.bgAlfamidi,
+                colour.bgIndomaret,
+                colour.bgStarbucks,
+                colour.bgLottemart,
+                colour.bgAce,
+        };
+
         CardList cardList;
-        for (String aCardCategory : cardCategory) {
-            cardList = new CardList(aCardCategory, logo);
+        for (int i = 0; i < cardCategory.length; i++) {
+            cardList = new CardList(cardCategory[i], logo[i], backgroundColor[i]);
             cardLists.add(cardList);
         }
 
         cardListAdapter.notifyDataSetChanged();
+    }
+
+    class colour {
+        static final int bgAlfamart = 0xFFFFFFFF;
+        static final int bgAlfamidi = 0xFFFFFFFF;
+        static final int bgIndomaret = 0xFFFFFFFF;
+        static final int bgStarbucks = 0xFF00704A;
+        static final int bgLottemart = 0xFFDA291C;
+        static final int bgAce = 0xFFFFFFFF;
     }
 }

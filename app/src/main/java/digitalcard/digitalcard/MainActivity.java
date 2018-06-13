@@ -1,27 +1,20 @@
 package digitalcard.digitalcard;
 
-import android.Manifest;
-import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Criteria;
-import android.location.Location;
-import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.PersistableBundle;
-import android.support.annotation.Nullable;
+import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.menu.MenuBuilder;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -32,29 +25,29 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import digitalcard.digitalcard.Adapter.CustomPagerAdapter;
+import digitalcard.digitalcard.Fragment.AccountFragment;
 import digitalcard.digitalcard.Fragment.ExistingCardFragment;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationServices;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import digitalcard.digitalcard.Fragment.CategoryCardFragment;
+import digitalcard.digitalcard.Fragment.MenuFragment;
+import digitalcard.digitalcard.Module.MenuPopupDialog;
 import digitalcard.digitalcard.Util.Utilities;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
-    LinearLayout mainLayout;
+    LinearLayout mainLayout, btnAccount, btnSettings, btnInfo;
     SlidingUpPanelLayout slidingUpPanelLayout;
     ImageButton btnMenu;
     FloatingActionButton btnAdd;
 
-    ExistingCardFragment fAddCard;
-    CategoryCardFragment fcategoryCardFragment;
+    AccountFragment accountFragment;
+    CategoryCardFragment categoryCardFragment;
+    MenuFragment menuFragment;
     FragmentTransaction ft;
     private int flag_fragment = -1;
     public static int OPEN_FRAGMENT_ADD_CARDS = 1;
@@ -65,15 +58,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        final Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         slidingUpPanelLayout = findViewById(R.id.popup_layout);
         slidingUpPanelLayout.addPanelSlideListener(new PanelSlidingListener());
         slidingUpPanelLayout.setFadeOnClickListener(new FadeOnClickListener());
 
-        fAddCard = new ExistingCardFragment();
-        fcategoryCardFragment = new CategoryCardFragment();
+        accountFragment = new AccountFragment();
+        categoryCardFragment = new CategoryCardFragment();
+        menuFragment = new MenuFragment();
 
         btnAdd = findViewById(R.id.add_button);
 //        btnMenu = findViewById(R.id.menu_button);
@@ -88,7 +82,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         final ViewPager viewPager = findViewById(R.id.pager);
-        final digitalcard.digitalcard.Adapter.PagerAdapter adapter = new digitalcard.digitalcard.Adapter.PagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount()) {
+//        viewPager.setClipToPadding(false);
+//        viewPager.setPadding(0,0,0,0);
+        final CustomPagerAdapter adapter = new CustomPagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount()) {
         };
         viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
@@ -111,6 +107,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             }
         });
+
+//        getSupportFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
+//            @Override
+//            public void onBackStackChanged() {
+//                Log.e("KEVIN", "Backstack Count = " + getSupportFragmentManager().getBackStackEntryCount());
+//            }
+//        });
+
     }
 
     @Override
@@ -130,6 +134,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.item_account:
+                ft = getSupportFragmentManager().beginTransaction();
+                ft.addToBackStack(null);
+                ft.replace(R.id.drag_view, accountFragment, "Account").commit();
+                slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
                 break;
             case R.id.item_settings:
                 break;
@@ -146,12 +154,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.add_button:
-                Toast.makeText(this, "Add button", Toast.LENGTH_SHORT).show();
                 ft = getSupportFragmentManager().beginTransaction();
                 ft.addToBackStack(null);
-                ft.replace(R.id.drag_view, fcategoryCardFragment, "AddNewCard").commit();
+                ft.replace(R.id.drag_view, categoryCardFragment, "AddNewCard").commit();
                 slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
                 break;
+
+//            case R.id.menu_button:
+//                ft = getSupportFragmentManager().beginTransaction();
+//                ft.addToBackStack(null);
+//                ft.replace(R.id.drag_view, menuFragment, "Menu").commit();
+//                slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
+//                break;
 //            case R.id.menu_button:
 //                Toast.makeText(this, "Menu button", Toast.LENGTH_SHORT).show();
 //                break;
@@ -161,32 +175,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onBackPressed() {
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.drag_view);
-        Log.e("frags" , String.valueOf(fragment));
         if (fragment == null) {
+            Log.e("KEVIN", "FRAGMENT NULL AND FINISH ACTIVITY");
             this.finish();
             System.exit(0);
         } else if (fragment.getTag().equals("AddNewCard")) {
+            slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+        } else if (fragment.getTag().equals("Menu")) {
             slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
         } else if (fragment.getTag().equals("CardOverview")) {
             slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
         } else if (fragment.getTag().equals("DetailPromoFragment")) {
             slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
-        } else if (slidingUpPanelLayout.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
-            if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
-                getSupportFragmentManager().popBackStack();
-            }
-            if (getSupportFragmentManager().getBackStackEntryCount() == 1) {
-                slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
-            }
-        } else {
-            super.onBackPressed();
+        } else if (fragment.getTag().equals("Account")) {
+            slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
         }
-    }
 
-//    private void showMenu(View view){
-//        PopupMenu popupMenu = new PopupMenu(this, view);
-//        popupMenu.setOnMenuItemClickListener();
-//    }
+        getSupportFragmentManager().popBackStack();
+
+    }
 
     private void validateAllPermissions() {
         String[] permissions = Utilities.ALL_PERMISSIONS;
@@ -218,16 +225,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         @Override
         public void onPanelStateChanged(View panel, SlidingUpPanelLayout.PanelState previousState, SlidingUpPanelLayout.PanelState newState) {
             if (newState == SlidingUpPanelLayout.PanelState.COLLAPSED) {
-                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                if (flag_fragment == OPEN_FRAGMENT_ADD_CARDS) {
-                    ft.remove(getSupportFragmentManager().findFragmentByTag("AddNewCard")).commit();
+                getSupportFragmentManager().popBackStack();
+//                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+//                if (flag_fragment == OPEN_FRAGMENT_ADD_CARDS) {
+//                    ft.remove(getSupportFragmentManager().findFragmentByTag("AddNewCard")).commit();
 //                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 //                    imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
-                }
+//                }
             }
-//            InputMethodManager inputManager = (InputMethodManager) getSystemService(
-//                    Context.INPUT_METHOD_SERVICE);
-//            inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
         }
     }
 

@@ -6,7 +6,29 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_card"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    </android.support.v7.widget.RecyclerView>
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:paddingTop="6dp" />
+
+    <LinearLayout
+        android:id="@+id/ll_no_card"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_card" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="You don't have any card"
+            android:textColor="@color/grey_button"
+            android:textSize="14sp" />
+    </LinearLayout>
 
 </RelativeLayout>

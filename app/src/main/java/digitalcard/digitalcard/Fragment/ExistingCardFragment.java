@@ -39,6 +39,7 @@ public class ExistingCardFragment extends Fragment implements View.OnClickListen
     Button btnScan;
 
     String title;
+    int logo, backgroundColor;
 
     @Nullable
     @Override
@@ -55,7 +56,10 @@ public class ExistingCardFragment extends Fragment implements View.OnClickListen
         etCardName = rootView.findViewById(R.id.card_name);
         btnScan = rootView.findViewById(R.id.btn_scan);
 
-        title = getArguments().getString(Utilities.BUNNDLE_CARD_CATEGORY);
+        title = getArguments().getString(Utilities.BUNDLE_CARD_CATEGORY);
+        logo = getArguments().getInt(Utilities.BUNDLE_CARD_LOGO);
+        backgroundColor = getArguments().getInt(Utilities.BUNDLE_CARD_BACKGROUND);
+
         txtTitle.setText(title);
         etBarcodeNumber.setInputType(InputType.TYPE_CLASS_NUMBER);
 
@@ -96,9 +100,11 @@ public class ExistingCardFragment extends Fragment implements View.OnClickListen
 
                     DetailCardFragment detailCardFragment = new DetailCardFragment();
                     Bundle bundle = new Bundle();
-                    bundle.putString(Utilities.BUNNDLE_CARD_NAME, etCardName.getText().toString());
-                    bundle.putString(Utilities.BUNNDLE_BARCODE_NUMBER, etBarcodeNumber.getText().toString());
-                    bundle.putString(Utilities.BUNNDLE_CARD_CATEGORY, title);
+                    bundle.putString(Utilities.BUNDLE_CARD_NAME, etCardName.getText().toString());
+                    bundle.putString(Utilities.BUNDLE_BARCODE_NUMBER, etBarcodeNumber.getText().toString());
+                    bundle.putString(Utilities.BUNDLE_CARD_CATEGORY, title);
+                    bundle.putInt(Utilities.BUNDLE_CARD_LOGO, logo);
+                    bundle.putInt(Utilities.BUNDLE_CARD_BACKGROUND, backgroundColor);
                     detailCardFragment.setArguments(bundle);
 
                     FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();

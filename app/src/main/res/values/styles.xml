@@ -1,20 +1,24 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>>
         <item name="colorAccent">@color/colorAccent</item>
 
-        <item name="actionOverflowButtonStyle">@style/MyOverflowButtonStyle</item>
         <item name="actionOverflowMenuStyle">@style/MyOverflowMenuStyle</item>
+        <item name="android:windowActionBarOverlay">true</item>
 
-        <!--di bawah ini baru semua-->
+        <!--<item name="android:statusBarColor">@android:color/white</item>-->
         <item name="android:windowTranslucentStatus">true</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="android:windowContentOverlay">@null</item>
-        <item name="android:fitsSystemWindows">true</item>
+        <!--<item name="android:windowLightStatusBar">true</item>-->
+
+    </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
     </style>
 
     <!-- For Popup Menu -->
@@ -30,10 +34,6 @@
 
     <style name="DatePickerDialogTheme" parent="Theme.AppCompat.Light.Dialog">
         <item name="colorAccent">@color/start2</item>
-    </style>
-
-    <style name="MyOverflowButtonStyle" parent="Widget.AppCompat.ActionButton.Overflow">
-        <item name="android:tint">#ffffff</item>
     </style>
 
     <style name="MyOverflowMenuStyle" parent="Widget.AppCompat.PopupMenu.Overflow">

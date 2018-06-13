@@ -38,9 +38,9 @@ public class DetailPromoFragment extends Fragment implements View.OnClickListene
         tvPromoDescription = rootView.findViewById(R.id.promo_description);
 
         assert getArguments() != null;
-        title = getArguments().getString(Utilities.BUNNDLE_PROMO_MERCHANT);
-        promoTitle = getArguments().getString(Utilities.BUNNDLE_PROMO_TITLE);
-        promoDescription = getArguments().getString(Utilities.BUNNDLE_PROMO_DESCRIPTION);
+        title = getArguments().getString(Utilities.BUNDLE_PROMO_MERCHANT);
+        promoTitle = getArguments().getString(Utilities.BUNDLE_PROMO_TITLE);
+        promoDescription = getArguments().getString(Utilities.BUNDLE_PROMO_DESCRIPTION);
 
         tvTitle.setText(title);
         tvPromoTitle.setText(promoTitle);

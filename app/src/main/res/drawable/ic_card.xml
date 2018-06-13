@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="150dp"
+    android:height="150dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+
+    <group
+        android:translateX="-1761.000000"
+        android:translateY="-1460.000000">
+        <group
+            android:translateX="1234.000000"
+            android:translateY="863.000000">
+            <group
+                android:translateX="495.000000"
+                android:translateY="149.000000">
+                <group
+                    android:translateX="8.000000"
+                    android:translateY="136.000000">
+                    <group
+                        android:translateY="16.000000">
+                        <group
+                            android:translateY="280.000000">
+                            <group
+                                android:translateX="24.000000"
+                                android:translateY="16.000000">
+                                <path
+                                    android:fillType="evenOdd"
+                                    android:strokeWidth="1"
+                                    android:pathData="M 0 0.96 H 24 V 24 H 0 V 0.96 Z" />
+                                <path
+                                    android:fillColor="@color/grey_button"
+                                    android:fillType="evenOdd"
+                                    android:strokeWidth="1"
+                                    android:pathData="M20,11 L20,8.94331286 C20,8.4043039 19.5518945,7.94736842 18.9991283,7.94736842
+L5.00087166,7.94736842 C4.44463086,7.94736842 4,8.39326794 4,8.94331286 L4,11
+L20,11 Z M20,12 L4,12 L4,16.4251082 C4,16.9641172 4.4481055,17.4210526
+5.00087166,17.4210526 L18.9991283,17.4210526 C19.5553691,17.4210526
+20,16.9751531 20,16.4251082 L20,12 Z M3,9.00627636 C3,7.89824052 3.8926228,7
+4.99508929,7 L19.0049107,7 C20.1067681,7 21,7.89206093 21,9.00627636
+L21,16.3621447 C21,17.4701805 20.1073772,18.3684211 19.0049107,18.3684211
+L4.99508929,18.3684211 C3.8932319,18.3684211 3,17.4763601 3,16.3621447
+L3,9.00627636 Z M5,13.5 C5,13.2238576 5.23290253,13 5.50342274,13 L11.4965773,13
+C11.77461,13 12,13.2319336 12,13.5 C12,13.7761424 11.7670975,14 11.4965773,14
+L5.50342274,14 C5.22539004,14 5,13.7680664 5,13.5 Z M5,9.5 C5,9.22385763
+5.22765279,9 5.50964952,9 L14.4903505,9 C14.7718221,9 15,9.23193359 15,9.5
+C15,9.77614237 14.7723472,10 14.4903505,10 L5.50964952,10 C5.22817786,10
+5,9.76806641 5,9.5 Z M5,15.5 C5,15.2238576 5.21484375,15 5.49769878,15
+L9.50230122,15 C9.77717266,15 10,15.2319336 10,15.5 C10,15.7761424 9.78515625,16
+9.50230122,16 L5.49769878,16 C5.22282734,16 5,15.7680664 5,15.5 Z" />
+                            </group>
+                        </group>
+                    </group>
+                </group>
+            </group>
+        </group>
+    </group>
+</vector>

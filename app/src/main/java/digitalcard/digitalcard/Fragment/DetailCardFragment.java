@@ -51,6 +51,7 @@ public class DetailCardFragment extends Fragment implements View.OnClickListener
     Button btnOk;
 
     String cardName, barcodeNumber, title;
+    int logo, backgroundColor;
 
     @Nullable
     @Override
@@ -65,9 +66,11 @@ public class DetailCardFragment extends Fragment implements View.OnClickListener
 
         toolbar = rootView.findViewById(R.id.toolbar);
 
-        cardName = getArguments().getString(Utilities.BUNNDLE_CARD_NAME);
-        barcodeNumber = getArguments().getString(Utilities.BUNNDLE_BARCODE_NUMBER);
-        title = getArguments().getString(Utilities.BUNNDLE_CARD_CATEGORY);
+        cardName = getArguments().getString(Utilities.BUNDLE_CARD_NAME);
+        barcodeNumber = getArguments().getString(Utilities.BUNDLE_BARCODE_NUMBER);
+        title = getArguments().getString(Utilities.BUNDLE_CARD_CATEGORY);
+        logo = getArguments().getInt(Utilities.BUNDLE_CARD_LOGO);
+        backgroundColor = getArguments().getInt(Utilities.BUNDLE_CARD_BACKGROUND);
 
         txtTitle = toolbar.getTxtTitle();
         txtCardName = rootView.findViewById(R.id.card_name);
@@ -114,9 +117,11 @@ public class DetailCardFragment extends Fragment implements View.OnClickListener
                 cardList.cardName = cardName;
                 cardList.cardType = title;
                 cardList.barcodeNumber = barcodeNumber;
+                cardList.cardIcon = logo;
+                cardList.cardBackground = backgroundColor;
 
                 CardDB cardDB = new CardDB(getContext());
-                cardDB.addCard(new CardList(cardList.cardName, cardList.cardType ,cardList.barcodeNumber));
+                cardDB.addCard(new CardList(cardList.cardName, cardList.cardType ,cardList.barcodeNumber, cardList.cardIcon, cardList.cardBackground));
 
                 Intent intent = new Intent(getActivity(), MainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
