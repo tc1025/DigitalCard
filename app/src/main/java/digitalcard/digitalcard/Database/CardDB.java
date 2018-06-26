@@ -10,44 +10,34 @@ import java.util.ArrayList;
 import java.util.List;
 
 import digitalcard.digitalcard.Model.CardList;
+import digitalcard.digitalcard.Util.Utilities;
 
 public class CardDB extends SQLiteOpenHelper {
-    private static final int DATABASE_VERSION = 1;
-    private static final String DATABASE_NAME = "tableCardList";
-    private static final String TABLE_CARDLIST = "cardList";
-
-    private static final String id_key = "id";
-    private static final String card_name = "card_names";
-    private static final String card_type = "card_types";
-    private static final String barcode_number = "barcode_number";
-    private static final String card_logo = "card_logo";
-    private static final String card_background = "card_background";
-    private static final String notes = "notes";
-    private static final String front_view = "frontView";
-    private static final String back_view = "backView";
-
     private Context context;
 
     public CardDB(Context context) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        super(context, Utilities.DATABASE_NAME, null, Utilities.DATABASE_VERSION);
         this.context = context;
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_CARD_TABLE = "CREATE TABLE " + TABLE_CARDLIST + "("
-                + id_key + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + card_type + " TEXT, "
-                + card_name + " TEXT, "
-                + barcode_number + " TEXT, "
-                + card_logo + " INTEGER, "
-                + card_background + " INTEGER " + ")";
+        String CREATE_CARD_TABLE = "CREATE TABLE " + Utilities.TABLE_CARDLIST + "("
+                + Utilities.id_key + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + Utilities.card_type + " TEXT, "
+                + Utilities.card_name + " TEXT, "
+                + Utilities.barcode_number + " TEXT, "
+                + Utilities.card_logo + " TEXT, "
+                + Utilities.card_background + " INTEGER, "
+                + Utilities.notes + " TEXT, "
+                + Utilities.front_view + " TEXT, "
+                + Utilities.back_view + " TEXT " + ")";
         db.execSQL(CREATE_CARD_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF " + TABLE_CARDLIST);
+        db.execSQL("DROP TABLE IF " + Utilities.TABLE_CARDLIST);
         onCreate(db);
     }
 
@@ -55,13 +45,16 @@ public class CardDB extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(card_name, cardList.getCardName());
-        values.put(card_type, cardList.getCardType());
-        values.put(barcode_number, cardList.getBarcodeNumber());
-        values.put(card_logo, cardList.getCardIcon());
-        values.put(card_background, cardList.getCardBackground());
+        values.put(Utilities.card_name, cardList.getCardName());
+        values.put(Utilities.card_type, cardList.getCardType());
+        values.put(Utilities.barcode_number, cardList.getBarcodeNumber());
+        values.put(Utilities.card_logo, cardList.getCardIcon());
+        values.put(Utilities.card_background, cardList.getCardBackground());
+        values.put(Utilities.notes, cardList.getCardNote());
+        values.put(Utilities.front_view, cardList.getCardFrontView());
+        values.put(Utilities.back_view, cardList.getCardBackView());
 
-        db.insert(TABLE_CARDLIST,  null,values);
+        db.insert(Utilities.TABLE_CARDLIST,  null,values);
         db.close();
     }
 
@@ -69,26 +62,29 @@ public class CardDB extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(card_name, cardList.getCardName());
-        values.put(card_type, cardList.getCardType());
-        values.put(barcode_number, cardList.getBarcodeNumber());
-        values.put(card_logo, cardList.getCardIcon());
-        values.put(card_background, cardList.getCardBackground());
+        values.put(Utilities.card_name, cardList.getCardName());
+        values.put(Utilities.card_type, cardList.getCardType());
+        values.put(Utilities.barcode_number, cardList.getBarcodeNumber());
+        values.put(Utilities.card_logo, cardList.getCardIcon());
+        values.put(Utilities.card_background, cardList.getCardBackground());
+        values.put(Utilities.notes, cardList.getCardNote());
+        values.put(Utilities.front_view, cardList.getCardFrontView());
+        values.put(Utilities.back_view, cardList.getCardBackView());
 
-        db.update(TABLE_CARDLIST, values,"id=" + id_key, null );
+        db.update(Utilities.TABLE_CARDLIST, values,"id=" + cardList.getId(), null );
         db.close();
     }
 
     public void deleteCard(CardList cardList) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE_CARDLIST, id_key + " = ?",
+        db.delete(Utilities.TABLE_CARDLIST, Utilities.id_key + " = ?",
                 new String[]{String.valueOf(cardList.getId())});
         db.close();
     }
 
     public List<CardList> getAllCardList(){
         List<CardList> data = new ArrayList<>();
-        String selectQuery = "SELECT * FROM " + TABLE_CARDLIST;
+        String selectQuery = "SELECT * FROM " + Utilities.TABLE_CARDLIST;
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
 
@@ -99,8 +95,11 @@ public class CardDB extends SQLiteOpenHelper {
                 cardList.setCardName(cursor.getString(2));
                 cardList.setCardType(cursor.getString(1));
                 cardList.setBarcodeNumber(cursor.getString(3));
-                cardList.setCardIcon(cursor.getInt(4));
+                cardList.setCardIcon(cursor.getString(4));
                 cardList.setCardBackground(cursor.getInt(5));
+                cardList.setCardNote(cursor.getString(6));
+                cardList.setCardFrontView(cursor.getString(7));
+                cardList.setCardBackView(cursor.getString(8));
 
                 data.add(cardList);
             } while (cursor.moveToNext());

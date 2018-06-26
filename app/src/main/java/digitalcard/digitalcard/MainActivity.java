@@ -1,5 +1,6 @@
 package digitalcard.digitalcard;
 
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -25,12 +26,14 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import digitalcard.digitalcard.Adapter.CustomPagerAdapter;
+import digitalcard.digitalcard.Fragment.AccountFragment;
 import digitalcard.digitalcard.Fragment.ExistingCardFragment;
 
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import digitalcard.digitalcard.Fragment.CategoryCardFragment;
 import digitalcard.digitalcard.Fragment.MenuFragment;
+import digitalcard.digitalcard.Fragment.TabKartu;
 import digitalcard.digitalcard.Module.MenuPopupDialog;
 import digitalcard.digitalcard.Util.Utilities;
 
@@ -119,6 +122,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.item_account:
+                AccountFragment accountFragment = new AccountFragment();
+                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                ft.replace(R.id.drag_view, accountFragment, "Account");
+                ft.commit();
+                slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
                 break;
             case R.id.item_settings:
                 break;
@@ -166,6 +174,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
         } else if (fragment.getTag().equals("CardOverview")) {
             slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+            Intent intent = new Intent(TabKartu.RADIO_DATASET_CHANGED);
+            this.sendBroadcast(intent);
         } else if (fragment.getTag().equals("DetailPromoFragment")) {
             slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
         } else if (slidingUpPanelLayout.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
@@ -176,6 +186,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
             }
         } else {
+            Intent intent = new Intent(TabKartu.RADIO_DATASET_CHANGED);
+            this.sendBroadcast(intent);
             super.onBackPressed();
         }
     }

@@ -63,7 +63,7 @@ public class PopupBarcodeDialog extends Dialog{
             Settings.System.putInt(context.getContentResolver(), Settings.System.SCREEN_BRIGHTNESS, brightness);
         }
         WindowManager.LayoutParams layoutpars = getWindow().getAttributes();
-        layoutpars.screenBrightness = brightness / (float)255;
+        layoutpars.screenBrightness = 1;
         Log.e("tommy", "normal " + brightness + ", changes " + brightness / (float)255);
         getWindow().setAttributes(layoutpars);
 

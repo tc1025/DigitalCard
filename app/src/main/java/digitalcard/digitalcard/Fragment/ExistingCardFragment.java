@@ -38,8 +38,8 @@ public class ExistingCardFragment extends Fragment implements View.OnClickListen
     EditText etBarcodeNumber, etCardName;
     Button btnScan;
 
-    String title;
-    int logo, backgroundColor;
+    String title, logo;
+    int backgroundColor;
 
     @Nullable
     @Override
@@ -57,7 +57,7 @@ public class ExistingCardFragment extends Fragment implements View.OnClickListen
         btnScan = rootView.findViewById(R.id.btn_scan);
 
         title = getArguments().getString(Utilities.BUNDLE_CARD_CATEGORY);
-        logo = getArguments().getInt(Utilities.BUNDLE_CARD_LOGO);
+        logo = getArguments().getString(Utilities.BUNDLE_CARD_LOGO);
         backgroundColor = getArguments().getInt(Utilities.BUNDLE_CARD_BACKGROUND);
 
         txtTitle.setText(title);
@@ -98,18 +98,22 @@ public class ExistingCardFragment extends Fragment implements View.OnClickListen
                 else {
                     Toast.makeText(getActivity(), "You add a new card", Toast.LENGTH_SHORT).show();
 
-                    DetailCardFragment detailCardFragment = new DetailCardFragment();
+                    CardOverViewFragment cardOverViewFragment = new CardOverViewFragment();
                     Bundle bundle = new Bundle();
                     bundle.putString(Utilities.BUNDLE_CARD_NAME, etCardName.getText().toString());
                     bundle.putString(Utilities.BUNDLE_BARCODE_NUMBER, etBarcodeNumber.getText().toString());
                     bundle.putString(Utilities.BUNDLE_CARD_CATEGORY, title);
-                    bundle.putInt(Utilities.BUNDLE_CARD_LOGO, logo);
+                    bundle.putString(Utilities.BUNDLE_CARD_LOGO, logo);
                     bundle.putInt(Utilities.BUNDLE_CARD_BACKGROUND, backgroundColor);
-                    detailCardFragment.setArguments(bundle);
+                    bundle.putString(Utilities.BUNDLE_CARD_NOTES, "");
+                    bundle.putString(Utilities.BUNDLE_CARD_FRONT_VIEW, "");
+                    bundle.putString(Utilities.BUNDLE_CARD_BACK_VIEW, "");
+                    bundle.putBoolean(Utilities.BUNDLE_BACK_BUTTON_VISIBILITY, true);
+                    cardOverViewFragment.setArguments(bundle);
 
                     FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
                     ft.addToBackStack(null);
-                    ft.replace(R.id.drag_view, detailCardFragment, "DetailCard").commit();
+                    ft.replace(R.id.drag_view, cardOverViewFragment, "DetailCard").commit();
                 }
                 break;
 
