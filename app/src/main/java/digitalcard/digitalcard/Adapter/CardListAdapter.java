@@ -1,6 +1,8 @@
 package digitalcard.digitalcard.Adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,6 +14,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
+
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 
 import digitalcard.digitalcard.Fragment.ExistingCardFragment;
@@ -56,15 +64,24 @@ public class CardListAdapter extends RecyclerView.Adapter<CardListAdapter.ViewHo
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, int position) {
         final CardList data = cardLists.get(position);
         int cardBackground = 0;
 //        if (data.getThumbnail() != 0)
 //            Glide.with(context).load(data.getThumbnail()).into(holder.logo);
 
-        holder.name.setText(data.cardCategory);
-        holder.logo.setImageResource(data.cardIcon);
-        holder.logo.setBackgroundColor(data.cardBackground);
+        Picasso.get().load(data.cardIcon).into(holder.logo, new Callback() {
+            @Override
+            public void onSuccess() {
+                holder.logo.setBackgroundColor(data.cardBackground);
+                holder.name.setText(data.cardCategory);
+            }
+
+            @Override
+            public void onError(Exception e) {
+
+            }
+        });
 
         holder.panel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,7 +101,7 @@ public class CardListAdapter extends RecyclerView.Adapter<CardListAdapter.ViewHo
                             RegistrationCardFragment registrationCardFragment = new RegistrationCardFragment();
                             Bundle bundle = new Bundle();
                             bundle.putString(Utilities.BUNDLE_CARD_CATEGORY, data.cardCategory);
-                            bundle.putInt(Utilities.BUNDLE_CARD_LOGO, data.cardIcon);
+                            bundle.putString(Utilities.BUNDLE_CARD_LOGO, data.cardIcon);
                             bundle.putInt(Utilities.BUNDLE_CARD_BACKGROUND, data.cardBackground);
                             registrationCardFragment.setArguments(bundle);
 
@@ -102,7 +119,7 @@ public class CardListAdapter extends RecyclerView.Adapter<CardListAdapter.ViewHo
                             ExistingCardFragment existingCardFragment = new ExistingCardFragment();
                             Bundle bundle = new Bundle();
                             bundle.putString(Utilities.BUNDLE_CARD_CATEGORY, data.cardCategory);
-                            bundle.putInt(Utilities.BUNDLE_CARD_LOGO, data.cardIcon);
+                            bundle.putString(Utilities.BUNDLE_CARD_LOGO, data.cardIcon);
                             bundle.putInt(Utilities.BUNDLE_CARD_BACKGROUND, data.cardBackground);
                             existingCardFragment.setArguments(bundle);
 

@@ -36,6 +36,7 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import digitalcard.digitalcard.Fragment.CategoryCardFragment;
 import digitalcard.digitalcard.Fragment.MenuFragment;
+import digitalcard.digitalcard.Fragment.TabKartu;
 import digitalcard.digitalcard.Module.MenuPopupDialog;
 import digitalcard.digitalcard.Util.Utilities;
 
@@ -45,7 +46,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     ImageButton btnMenu;
     FloatingActionButton btnAdd;
 
-    AccountFragment accountFragment;
     CategoryCardFragment categoryCardFragment;
     MenuFragment menuFragment;
     FragmentTransaction ft;
@@ -65,7 +65,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         slidingUpPanelLayout.addPanelSlideListener(new PanelSlidingListener());
         slidingUpPanelLayout.setFadeOnClickListener(new FadeOnClickListener());
 
-        accountFragment = new AccountFragment();
         categoryCardFragment = new CategoryCardFragment();
         menuFragment = new MenuFragment();
 
@@ -134,9 +133,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.item_account:
-                ft = getSupportFragmentManager().beginTransaction();
-                ft.addToBackStack(null);
-                ft.replace(R.id.drag_view, accountFragment, "Account").commit();
+                AccountFragment accountFragment = new AccountFragment();
+                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                ft.replace(R.id.drag_view, accountFragment, "Account");
+                ft.commit();
                 slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
                 break;
             case R.id.item_settings:
@@ -185,10 +185,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
         } else if (fragment.getTag().equals("CardOverview")) {
             slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+            Intent intent = new Intent(TabKartu.RADIO_DATASET_CHANGED);
+            this.sendBroadcast(intent);
         } else if (fragment.getTag().equals("DetailPromoFragment")) {
             slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
         } else if (fragment.getTag().equals("Account")) {
             slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+        } else if (slidingUpPanelLayout.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
+            if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
+                getSupportFragmentManager().popBackStack();
+            }
+            if (getSupportFragmentManager().getBackStackEntryCount() == 1) {
+                slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+            }
+        } else {
+            Intent intent = new Intent(TabKartu.RADIO_DATASET_CHANGED);
+            this.sendBroadcast(intent);
+            super.onBackPressed();
         }
 
         getSupportFragmentManager().popBackStack();

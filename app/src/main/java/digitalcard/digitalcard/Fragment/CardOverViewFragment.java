@@ -5,16 +5,19 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -42,6 +45,10 @@ import com.google.zxing.common.BitMatrix;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import com.squareup.picasso.Picasso;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
@@ -69,16 +76,20 @@ public class CardOverViewFragment extends Fragment implements View.OnClickListen
 
     TextView tvTitle, tvCardName, tvBarcodeNumber, tvNotes;
     ImageButton btnLocation, btnDelete;
-    ImageView imgBarcode, dialogImgBarcode, imgLogo;
-    LinearLayout dialogActivity;
+    ImageView imgBarcode, dialogImgBarcode, imgLogo, imgFrontView, imgBackView;
+    LinearLayout dialogActivity, btnBack;
+    Button btnOk;
 
-    String title, cardName, barcodeNumber;
-    int cardID, logo, backgroundColor;
+    String title, cardName, barcodeNumber, logo, frontView, backView, notes;
+    int cardID, backgroundColor, id;
+    Bitmap bmFrontView, bmBackView;
 
     private GoogleApiClient mGoogleApiClient;
     Location location;
 
     private List<CardList> cardLists = new ArrayList<>();
+
+    Intent intent = new Intent(TabKartu.RADIO_DATASET_CHANGED);
 
     @Nullable
     @Override
@@ -96,33 +107,69 @@ public class CardOverViewFragment extends Fragment implements View.OnClickListen
 
         tvTitle = toolbar.getTxtTitle();
         btnLocation = toolbar.getBtnLocation();
-        btnDelete = toolbar.getBtnDelete();
+        btnBack = toolbar.getBtnBack();
         tvCardName = rootView.findViewById(R.id.card_name);
         tvBarcodeNumber = rootView.findViewById(R.id.barcode_number);
         imgBarcode = rootView.findViewById(R.id.barcode_image);
+        btnDelete = rootView.findViewById(R.id.delete_card);
         imgLogo = rootView.findViewById(R.id.merchant_logo);
         tvNotes = rootView.findViewById(R.id.notes);
+        imgFrontView = rootView.findViewById(R.id.img_front_view);
+        imgBackView = rootView.findViewById(R.id.img_back_view);
+        btnOk = rootView.findViewById(R.id.btn_ok);
+
+        Boolean toolbarView = getArguments().getBoolean(Utilities.BUNDLE_BACK_BUTTON_VISIBILITY, false);
+        if (toolbarView) {
+            toolbar.backButtonView(toolbarView);
+            if (getContext() instanceof MainActivity) {
+                ((MainActivity) getContext()).getSlidingPanel().setTouchEnabled(false);
+                btnDelete.setVisibility(View.GONE);
+                btnLocation.setVisibility(View.GONE);
+                btnOk.setVisibility(View.VISIBLE);
+            }
+        } else {
+            toolbar.backButtonView(toolbarView);
+        }
 
         assert getArguments() != null;
         cardID = getArguments().getInt(Utilities.BUNDLE_CARD_ID);
         title = getArguments().getString(Utilities.BUNDLE_CARD_CATEGORY);
         cardName = getArguments().getString(Utilities.BUNDLE_CARD_NAME);
         barcodeNumber = getArguments().getString(Utilities.BUNDLE_BARCODE_NUMBER);
-        logo = getArguments().getInt(Utilities.BUNDLE_CARD_LOGO);
+        logo = getArguments().getString(Utilities.BUNDLE_CARD_LOGO);
         backgroundColor = getArguments().getInt(Utilities.BUNDLE_CARD_BACKGROUND);
+        notes = getArguments().getString(Utilities.BUNDLE_CARD_NOTES);
+        frontView = getArguments().getString(Utilities.BUNDLE_CARD_FRONT_VIEW);
+        backView = getArguments().getString(Utilities.BUNDLE_CARD_BACK_VIEW);
+        id = getArguments().getInt("aaa");
 
         tvTitle.setText(title);
         tvCardName.setText(cardName);
         tvBarcodeNumber.setText(barcodeNumber);
         Picasso.get().load(logo).into(imgLogo);
-//        imgLogo.setImageResource(logo);
         imgLogo.setBackgroundColor(backgroundColor);
+        if (!notes.equals(""))
+            tvNotes.setText(notes);
+        if (!frontView.equals("")) {
+            byte[] decodeImage = Base64.decode(frontView, Base64.DEFAULT);
+            Bitmap image = BitmapFactory.decodeByteArray(decodeImage, 0, decodeImage.length);
+            imgFrontView.setImageBitmap(image);
+        }
+        if (!backView.equals("")) {
+            byte[] decodeImage = Base64.decode(backView, Base64.DEFAULT);
+            Bitmap image = BitmapFactory.decodeByteArray(decodeImage, 0, decodeImage.length);
+            imgBackView.setImageBitmap(image);
+        }
 
         btnLocation.setOnClickListener(this);
-        btnDelete.setOnClickListener(this);
         imgBarcode.setOnClickListener(this);
+        btnDelete.setOnClickListener(this);
         tvCardName.setOnClickListener(this);
         tvNotes.setOnClickListener(this);
+        imgFrontView.setOnClickListener(this);
+        imgBackView.setOnClickListener(this);
+        btnBack.setOnClickListener(this);
+        btnOk.setOnClickListener(this);
 
         convertNumberToBarcode(barcodeNumber, false);
 
@@ -140,13 +187,30 @@ public class CardOverViewFragment extends Fragment implements View.OnClickListen
     @Override
     public void onClick(View v) {
         FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+        Intent intentCamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         switch (v.getId()) {
+            case  R.id.back_button:
+                getActivity().onBackPressed();
+                break;
+
+            case R.id.btn_ok:
+                addCard();
+                break;
+
             case R.id.card_name:
                 popUpEdit("cardName");
                 break;
 
             case R.id.notes:
                 popUpEdit("cardNotes");
+                break;
+
+            case R.id.img_front_view:
+                startActivityForResult(intentCamera, 5);
+                break;
+
+            case R.id.img_back_view:
+                startActivityForResult(intentCamera, 6);
                 break;
 
             case R.id.location_button:
@@ -190,11 +254,11 @@ public class CardOverViewFragment extends Fragment implements View.OnClickListen
                 popupDialog.dismiss();
                 break;
 
-            case R.id.delete_button:
+            case R.id.delete_card:
                 List<CardList> tempCardLists = cardDB.getAllCardList();
                 if (!tempCardLists.isEmpty())
                     for (CardList data : tempCardLists) {
-                        cardLists.add(new CardList(data.getId(), data.getCardType(), data.getCardName(), data.getBarcodeNumber(), data.getCardIcon(), data.getCardBackground()));
+                        cardLists.add(new CardList(data.getId(), data.getCardType(), data.getCardName(), data.getBarcodeNumber(), data.getCardIcon(), data.getCardBackground(), data.getCardNote(), data.getCardFrontView(), data.getCardBackView()));
                     }
                 CardList deleteTarget = cardLists.get(cardID);
                 cardDB.deleteCard(deleteTarget);
@@ -214,6 +278,25 @@ public class CardOverViewFragment extends Fragment implements View.OnClickListen
 //                }
                 break;
         }
+    }
+
+    public void addCard () {
+        CardList cardList = new CardList();
+        cardList.cardName = cardName;
+        cardList.cardType = title;
+        cardList.barcodeNumber = barcodeNumber;
+        cardList.cardIcon = logo;
+        cardList.cardBackground = backgroundColor;
+        cardList.cardNote = notes;
+        cardList.cardFrontView = frontView;
+        cardList.cardBackView = backView;
+
+        CardDB cardDB = new CardDB(getContext());
+        cardDB.addCard(new CardList(cardList.cardName, cardList.cardType ,cardList.barcodeNumber, cardList.cardIcon, cardList.cardBackground, cardList.cardNote, cardList.cardFrontView, cardList.cardBackView));
+
+        Intent intent = new Intent(getActivity(), MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 
     public void popUpEdit (final String editSection) {
@@ -246,17 +329,22 @@ public class CardOverViewFragment extends Fragment implements View.OnClickListen
                 public void onClick(View v) {
                     String getEdited = etEdit.getText().toString();
                     CardList cardList = new CardList();
+                    cardList.cardName = cardName;
                     cardList.cardType = title;
                     cardList.barcodeNumber = barcodeNumber;
                     cardList.cardIcon = logo;
                     cardList.cardBackground = backgroundColor;
+                    cardList.cardNote = notes;
+                    cardList.cardFrontView = frontView;
+                    cardList.cardBackView = backView;
 
                     switch (editSection) {
                         case "cardName":
-                            cardDB.updateCard(new CardList(getEdited, cardList.cardType, cardList.barcodeNumber, cardList.cardIcon, cardList.cardBackground));
+                            cardDB.updateCard(new CardList(id, cardList.cardType, getEdited, cardList.barcodeNumber, cardList.cardIcon, cardList.cardBackground, cardList.cardNote, cardList.cardFrontView, cardList.cardBackView));
                             tvCardName.setText(getEdited);
                             break;
                         case "cardNotes":
+                            cardDB.updateCard(new CardList(id, getEdited, cardList.cardName, cardList.barcodeNumber, cardList.cardIcon, cardList.cardBackground, getEdited, cardList.cardFrontView, cardList.cardBackView));
                             tvNotes.setText(getEdited);
                             break;
                     }
@@ -265,6 +353,7 @@ public class CardOverViewFragment extends Fragment implements View.OnClickListen
                 }
             });
         }
+        getActivity().sendBroadcast(intent);
     }
 
     @Override
@@ -272,17 +361,61 @@ public class CardOverViewFragment extends Fragment implements View.OnClickListen
         if (requestCode == 1) {
             if (resultCode == 1) {
                 Place place = PlaceAutocomplete.getPlace(getActivity(), data);
-                Log.i("asd", "Place: " + place.getName());
             } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
                 Status status = PlaceAutocomplete.getStatus(getActivity(), data);
                 // TODO: Handle the error.
-                Log.i("asdf", status.getStatusMessage());
-
             } else if (resultCode == 2) {
                 // The user canceled the operation.
             }
         }
 
+        if (requestCode == 5) {
+            if (data!= null) {
+                bmFrontView = (Bitmap) data.getExtras().get("data");
+                imgFrontView.setImageBitmap(bmFrontView);
+
+                ByteArrayOutputStream baos=new  ByteArrayOutputStream();
+                bmFrontView.compress(Bitmap.CompressFormat.PNG,100, baos);
+                byte [] b=baos.toByteArray();
+                frontView = Base64.encodeToString(b, Base64.DEFAULT);
+
+                CardList cardList = new CardList();
+                cardList.cardName = cardName;
+                cardList.cardType = title;
+                cardList.barcodeNumber = barcodeNumber;
+                cardList.cardIcon = logo;
+                cardList.cardBackground = backgroundColor;
+                cardList.cardNote = notes;
+                cardList.cardBackView = backView;
+                cardDB.updateCard(new CardList(id, cardList.cardType, cardList.cardName, cardList.barcodeNumber, cardList.cardIcon, cardList.cardBackground, cardList.cardNote, frontView, cardList.cardBackView));
+
+                getActivity().sendBroadcast(intent);
+            }
+        }
+
+        if (requestCode == 6) {
+            if (data != null) {
+                bmBackView = (Bitmap) data.getExtras().get("data");
+                imgBackView.setImageBitmap(bmBackView);
+
+                ByteArrayOutputStream baos=new  ByteArrayOutputStream();
+                bmBackView.compress(Bitmap.CompressFormat.PNG,100, baos);
+                byte [] b=baos.toByteArray();
+                backView = Base64.encodeToString(b, Base64.DEFAULT);
+
+                CardList cardList = new CardList();
+                cardList.cardName = cardName;
+                cardList.cardType = title;
+                cardList.barcodeNumber = barcodeNumber;
+                cardList.cardIcon = logo;
+                cardList.cardBackground = backgroundColor;
+                cardList.cardNote = notes;
+                cardList.cardFrontView = frontView;
+                cardDB.updateCard(new CardList(id, cardList.cardType, cardList.cardName, cardList.barcodeNumber, cardList.cardIcon, cardList.cardBackground, cardList.cardNote, cardList.cardFrontView, backView));
+
+                getActivity().sendBroadcast(intent);
+            }
+        }
     }
 
     private boolean isPermissionGranted(String permission) {

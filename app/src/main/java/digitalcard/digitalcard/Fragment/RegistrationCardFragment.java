@@ -44,8 +44,8 @@ public class RegistrationCardFragment extends Fragment implements View.OnClickLi
     RadioGroup regGender;
     RadioButton rbGender;
 
-    String title, captcha = "";
-    int logo, backgroundColor;
+    String title, logo, captcha = "";
+    int backgroundColor;
 
     Calendar calendar = Calendar.getInstance();
     String dateFormat = "dd/MM/yyyy";
@@ -66,7 +66,7 @@ public class RegistrationCardFragment extends Fragment implements View.OnClickLi
 
         assert getArguments() != null;
         title = getArguments().getString(Utilities.BUNDLE_CARD_CATEGORY);
-        logo = getArguments().getInt(Utilities.BUNDLE_CARD_LOGO);
+        logo = getArguments().getString(Utilities.BUNDLE_CARD_LOGO);
         backgroundColor = getArguments().getInt(Utilities.BUNDLE_CARD_BACKGROUND);
 
         tvTitle = toolbar.getTxtTitle();
@@ -157,18 +157,22 @@ public class RegistrationCardFragment extends Fragment implements View.OnClickLi
                         }
                     }
 
-                    DetailCardFragment detailCardFragment = new DetailCardFragment();
+                    CardOverViewFragment cardOverViewFragment = new CardOverViewFragment();
                     Bundle bundle = new Bundle();
                     bundle.putString(Utilities.BUNDLE_CARD_NAME, regCardName.getText().toString());
                     bundle.putString(Utilities.BUNDLE_BARCODE_NUMBER, randomBarcode);
                     bundle.putString(Utilities.BUNDLE_CARD_CATEGORY, title);
-                    bundle.putInt(Utilities.BUNDLE_CARD_LOGO, logo);
+                    bundle.putString(Utilities.BUNDLE_CARD_LOGO, logo);
                     bundle.putInt(Utilities.BUNDLE_CARD_BACKGROUND, backgroundColor);
-                    detailCardFragment.setArguments(bundle);
+                    bundle.putString(Utilities.BUNDLE_CARD_NOTES, "");
+                    bundle.putString(Utilities.BUNDLE_CARD_FRONT_VIEW, "");
+                    bundle.putString(Utilities.BUNDLE_CARD_BACK_VIEW, "");
+                    bundle.putBoolean(Utilities.BUNDLE_BACK_BUTTON_VISIBILITY, true);
+                    cardOverViewFragment.setArguments(bundle);
 
                     FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
                     ft.addToBackStack(null);
-                    ft.replace(R.id.drag_view, detailCardFragment, "DetailCard").commit();
+                    ft.replace(R.id.drag_view, cardOverViewFragment, "DetailCard").commit();
                 }
                 break;
         }

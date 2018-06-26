@@ -12,7 +12,6 @@
         android:id="@+id/card_logo"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:background="@color/grey_button"
         android:layout_marginEnd="8dp"/>
 
     <TextView

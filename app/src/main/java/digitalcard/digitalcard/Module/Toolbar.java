@@ -80,4 +80,14 @@ public class Toolbar extends LinearLayout {
     public ImageButton getBtnDelete(){
         return btnDelete;
     }
+
+    public void backButtonView(Boolean setVisibility) {
+        if (!setVisibility) {
+            btnBack.setVisibility(GONE);
+            imgDropdown.setVisibility(VISIBLE);
+        } else {
+            btnBack.setVisibility(VISIBLE);
+            imgDropdown.setVisibility(GONE);
+        }
+    }
 }
