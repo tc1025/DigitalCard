@@ -49,7 +49,7 @@ public class CustomAppCompatActivity extends AppCompatActivity {
                 Method setStatusBarColorMethod = Window.class.getDeclaredMethod("setStatusBarColor", int.class);
                 Method setNavigationBarColorMethod = Window.class.getDeclaredMethod("setNavigationBarColor", int.class);
                 setStatusBarColorMethod.invoke(window, Color.TRANSPARENT);
-                setNavigationBarColorMethod.invoke(window, Color.RED);
+                setNavigationBarColorMethod.invoke(window, Color.BLACK);
                 //setNavigationBarColorMethod.invoke(window, R.drawable.gradient_background);	// Navigation color
             } catch (Exception e) {
                 e.printStackTrace();

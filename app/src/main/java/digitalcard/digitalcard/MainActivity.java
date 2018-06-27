@@ -1,15 +1,11 @@
 package digitalcard.digitalcard;
 
-import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
@@ -20,32 +16,27 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewParent;
-import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import digitalcard.digitalcard.Adapter.CustomPagerAdapter;
 import digitalcard.digitalcard.Fragment.AccountFragment;
-import digitalcard.digitalcard.Fragment.ExistingCardFragment;
 
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import digitalcard.digitalcard.Fragment.CategoryCardFragment;
 import digitalcard.digitalcard.Fragment.MenuFragment;
-import digitalcard.digitalcard.Module.MenuPopupDialog;
+import digitalcard.digitalcard.Fragment.SettingsFragment;
 import digitalcard.digitalcard.Util.Utilities;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener{
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     LinearLayout mainLayout, btnAccount, btnSettings, btnInfo;
     SlidingUpPanelLayout slidingUpPanelLayout;
     ImageButton btnMenu;
     FloatingActionButton btnAdd;
 
     AccountFragment accountFragment;
+    SettingsFragment settingsFragment;
     CategoryCardFragment categoryCardFragment;
     MenuFragment menuFragment;
     FragmentTransaction ft;
@@ -66,6 +57,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         slidingUpPanelLayout.setFadeOnClickListener(new FadeOnClickListener());
 
         accountFragment = new AccountFragment();
+        settingsFragment = new SettingsFragment();
         categoryCardFragment = new CategoryCardFragment();
         menuFragment = new MenuFragment();
 
@@ -78,12 +70,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         final TabLayout tabLayout = findViewById(R.id.tab_layout);
         tabLayout.addTab(tabLayout.newTab().setText(R.string.card_text));
         tabLayout.addTab(tabLayout.newTab().setText(R.string.promo_text));
-//        tabLayout.addTab(tabLayout.newTab().setText("Tab 3"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         final ViewPager viewPager = findViewById(R.id.pager);
-//        viewPager.setClipToPadding(false);
-//        viewPager.setPadding(0,0,0,0);
         final CustomPagerAdapter adapter = new CustomPagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount()) {
         };
         viewPager.setAdapter(adapter);
@@ -92,9 +81,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 viewPager.setCurrentItem(tab.getPosition());
-                if (tabLayout.getSelectedTabPosition() == 1)
-                    btnAdd.setVisibility(View.GONE);
-                else btnAdd.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -104,6 +90,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                switch (position) {
+                    case 0:
+                        btnAdd.show();
+                        break;
+
+                    default:
+                        btnAdd.hide();
+                        break;
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
 
             }
         });
@@ -121,8 +132,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.button_menu, menu);
 
-        if(menu instanceof MenuBuilder){
-
+        if (menu instanceof MenuBuilder) {
             MenuBuilder menuBuilder = (MenuBuilder) menu;
             menuBuilder.setOptionalIconsVisible(true);
         }
@@ -132,7 +142,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.item_account:
                 ft = getSupportFragmentManager().beginTransaction();
                 ft.addToBackStack(null);
@@ -140,6 +150,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
                 break;
             case R.id.item_settings:
+                ft = getSupportFragmentManager().beginTransaction();
+                ft.addToBackStack(null);
+                ft.replace(R.id.drag_view, settingsFragment, "Settings").commit();
+                slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
                 break;
         }
 
@@ -152,7 +166,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.add_button:
                 ft = getSupportFragmentManager().beginTransaction();
                 ft.addToBackStack(null);
@@ -188,6 +202,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } else if (fragment.getTag().equals("DetailPromoFragment")) {
             slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
         } else if (fragment.getTag().equals("Account")) {
+            slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+        } else if (fragment.getTag().equals("Settings")) {
             slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
         }
 

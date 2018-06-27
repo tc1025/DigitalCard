@@ -1,16 +1,24 @@
 package digitalcard.digitalcard.Fragment;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -23,6 +31,7 @@ import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -34,7 +43,9 @@ import digitalcard.digitalcard.Module.Toolbar;
 import digitalcard.digitalcard.R;
 import digitalcard.digitalcard.Util.Utilities;
 
-public class LocationFragment extends Fragment implements View.OnClickListener {
+public class LocationFragment extends Fragment implements View.OnClickListener, LocationListener {
+    private static final int MY_PERMISSIONS_REQUEST_LOCATION = 22;
+
     View rootView;
     Toolbar toolbar;
 
@@ -42,6 +53,7 @@ public class LocationFragment extends Fragment implements View.OnClickListener {
     TextView tvTitle;
     MapView merchantLocation;
     GoogleMap mGoogleMap;
+    LocationManager mLocationManager;
 
     Location location;
     String title;
@@ -65,6 +77,10 @@ public class LocationFragment extends Fragment implements View.OnClickListener {
         tvTitle.setText(title);
         btnBack.setOnClickListener(this);
 
+        mLocationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+
+        checkLocationPermission();
+
         return rootView;
     }
 
@@ -77,16 +93,19 @@ public class LocationFragment extends Fragment implements View.OnClickListener {
 
         GoogleApiAvailability googleAPI = GoogleApiAvailability.getInstance();
         int statusCode = googleAPI.isGooglePlayServicesAvailable(getActivity());
+        Log.e("KEVIN", "Status Code = " + statusCode);
         if (statusCode == ConnectionResult.SUCCESS) {
             merchantLocation.getMapAsync(new OnMapReadyCallback() {
                 @Override
                 public void onMapReady(GoogleMap googleMap) {
                     mGoogleMap = googleMap;
-                    mGoogleMap.setBuildingsEnabled(true);
+                    mGoogleMap.getUiSettings().setCompassEnabled(true);
+                    mGoogleMap.getUiSettings().setTiltGesturesEnabled(false);
                     mGoogleMap.setOnMyLocationButtonClickListener(myLocationButtonClickListener);
                     mGoogleMap.setOnMapLoadedCallback(onMapLoadedCallback);
                     try {
                         mGoogleMap.setMyLocationEnabled(true);
+                        Log.e("KEVIN", "MAP READY");
                     } catch (SecurityException e) {
                         e.printStackTrace();
                     }
@@ -130,12 +149,123 @@ public class LocationFragment extends Fragment implements View.OnClickListener {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        if (ContextCompat.checkSelfPermission(getActivity(),
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+
+            mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 400, 1000, this);
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (ContextCompat.checkSelfPermission(getActivity(),
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+
+            mLocationManager.removeUpdates(this);
+        }
+    }
+
+    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.back_button:
                 getActivity().onBackPressed();
                 break;
         }
+    }
+
+    public void checkLocationPermission() {
+        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            requestLocationPermission();
+        }
+    }
+
+    private void requestLocationPermission() {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
+                Manifest.permission.ACCESS_FINE_LOCATION)) {
+
+            new AlertDialog.Builder(getActivity())
+                    .setTitle(R.string.title_location_permission)
+                    .setMessage(R.string.text_location_permission)
+                    .setPositiveButton(R.string.ok_permission, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            ActivityCompat.requestPermissions(getActivity(),
+                                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                                    MY_PERMISSIONS_REQUEST_LOCATION);
+                        }
+                    })
+                    .setNegativeButton(R.string.cancel_permission, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    })
+                    .create()
+                    .show();
+
+
+        } else {
+            ActivityCompat.requestPermissions(getActivity(),
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    MY_PERMISSIONS_REQUEST_LOCATION);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_LOCATION: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay! Do the
+                    // location-related task you need to do.
+                    if (ContextCompat.checkSelfPermission(getActivity(),
+                            Manifest.permission.ACCESS_FINE_LOCATION)
+                            == PackageManager.PERMISSION_GRANTED) {
+
+                        //Request location updates:
+                        mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 400, 1000, this);
+                    }
+
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+
+                }
+                return;
+            }
+        }
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 15);
+        mGoogleMap.animateCamera(cameraUpdate);
+        mLocationManager.removeUpdates(this);
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+
     }
 
     private GoogleMap.OnMyLocationButtonClickListener myLocationButtonClickListener = new GoogleMap.OnMyLocationButtonClickListener() {

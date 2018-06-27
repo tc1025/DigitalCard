@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.text.InputType;
@@ -81,7 +82,6 @@ public class ExistingCardFragment extends Fragment implements View.OnClickListen
                 break;
 
             case R.id.button_cancel:
-                Toast.makeText(getActivity(), "You choose cancel", Toast.LENGTH_SHORT).show();
                 getActivity().onBackPressed();
                 break;
 
@@ -96,8 +96,6 @@ public class ExistingCardFragment extends Fragment implements View.OnClickListen
                     etBarcodeNumber.requestFocus();
                 }
                 else {
-                    Toast.makeText(getActivity(), "You add a new card", Toast.LENGTH_SHORT).show();
-
                     DetailCardFragment detailCardFragment = new DetailCardFragment();
                     Bundle bundle = new Bundle();
                     bundle.putString(Utilities.BUNDLE_CARD_NAME, etCardName.getText().toString());

@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#757575</color>
     <color name="colorPrimaryDark">#616161</color>
-    <color name="colorAccent">#ee0979</color>
+    <color name="colorAccent">#f84330</color>
 
     <color name="colorAppGradientBgStart">#4A2E68</color>
     <color name="colorAppGradientBgCenter">#E6756B</color>

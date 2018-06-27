@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import digitalcard.digitalcard.Adapter.CardListAdapter;
+import digitalcard.digitalcard.MainActivity;
 import digitalcard.digitalcard.Model.CardList;
 import digitalcard.digitalcard.Module.Toolbar;
 import digitalcard.digitalcard.R;
@@ -44,6 +45,11 @@ public class CategoryCardFragment extends Fragment implements View.OnClickListen
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootview = inflater.inflate(R.layout.fragment_category_card, container, false);
+
+        if (getContext() instanceof MainActivity) {
+            ((MainActivity) getContext()).getSlidingPanel().setTouchEnabled(true);
+        }
+
         toolbar = rootview.findViewById(R.id.toolbar);
 
         txtTitle = toolbar.getTxtTitle();

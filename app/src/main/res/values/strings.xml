@@ -16,8 +16,17 @@
     <string name="done_text">Done</string>
     <string name="cancel_text">Cancel</string>
 
+    <string name="settings_password">Security Code</string>
+    <string name="settings_password_subtitle">Add or change security code to secure Digicard</string>
+
     <!--dialog-->
+    <string name="title_location_permission">Permisssion Needed</string>
+    <string name="text_location_permission">This app would like to use your current location to customize your experience.</string>
+    <string name="ok_permission">OK</string>
+    <string name="cancel_permission">CANCEL</string>
     <string name="dialog_header_location_null">Location not Found</string>
     <string name="dialog_content_location_null">Please check if internet connection or GPS services is active.</string>
+    <string name="enter_security_code">Enter Your Security Code</string>
+    <string name="wrong_security_code">Wrong Security Code</string>
 
 </resources>

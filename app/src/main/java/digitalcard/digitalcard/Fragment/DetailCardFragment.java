@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
@@ -99,7 +100,7 @@ public class DetailCardFragment extends Fragment implements View.OnClickListener
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.back_button:
-                getActivity().onBackPressed();
+            getActivity().onBackPressed();
                 break;
 
             case R.id.card_front_view:
@@ -111,8 +112,6 @@ public class DetailCardFragment extends Fragment implements View.OnClickListener
                 break;
 
             case R.id.btn_ok:
-                Toast.makeText(getContext(), "You choose OK", Toast.LENGTH_SHORT).show();
-
                 CardList cardList = new CardList();
                 cardList.cardName = cardName;
                 cardList.cardType = title;

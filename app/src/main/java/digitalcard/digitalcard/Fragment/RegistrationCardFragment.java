@@ -114,7 +114,7 @@ public class RegistrationCardFragment extends Fragment implements View.OnClickLi
 
         switch (v.getId()){
             case R.id.register_DOB:
-                new DatePickerDialog(getContext(), R.style.DatePickerDialogTheme, date, 1990, 1, 1).show();
+                new DatePickerDialog(getContext(), date, 1990, 1, 1).show();
                 break;
 
             case R.id.back_button:
@@ -122,7 +122,6 @@ public class RegistrationCardFragment extends Fragment implements View.OnClickLi
                 break;
 
             case R.id.button_cancel:
-                Toast.makeText(getActivity(), "You choose cancel", Toast.LENGTH_SHORT).show();
                 getActivity().onBackPressed();
                 break;
 

@@ -23,6 +23,7 @@ import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.drive.Drive;
 import com.google.android.gms.tasks.Task;
 
+import digitalcard.digitalcard.MainActivity;
 import digitalcard.digitalcard.Module.Toolbar;
 import digitalcard.digitalcard.R;
 import digitalcard.digitalcard.Util.Utilities;
@@ -38,7 +39,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
 
     SignInButton signInButton;
     TextView tvTitle, tvAccountName;
-    LinearLayout llNotConnected, llConnected;
+    LinearLayout llNotConnected, llConnected, btnBack;
 
     boolean loginStatus;
 
@@ -62,15 +63,20 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_account, container, false);
 
+        if (getContext() instanceof MainActivity) {
+            ((MainActivity) getContext()).getSlidingPanel().setTouchEnabled(false);
+        }
+
         toolbar = rootView.findViewById(R.id.toolbar);
 
         tvTitle = toolbar.getTxtTitle();
+        tvTitle.setText("Account");
+        btnBack = toolbar.getBtnBack();
+
         signInButton = rootView.findViewById(R.id.btn_sign_in);
         llConnected = rootView.findViewById(R.id.ll_connected_account);
         llNotConnected = rootView.findViewById(R.id.ll_no_connected_account);
         tvAccountName = rootView.findViewById(R.id.sign_in_name);
-
-        tvTitle.setText("Account");
 
         if (!loginStatus) {
             llConnected.setVisibility(View.GONE);
@@ -81,13 +87,16 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
         }
 
         signInButton.setOnClickListener(this);
-
+        btnBack.setOnClickListener(this);
         return rootView;
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.back_button:
+                getActivity().onBackPressed();
+                break;
             case R.id.btn_sign_in:
                 signIn();
                 break;
