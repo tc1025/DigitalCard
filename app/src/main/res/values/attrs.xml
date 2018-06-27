@@ -24,7 +24,6 @@
     <declare-styleable name="Toolbar">
         <attr name="backButton" format="boolean"/>
         <attr name="cardOverviewStyle" format="boolean"/>
-        <attr name="locationButton" format="boolean"/>
     </declare-styleable>
 
 </resources>

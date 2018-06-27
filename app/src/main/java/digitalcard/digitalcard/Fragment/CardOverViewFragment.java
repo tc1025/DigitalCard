@@ -218,7 +218,7 @@ public class CardOverViewFragment extends Fragment implements View.OnClickListen
                     Bundle bundle = new Bundle();
                     bundle.putDouble(Utilities.BUNDLE_LOCATION_LATITUDE, location != null ? location.getLatitude() : 0.0);
                     bundle.putDouble(Utilities.BUNDLE_LOCATION_LONGITUDE, location != null ? location.getLongitude() : 0.0);
-                    bundle.putString(Utilities.BUNDLE_CARD_CATEGORY, cardName);
+                    bundle.putString(Utilities.BUNDLE_CARD_CATEGORY, title);
                     locationFragment.setArguments(bundle);
                     ft.addToBackStack(null);
                     ft.replace(R.id.drag_view, locationFragment, "LocationCard").commit();

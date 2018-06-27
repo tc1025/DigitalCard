@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="56dp"
         app:backButton="false"
-        app:locationButton="true"
+        app:cardOverviewStyle="true"
         />
     <ScrollView
         android:layout_width="match_parent"

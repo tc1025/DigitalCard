@@ -11,6 +11,9 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -21,6 +24,13 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -30,28 +40,45 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import digitalcard.digitalcard.Adapter.LocationListAdapter;
+import digitalcard.digitalcard.Model.CardList;
 import digitalcard.digitalcard.Module.Toolbar;
 import digitalcard.digitalcard.R;
 import digitalcard.digitalcard.Util.Utilities;
+
+import static com.google.android.gms.wearable.DataMap.TAG;
 
 public class LocationFragment extends Fragment implements View.OnClickListener {
     View rootView;
     Toolbar toolbar;
 
     LinearLayout btnBack;
-    TextView tvTitle;
+    TextView tvTitle, tvNoLocation;
     MapView merchantLocation;
     GoogleMap mGoogleMap;
+    RecyclerView rvLocation;
 
     Location location;
     String title;
     Double latitude, longitude;
+    List<digitalcard.digitalcard.Model.Location> locationList;
+    LocationListAdapter locationListAdapter;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_location, container, false);
         toolbar = rootView.findViewById(R.id.toolbar);
+        tvNoLocation = rootView.findViewById(R.id.no_location);
 
         merchantLocation = rootView.findViewById(R.id.merchant_location);
         assert getArguments() != null;
@@ -61,9 +88,20 @@ public class LocationFragment extends Fragment implements View.OnClickListener {
 
         btnBack = toolbar.getBtnBack();
         tvTitle = toolbar.getTxtTitle();
+        rvLocation = rootView.findViewById(R.id.rv_location);
+
+        locationList = new ArrayList<>();
+        locationListAdapter = new LocationListAdapter(getContext(), locationList);
+
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        rvLocation.setLayoutManager(layoutManager);
+        rvLocation.setItemAnimator(new DefaultItemAnimator());
+        rvLocation.setAdapter(locationListAdapter);
 
         tvTitle.setText(title);
         btnBack.setOnClickListener(this);
+
+        loadPlace();
 
         return rootView;
     }
@@ -136,6 +174,55 @@ public class LocationFragment extends Fragment implements View.OnClickListener {
                 getActivity().onBackPressed();
                 break;
         }
+    }
+
+    public void loadPlace(){
+//        radius = meter
+//        keyword = yg mau dicari
+        String link = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location="
+                , radius = "&radius="
+                , keyword = "&keyword="
+                , key = "&key=AIzaSyAeY9ioncH27wIXVxKOhIY_vKyQ5JitCy0";
+        String url = link + latitude + "," + longitude + radius + 10000 + keyword + title + key;
+        url = url.replaceAll(" ", "+");
+        Log.e("asd", "lat : " + latitude + ", long : " + longitude);
+        Log.e("asd", url);
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            JSONArray jsonArray = jsonObject.getJSONArray("results");
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                JSONObject object = jsonArray.getJSONObject(i);
+                                Log.e("data", "Store : " + object.getString("name") + ", address : " + object.getString("vicinity"));
+                                locationList.add(new digitalcard.digitalcard.Model.Location(object.getString("name"), object.getString("vicinity")));
+                            }
+                        } catch (JSONException e) { e.printStackTrace(); }
+                        finally {
+                            locationListAdapter.notifyDataSetChanged();
+
+                            if (locationList.isEmpty()) {
+                                tvNoLocation.setVisibility(View.VISIBLE);
+                                rvLocation.setVisibility(View.GONE);
+                            }
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) { Log.e(TAG, error.toString()); }
+                }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String , String> map = new HashMap<String, String>();
+                return map;
+            }
+        };
+        RequestQueue requestQueue = Volley.newRequestQueue(getContext());
+        requestQueue.add(stringRequest);
     }
 
     private GoogleMap.OnMyLocationButtonClickListener myLocationButtonClickListener = new GoogleMap.OnMyLocationButtonClickListener() {
