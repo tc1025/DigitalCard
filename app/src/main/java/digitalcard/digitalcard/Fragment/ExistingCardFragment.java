@@ -4,8 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.text.InputType;
 import android.util.Log;
@@ -19,6 +19,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import digitalcard.digitalcard.Database.CardDB;
+import digitalcard.digitalcard.MainActivity;
+import digitalcard.digitalcard.Model.CardList;
 import digitalcard.digitalcard.Module.DoubleButton;
 import digitalcard.digitalcard.Module.Toolbar;
 import digitalcard.digitalcard.R;
@@ -29,7 +32,7 @@ import digitalcard.digitalcard.Util.Utilities;
  * Created by viks on 16/03/2018.
  */
 
-public class ExistingCardFragment extends Fragment implements View.OnClickListener{
+public class ExistingCardFragment extends Fragment implements View.OnClickListener {
     View rootView;
     Toolbar toolbar;
     DoubleButton btnAction;
@@ -39,13 +42,18 @@ public class ExistingCardFragment extends Fragment implements View.OnClickListen
     EditText etBarcodeNumber, etCardName;
     Button btnScan;
 
-    String title;
-    int logo, backgroundColor;
+    String title, logo, cardName, barcodeNumber, frontView, backView, notes;
+    int backgroundColor;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_add_card, container, false);
+
+        if (getContext() instanceof MainActivity) {
+            ((MainActivity) getContext()).getSlidingPanel().setTouchEnabled(false);
+        }
+
         toolbar = rootView.findViewById(R.id.toolbar);
         btnAction = rootView.findViewById(R.id.btn_action);
 
@@ -58,7 +66,7 @@ public class ExistingCardFragment extends Fragment implements View.OnClickListen
         btnScan = rootView.findViewById(R.id.btn_scan);
 
         title = getArguments().getString(Utilities.BUNDLE_CARD_CATEGORY);
-        logo = getArguments().getInt(Utilities.BUNDLE_CARD_LOGO);
+        logo = getArguments().getString(Utilities.BUNDLE_CARD_LOGO);
         backgroundColor = getArguments().getInt(Utilities.BUNDLE_CARD_BACKGROUND);
 
         txtTitle.setText(title);
@@ -76,7 +84,7 @@ public class ExistingCardFragment extends Fragment implements View.OnClickListen
     public void onClick(View view) {
         InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.back_button:
                 getActivity().onBackPressed();
                 break;
@@ -90,24 +98,40 @@ public class ExistingCardFragment extends Fragment implements View.OnClickListen
                 if (etCardName.getText().toString().equals("")) {
                     Toast.makeText(getActivity(), "Card name must be filled", Toast.LENGTH_SHORT).show();
                     etCardName.requestFocus();
-                }
-                else if (etBarcodeNumber.getText().toString().equals("")) {
+                } else if (etBarcodeNumber.getText().toString().equals("")) {
                     Toast.makeText(getActivity(), "Barcode number must be filled", Toast.LENGTH_SHORT).show();
                     etBarcodeNumber.requestFocus();
-                }
-                else {
-                    DetailCardFragment detailCardFragment = new DetailCardFragment();
+                } else {
+                    Toast.makeText(getActivity(), "Card Added", Toast.LENGTH_SHORT).show();
+
+                    cardName = etCardName.getText().toString();
+                    barcodeNumber = etBarcodeNumber.getText().toString();
+                    notes = "";
+                    frontView = "";
+                    backView = "";
+
+                    CardOverViewFragment cardOverViewFragment = new CardOverViewFragment();
                     Bundle bundle = new Bundle();
-                    bundle.putString(Utilities.BUNDLE_CARD_NAME, etCardName.getText().toString());
-                    bundle.putString(Utilities.BUNDLE_BARCODE_NUMBER, etBarcodeNumber.getText().toString());
+                    bundle.putString(Utilities.BUNDLE_CARD_NAME, cardName);
+                    bundle.putString(Utilities.BUNDLE_BARCODE_NUMBER, barcodeNumber);
                     bundle.putString(Utilities.BUNDLE_CARD_CATEGORY, title);
-                    bundle.putInt(Utilities.BUNDLE_CARD_LOGO, logo);
+                    bundle.putString(Utilities.BUNDLE_CARD_LOGO, logo);
                     bundle.putInt(Utilities.BUNDLE_CARD_BACKGROUND, backgroundColor);
-                    detailCardFragment.setArguments(bundle);
+                    bundle.putString(Utilities.BUNDLE_CARD_NOTES, notes);
+                    bundle.putString(Utilities.BUNDLE_CARD_FRONT_VIEW, frontView);
+                    bundle.putString(Utilities.BUNDLE_CARD_BACK_VIEW, backView);
+                    cardOverViewFragment.setArguments(bundle);
+
+                    FragmentManager fm = getActivity().getSupportFragmentManager();
+                    for(int i = 0; i < fm.getBackStackEntryCount(); ++i) {
+                        fm.popBackStack();
+                    }
+
+                    addCard();
 
                     FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
                     ft.addToBackStack(null);
-                    ft.replace(R.id.drag_view, detailCardFragment, "DetailCard").commit();
+                    ft.replace(R.id.drag_view, cardOverViewFragment, "CardOverview").commit();
                 }
                 break;
 
@@ -120,6 +144,24 @@ public class ExistingCardFragment extends Fragment implements View.OnClickListen
         }
     }
 
+    public void addCard () {
+        CardList cardList = new CardList();
+        cardList.cardName       = cardName;
+        cardList.cardType       = title;
+        cardList.barcodeNumber  = barcodeNumber;
+        cardList.cardIcon       = logo;
+        cardList.cardBackground = backgroundColor;
+        cardList.cardNote       = notes;
+        cardList.cardFrontView  = frontView;
+        cardList.cardBackView   = backView;
+
+        CardDB cardDB = new CardDB(getContext());
+        cardDB.addCard(new CardList(cardList.cardName, cardList.cardType ,cardList.barcodeNumber, cardList.cardIcon, cardList.cardBackground, cardList.cardNote, cardList.cardFrontView, cardList.cardBackView));
+
+        Intent intent = new Intent(TabKartu.RADIO_DATASET_CHANGED);
+        getActivity().sendBroadcast(intent);
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == 0) {
@@ -130,7 +172,7 @@ public class ExistingCardFragment extends Fragment implements View.OnClickListen
             if (data != null) {
                 String serialNumber = data.getStringExtra("CODE_DATA");
                 etBarcodeNumber.setText(serialNumber);
-                Toast.makeText(getActivity(),data.getStringExtra("CODE_TYPE"),Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), data.getStringExtra("CODE_TYPE"), Toast.LENGTH_SHORT).show();
             }
         }
     }

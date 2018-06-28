@@ -39,6 +39,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 
+import digitalcard.digitalcard.MainActivity;
 import digitalcard.digitalcard.Module.Toolbar;
 import digitalcard.digitalcard.R;
 import digitalcard.digitalcard.Util.Utilities;
@@ -63,6 +64,11 @@ public class LocationFragment extends Fragment implements View.OnClickListener, 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_location, container, false);
+
+        if (getContext() instanceof MainActivity) {
+            ((MainActivity) getContext()).getSlidingPanel().setTouchEnabled(false);
+        }
+
         toolbar = rootView.findViewById(R.id.toolbar);
 
         merchantLocation = rootView.findViewById(R.id.merchant_location);

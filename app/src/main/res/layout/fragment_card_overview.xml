@@ -19,14 +19,20 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="6dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingBottom="6dp">
 
-            <ImageView
-                android:id="@+id/merchant_logo"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:background="#E3E3E3" />
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/merchant_logo"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:background="#E3E3E3" />
+
+            </RelativeLayout>
 
             <TextView
                 android:id="@+id/card_name"
@@ -37,30 +43,28 @@
                 android:text="test"
                 android:textSize="14sp" />
 
-            <ImageView
-                android:id="@+id/barcode_image"
+            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:layout_marginEnd="16dp"
-                android:layout_marginStart="16dp" />
+                android:layout_marginStart="16dp">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:layout_marginStart="16dp"
-                android:background="#E3E3E3">
+                <ImageView
+                    android:id="@+id/barcode_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
 
                 <TextView
-                    android:id="@+id/barcode_number"
                     android:layout_width="match_parent"
-                    android:layout_height="36dp"
-                    android:layout_margin="1dp"
-                    android:background="@android:color/white"
-                    android:gravity="center"
-                    android:text="test"
-                    android:textSize="16sp" />
-            </LinearLayout>
+                    android:layout_height="match_parent"
+                    android:gravity="center|bottom"
+                    android:background="@drawable/fading_white"
+                    android:paddingBottom="20dp"
+                    android:text="Show Barcode"
+                    android:textSize="18sp"
+                    android:textStyle="bold"/>
+
+            </FrameLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -144,6 +148,7 @@
                             android:orientation="vertical">
 
                             <ImageView
+                                android:id="@+id/img_front_view"
                                 android:layout_width="match_parent"
                                 android:layout_height="100dp"
                                 android:background="@color/grey_button" />
@@ -170,6 +175,7 @@
                             android:orientation="vertical">
 
                             <ImageView
+                                android:id="@+id/img_back_view"
                                 android:layout_width="match_parent"
                                 android:layout_height="100dp"
                                 android:background="@color/grey_button" />

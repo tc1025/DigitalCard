@@ -53,7 +53,9 @@
                         android:id="@+id/register_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Input your full name" />
+                        android:hint="Input your full name"
+                        android:inputType="text"
+                        android:maxLines="1" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -75,7 +77,9 @@
                         android:id="@+id/register_id_number"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="KTP (16 digits)" />
+                        android:hint="KTP (16 digits)"
+                        android:inputType="text"
+                        android:maxLines="1" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -176,16 +180,18 @@
                         android:id="@+id/register_card_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Input this card name" />
+                        android:hint="Input this card name"
+                        android:inputType="text"
+                        android:maxLines="1" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="45dp"
                     android:layout_marginEnd="16dp"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="32dp"
-                    android:layout_marginBottom="45dp"
                     android:orientation="vertical">
 
                     <TextView

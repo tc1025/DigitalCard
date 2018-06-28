@@ -1,17 +1,27 @@
 package digitalcard.digitalcard.Adapter;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
+
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 
 import digitalcard.digitalcard.Fragment.ExistingCardFragment;
@@ -59,9 +69,18 @@ public class CardListAdapter extends RecyclerView.Adapter<CardListAdapter.ViewHo
 //        if (data.getThumbnail() != 0)
 //            Glide.with(context).load(data.getThumbnail()).into(holder.logo);
 
-        holder.name.setText(data.cardCategory);
-        holder.logo.setImageResource(data.cardIcon);
-        holder.logo.setBackgroundColor(data.cardBackground);
+        Picasso.get().load(data.cardIcon).into(holder.logo, new Callback() {
+            @Override
+            public void onSuccess() {
+                holder.logo.setBackgroundColor(data.cardBackground);
+                holder.name.setText(data.cardCategory);
+            }
+
+            @Override
+            public void onError(Exception e) {
+
+            }
+        });
 
         holder.panel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,16 +88,18 @@ public class CardListAdapter extends RecyclerView.Adapter<CardListAdapter.ViewHo
                 LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 View alertLayout = inflater.inflate(R.layout.register_dialog_layout, null);
 
+                TextView dialogMessage = alertLayout.findViewById(R.id.dialog_message);
+                dialogMessage.setText("Do you have this member card");
+
                 AlertDialog.Builder alert = new AlertDialog.Builder(context);
                 alert.setView(alertLayout);
-//                alert.setTitle("Do you have this member card?");
                 alert.setPositiveButton("Yes, add existing member card", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         ExistingCardFragment existingCardFragment = new ExistingCardFragment();
                         Bundle bundle = new Bundle();
                         bundle.putString(Utilities.BUNDLE_CARD_CATEGORY, data.cardCategory);
-                        bundle.putInt(Utilities.BUNDLE_CARD_LOGO, data.cardIcon);
+                        bundle.putString(Utilities.BUNDLE_CARD_LOGO, data.cardIcon);
                         bundle.putInt(Utilities.BUNDLE_CARD_BACKGROUND, data.cardBackground);
                         existingCardFragment.setArguments(bundle);
 
@@ -95,7 +116,7 @@ public class CardListAdapter extends RecyclerView.Adapter<CardListAdapter.ViewHo
                         RegistrationCardFragment registrationCardFragment = new RegistrationCardFragment();
                         Bundle bundle = new Bundle();
                         bundle.putString(Utilities.BUNDLE_CARD_CATEGORY, data.cardCategory);
-                        bundle.putInt(Utilities.BUNDLE_CARD_LOGO, data.cardIcon);
+                        bundle.putString(Utilities.BUNDLE_CARD_LOGO, data.cardIcon);
                         bundle.putInt(Utilities.BUNDLE_CARD_BACKGROUND, data.cardBackground);
                         registrationCardFragment.setArguments(bundle);
 
@@ -108,7 +129,6 @@ public class CardListAdapter extends RecyclerView.Adapter<CardListAdapter.ViewHo
 
                 AlertDialog dialog = alert.create();
                 dialog.show();
-
             }
         });
     }

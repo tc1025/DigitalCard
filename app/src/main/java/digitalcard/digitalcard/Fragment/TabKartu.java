@@ -1,7 +1,14 @@
 package digitalcard.digitalcard.Fragment;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.provider.SyncStateContract;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -17,14 +24,33 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.squareup.picasso.Picasso;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import digitalcard.digitalcard.Database.CardDB;
 import digitalcard.digitalcard.MainActivity;
 import digitalcard.digitalcard.Model.CardList;
 import digitalcard.digitalcard.R;
 import digitalcard.digitalcard.Util.Utilities;
+
+import static com.google.android.gms.wearable.DataMap.TAG;
 
 
 public class TabKartu extends Fragment {
@@ -39,19 +65,32 @@ public class TabKartu extends Fragment {
 
     int cardCount = 0;
 
+    //    Radio
+    public final static String RADIO_DATASET_CHANGED = "DATASET_CHANGED";
+    Radio radio;
+
     @Override
     public void onResume() {
         super.onResume();
-        adapter.notifyDataSetChanged();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(RADIO_DATASET_CHANGED);
+        getActivity().getApplicationContext().registerReceiver(radio, filter);
+    }
 
-        cardListArrayList.clear();
-        loadCard();
-        fillCardList();
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        try {
+            getActivity().getApplicationContext().unregisterReceiver(radio);
+        } catch (Exception e) {
+            Toast.makeText(getActivity(), "not changed", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        radio = new Radio();
     }
 
     @Override
@@ -71,13 +110,24 @@ public class TabKartu extends Fragment {
         return rootView;
     }
 
+    private class Radio extends BroadcastReceiver{
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals(RADIO_DATASET_CHANGED)){
+                //Notify dataset changed here
+                cardListArrayList.clear();
+                loadCard();
+                fillCardList();
+            }
+        }
+    }
+
     public void loadCard(){
         cardDB = new CardDB(getContext());
         List<CardList> cardLists =  cardDB.getAllCardList();
         if (!cardLists.isEmpty()) {
             for (CardList data : cardLists) {
-//                int cardId = data.getId();
-                cardListArrayList.add(new CardList(data.getId(), data.getCardType(), data.getCardName(), data.getBarcodeNumber(), data.getCardIcon(), data.getCardBackground()));
+                cardListArrayList.add(new CardList(data.getId(), data.getCardType(), data.getCardName(), data.getBarcodeNumber(), data.getCardIcon(), data.getCardBackground(), data.getCardNote(), data.getCardFrontView(), data.getCardBackView()));
             }
         }
         cardCount = cardListArrayList.size();
@@ -86,7 +136,6 @@ public class TabKartu extends Fragment {
     private void fillCardList(){
         adapter = new ListCardAdapter(getContext(), cardListArrayList);
         rvCard.setAdapter(adapter);
-        Log.e("asd", cardListArrayList.size() + " size");
     }
 
     private class ListCardAdapter extends RecyclerView.Adapter<ListCardAdapter.MyViewHolder>{
@@ -123,7 +172,7 @@ public class TabKartu extends Fragment {
 
             holder.cardName.setText(data.getCardName());
             holder.cardName.setSingleLine(true);
-            holder.cardIcon.setImageResource(data.cardIcon);
+            Picasso.get().load(data.cardIcon).into(holder.cardIcon);
             holder.cardIcon.setBackgroundColor(data.cardBackground);
             holder.card.setBackgroundColor(data.cardBackground);
 
@@ -145,8 +194,12 @@ public class TabKartu extends Fragment {
                     bundle.putString(Utilities.BUNDLE_CARD_NAME, data.cardName);
                     bundle.putString(Utilities.BUNDLE_CARD_CATEGORY, data.cardType);
                     bundle.putString(Utilities.BUNDLE_BARCODE_NUMBER, data.barcodeNumber);
-                    bundle.putInt(Utilities.BUNDLE_CARD_LOGO, data.cardIcon);
+                    bundle.putString(Utilities.BUNDLE_CARD_LOGO, data.cardIcon);
                     bundle.putInt(Utilities.BUNDLE_CARD_BACKGROUND, data.cardBackground);
+                    bundle.putString(Utilities.BUNDLE_CARD_NOTES, data.cardNote);
+                    bundle.putString(Utilities.BUNDLE_CARD_FRONT_VIEW, data.cardFrontView);
+                    bundle.putString(Utilities.BUNDLE_CARD_BACK_VIEW, data.cardBackView);
+                    bundle.putInt("aaa", data.id);
                     cardOverViewFragment.setArguments(bundle);
 
                     ft = getActivity().getSupportFragmentManager().beginTransaction();
