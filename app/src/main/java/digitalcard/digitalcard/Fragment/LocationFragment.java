@@ -19,6 +19,9 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -29,6 +32,13 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.maps.CameraUpdate;
@@ -38,11 +48,25 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 
 import digitalcard.digitalcard.MainActivity;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import digitalcard.digitalcard.Adapter.LocationListAdapter;
+import digitalcard.digitalcard.Model.CardList;
 import digitalcard.digitalcard.Module.Toolbar;
 import digitalcard.digitalcard.R;
 import digitalcard.digitalcard.Util.Utilities;
+
+import static com.google.android.gms.wearable.DataMap.TAG;
 
 public class LocationFragment extends Fragment implements View.OnClickListener, LocationListener {
     private static final int MY_PERMISSIONS_REQUEST_LOCATION = 22;
@@ -51,14 +75,20 @@ public class LocationFragment extends Fragment implements View.OnClickListener, 
     Toolbar toolbar;
 
     LinearLayout btnBack;
-    TextView tvTitle;
+    TextView tvTitle, tvNoLocation;
     MapView merchantLocation;
     GoogleMap mGoogleMap;
-    LocationManager mLocationManager;
+//    LocationManager mLocationManager;
+    RecyclerView rvLocation;
 
     Location location;
     String title;
     Double latitude, longitude;
+    List<digitalcard.digitalcard.Model.Location> locationList;
+    LocationListAdapter locationListAdapter;
+
+    LatLngBounds indonesiaBounds = new LatLngBounds(
+            new LatLng(-11.1, 95.1), new LatLng(5.9, 141.0));
 
     @Nullable
     @Override
@@ -70,6 +100,7 @@ public class LocationFragment extends Fragment implements View.OnClickListener, 
         }
 
         toolbar = rootView.findViewById(R.id.toolbar);
+        tvNoLocation = rootView.findViewById(R.id.no_location);
 
         merchantLocation = rootView.findViewById(R.id.merchant_location);
         assert getArguments() != null;
@@ -77,15 +108,29 @@ public class LocationFragment extends Fragment implements View.OnClickListener, 
         longitude = getArguments().getDouble(Utilities.BUNDLE_LOCATION_LONGITUDE);
         title = getArguments().getString(Utilities.BUNDLE_CARD_CATEGORY);
 
+        Log.e("KEVIN", "TEST");
+        Log.e("KEVIN", "lat = " + latitude + " long = " + longitude);
+
         btnBack = toolbar.getBtnBack();
         tvTitle = toolbar.getTxtTitle();
+        rvLocation = rootView.findViewById(R.id.rv_location);
+
+        locationList = new ArrayList<>();
+        locationListAdapter = new LocationListAdapter(getContext(), locationList);
+
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        rvLocation.setLayoutManager(layoutManager);
+        rvLocation.setItemAnimator(new DefaultItemAnimator());
+        rvLocation.setAdapter(locationListAdapter);
 
         tvTitle.setText(title);
         btnBack.setOnClickListener(this);
 
-        mLocationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+//        mLocationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
 
         checkLocationPermission();
+
+        loadPlace();
 
         return rootView;
     }
@@ -105,6 +150,7 @@ public class LocationFragment extends Fragment implements View.OnClickListener, 
                 @Override
                 public void onMapReady(GoogleMap googleMap) {
                     mGoogleMap = googleMap;
+                    mGoogleMap.setLatLngBoundsForCameraTarget(indonesiaBounds);
                     mGoogleMap.getUiSettings().setCompassEnabled(true);
                     mGoogleMap.getUiSettings().setTiltGesturesEnabled(false);
                     mGoogleMap.setOnMyLocationButtonClickListener(myLocationButtonClickListener);
@@ -157,23 +203,23 @@ public class LocationFragment extends Fragment implements View.OnClickListener, 
     @Override
     public void onResume() {
         super.onResume();
-        if (ContextCompat.checkSelfPermission(getActivity(),
-                Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
-
-            mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 400, 1000, this);
-        }
+//        if (ContextCompat.checkSelfPermission(getActivity(),
+//                Manifest.permission.ACCESS_FINE_LOCATION)
+//                == PackageManager.PERMISSION_GRANTED) {
+//
+//            mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 400, 1000, this);
+//        }
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        if (ContextCompat.checkSelfPermission(getActivity(),
-                Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
-
-            mLocationManager.removeUpdates(this);
-        }
+//        if (ContextCompat.checkSelfPermission(getActivity(),
+//                Manifest.permission.ACCESS_FINE_LOCATION)
+//                == PackageManager.PERMISSION_GRANTED) {
+//
+//            mLocationManager.removeUpdates(this);
+//        }
     }
 
     @Override
@@ -237,7 +283,7 @@ public class LocationFragment extends Fragment implements View.OnClickListener, 
                             == PackageManager.PERMISSION_GRANTED) {
 
                         //Request location updates:
-                        mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 400, 1000, this);
+//                        mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 400, 1000, this);
                     }
 
                 } else {
@@ -256,7 +302,7 @@ public class LocationFragment extends Fragment implements View.OnClickListener, 
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
         CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 15);
         mGoogleMap.animateCamera(cameraUpdate);
-        mLocationManager.removeUpdates(this);
+//        mLocationManager.removeUpdates(this);
     }
 
     @Override
@@ -272,6 +318,67 @@ public class LocationFragment extends Fragment implements View.OnClickListener, 
     @Override
     public void onProviderDisabled(String provider) {
 
+    }
+
+    public void loadPlace(){
+//        radius = meter
+//        keyword = yg mau dicari
+        String link = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location="
+                , keyword = "&rankby=distance&keyword="
+                , key = "&key=AIzaSyAeY9ioncH27wIXVxKOhIY_vKyQ5JitCy0";
+        String url = link + latitude + "," + longitude + keyword + title + key;
+        url = url.replaceAll(" ", "+");
+        Log.e("asd", "lat : " + latitude + ", long : " + longitude);
+        Log.e("asd", url);
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            JSONArray jsonArray = jsonObject.getJSONArray("results");
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                JSONObject object = jsonArray.getJSONObject(i);
+                                JSONObject geometry = object.getJSONObject("geometry");
+                                JSONObject location = geometry.getJSONObject("location");
+                                Log.e("data", "Store : "
+                                        + object.getString("name")
+                                        + ", address : "
+                                        + object.getString("vicinity")
+                                        + ", lat : "
+                                        + location.getDouble("lat")
+                                        + ", lng : "
+                                        + location.getDouble("lng"));
+                                locationList.add(new digitalcard.digitalcard.Model.Location(object.getString("name")
+                                        , object.getString("vicinity")
+                                        , location.getDouble("lat")
+                                        , location.getDouble("lng"))
+                                );
+                            }
+                        } catch (JSONException e) { e.printStackTrace(); }
+                        finally {
+                            locationListAdapter.notifyDataSetChanged();
+
+                            if (locationList.isEmpty()) {
+                                tvNoLocation.setVisibility(View.VISIBLE);
+                                rvLocation.setVisibility(View.GONE);
+                            }
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) { Log.e(TAG, error.toString()); }
+                }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String , String> map = new HashMap<String, String>();
+                return map;
+            }
+        };
+        RequestQueue requestQueue = Volley.newRequestQueue(getContext());
+        requestQueue.add(stringRequest);
     }
 
     private GoogleMap.OnMyLocationButtonClickListener myLocationButtonClickListener = new GoogleMap.OnMyLocationButtonClickListener() {
@@ -306,9 +413,7 @@ public class LocationFragment extends Fragment implements View.OnClickListener, 
 
             LatLng latlng = new LatLng(latitude, longitude);
 
-            CameraPosition cameraPosition =
-                    new CameraPosition.Builder().target(latlng).zoom(14).build();
-            mGoogleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+            mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latlng, 14), null);
         }
     };
 

@@ -3,28 +3,21 @@ package digitalcard.digitalcard.Adapter;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.List;
 
-import digitalcard.digitalcard.Fragment.ExistingCardFragment;
+import digitalcard.digitalcard.Fragment.ExistingMemberFragment;
 import digitalcard.digitalcard.Fragment.RegistrationCardFragment;
 import digitalcard.digitalcard.MainActivity;
 import digitalcard.digitalcard.Model.CardList;
@@ -96,15 +89,15 @@ public class CardListAdapter extends RecyclerView.Adapter<CardListAdapter.ViewHo
                 alert.setPositiveButton("Yes, add existing member card", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        ExistingCardFragment existingCardFragment = new ExistingCardFragment();
+                        ExistingMemberFragment existingMemberFragment = new ExistingMemberFragment();
                         Bundle bundle = new Bundle();
                         bundle.putString(Utilities.BUNDLE_CARD_CATEGORY, data.cardCategory);
                         bundle.putString(Utilities.BUNDLE_CARD_LOGO, data.cardIcon);
                         bundle.putInt(Utilities.BUNDLE_CARD_BACKGROUND, data.cardBackground);
-                        existingCardFragment.setArguments(bundle);
+                        existingMemberFragment.setArguments(bundle);
 
                         ((MainActivity)context).getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.drag_view, existingCardFragment, "AddCard")
+                                .replace(R.id.drag_view, existingMemberFragment, "AddCard")
                                 .addToBackStack(null)
                                 .commit();
                     }

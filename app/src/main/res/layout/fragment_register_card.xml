@@ -173,14 +173,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
-                        android:text="Card Name"
+                        android:text="Card Alias"
                         android:textSize="14sp" />
 
                     <EditText
                         android:id="@+id/register_card_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Input this card name"
+                        android:hint="Input this card alias"
                         android:inputType="text"
                         android:maxLines="1" />
                 </LinearLayout>

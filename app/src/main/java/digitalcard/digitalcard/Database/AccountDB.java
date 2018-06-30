@@ -34,7 +34,7 @@ public class AccountDB extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF " + Utilities.TABLE_ACCOUNT_LIST);
+        db.execSQL("DROP TABLE IF EXISTS " + Utilities.TABLE_ACCOUNT_LIST);
         onCreate(db);
     }
 

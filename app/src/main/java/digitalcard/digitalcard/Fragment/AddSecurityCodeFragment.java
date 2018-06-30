@@ -22,14 +22,14 @@ import digitalcard.digitalcard.Util.KeyUtilities;
 public class AddSecurityCodeFragment extends Fragment implements View.OnClickListener{
     View rootView;
     Toolbar toolbar;
-    TextView tvTitle;
+    TextView tvTitle, mEnterPinPrompt;
 
     LinearLayout btnBack;
 
     PinLockView mPinLockView;
     IndicatorDots mIndicatorDots;
 
-    String codeFirstAttempt;
+    String codeFirstAttempt = "";
 
     @Nullable
     @Override
@@ -46,6 +46,8 @@ public class AddSecurityCodeFragment extends Fragment implements View.OnClickLis
         tvTitle.setText("Password");
         btnBack = toolbar.getBtnBack();
 
+        mEnterPinPrompt = rootView.findViewById(R.id.enter_pin_prompt);
+
         mPinLockView = rootView.findViewById(R.id.pin_lock_view);
         mIndicatorDots = rootView.findViewById(R.id.pin_indicator);
 
@@ -61,11 +63,16 @@ public class AddSecurityCodeFragment extends Fragment implements View.OnClickLis
                 if (codeFirstAttempt.isEmpty()){
                     codeFirstAttempt = pin;
                     mPinLockView.resetPinLockView();
+                    mEnterPinPrompt.setText("Re-enter Your Security Code");
                 } else {
                     if (pin.equals(codeFirstAttempt)){
                         keyUtilities.checkForKey(getActivity());
                         keyUtilities.encryptString(getActivity(), pin);
-                    } else {}
+                    } else {
+                        codeFirstAttempt = "";
+                        mPinLockView.resetPinLockView();
+                        mEnterPinPrompt.setText("Enter Your Security Code");
+                    }
                 }
             }
 

@@ -127,7 +127,6 @@ public class AccountFragment extends Fragment implements View.OnClickListener{
         switch (v.getId()) {
             case R.id.back_button:
                 getActivity().onBackPressed();
-
                 break;
             case R.id.btn_sign_in:
                 signIn();

@@ -37,7 +37,7 @@ public class CardDB extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF " + Utilities.TABLE_CARDLIST);
+        db.execSQL("DROP TABLE IF EXISTS " + Utilities.TABLE_CARDLIST);
         onCreate(db);
     }
 

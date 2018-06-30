@@ -148,7 +148,7 @@ public class RegistrationCardFragment extends Fragment implements View.OnClickLi
                 } else if (regDOB.getText().toString().equals("")) {
                     Toast.makeText(getActivity(), "Date of birth field must be filled", Toast.LENGTH_SHORT).show();
                 } else if (regCardName.getText().toString().equals("")) {
-                    Toast.makeText(getActivity(), "Card name field must be filled", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Card alias field must be filled", Toast.LENGTH_SHORT).show();
                 } else if (!regCaptcha.getText().toString().equals(captcha)) {
                     Toast.makeText(getActivity(), "Captcha not matched", Toast.LENGTH_SHORT).show();
                 } else {

@@ -1,16 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+
     <digitalcard.digitalcard.Module.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="56dp"/>
+        android:layout_height="56dp" />
 
     <com.google.android.gms.maps.MapView
         android:id="@+id/merchant_location"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="250dp" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_location"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:paddingTop="6dp" />
+
+    <TextView
+        android:id="@+id/no_location"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="No Merchant around here"
+        android:visibility="gone" />
 </LinearLayout>

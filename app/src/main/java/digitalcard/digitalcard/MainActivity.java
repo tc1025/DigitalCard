@@ -1,14 +1,11 @@
 package digitalcard.digitalcard;
 
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
@@ -19,25 +16,14 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewParent;
-import android.view.ViewGroup;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import digitalcard.digitalcard.Adapter.CustomPagerAdapter;
 import digitalcard.digitalcard.Fragment.AccountFragment;
-import digitalcard.digitalcard.Fragment.ExistingCardFragment;
 
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import digitalcard.digitalcard.Fragment.CategoryCardFragment;
-import digitalcard.digitalcard.Fragment.MenuFragment;
 import digitalcard.digitalcard.Fragment.SettingsFragment;
-import digitalcard.digitalcard.Fragment.TabKartu;
-import digitalcard.digitalcard.Module.MenuPopupDialog;
 import digitalcard.digitalcard.Util.Utilities;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -47,11 +33,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     AccountFragment accountFragment;
     SettingsFragment settingsFragment;
     CategoryCardFragment categoryCardFragment;
-    MenuFragment menuFragment;
     FragmentTransaction ft;
-    private int flag_fragment = -1;
-    public static int OPEN_FRAGMENT_ADD_CARDS = 1;
-    public static int OPEN_FRAGMENT_RECORDS = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +50,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         accountFragment = new AccountFragment();
         settingsFragment = new SettingsFragment();
         categoryCardFragment = new CategoryCardFragment();
-        menuFragment = new MenuFragment();
 
         btnAdd = findViewById(R.id.add_button);
         btnAdd.setOnClickListener(this);
