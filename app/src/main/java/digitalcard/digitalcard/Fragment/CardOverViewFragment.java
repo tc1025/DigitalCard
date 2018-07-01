@@ -97,6 +97,8 @@ public class CardOverViewFragment extends Fragment implements View.OnClickListen
         rootView = inflater.inflate(R.layout.fragment_card_overview, container, false);
         cardDB = new CardDB(getActivity());
 
+        ((MainActivity) getContext()).getSlidingPanel().setTouchEnabled(false);
+
         toolbar = rootView.findViewById(R.id.toolbar);
         popupDialog = new PopupBarcodeDialog(getActivity());
         editDialog = new EditDialog(getActivity());

@@ -120,7 +120,7 @@ public class LocationFragment extends Fragment implements View.OnClickListener {
                 @Override
                 public void onMapReady(GoogleMap googleMap) {
                     mGoogleMap = googleMap;
-                    mGoogleMap.setBuildingsEnabled(true);
+//                    mGoogleMap.setBuildingsEnabled(true);
                     mGoogleMap.setOnMyLocationButtonClickListener(myLocationButtonClickListener);
                     mGoogleMap.setOnMapLoadedCallback(onMapLoadedCallback);
                     try {
@@ -180,13 +180,10 @@ public class LocationFragment extends Fragment implements View.OnClickListener {
 //        radius = meter
 //        keyword = yg mau dicari
         String link = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location="
-                , radius = "&radius="
-                , keyword = "&keyword="
+                , keyword = "&rankby=distance&keyword="
                 , key = "&key=AIzaSyAeY9ioncH27wIXVxKOhIY_vKyQ5JitCy0";
-        String url = link + latitude + "," + longitude + radius + 10000 + keyword + title + key;
+        String url = link + latitude + "," + longitude + keyword + title + key;
         url = url.replaceAll(" ", "+");
-        Log.e("asd", "lat : " + latitude + ", long : " + longitude);
-        Log.e("asd", url);
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
@@ -197,6 +194,7 @@ public class LocationFragment extends Fragment implements View.OnClickListener {
                             JSONArray jsonArray = jsonObject.getJSONArray("results");
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 JSONObject object = jsonArray.getJSONObject(i);
+                                JSONObject location = object.getJSONObject("geometry").getJSONObject("location");
                                 Log.e("data", "Store : " + object.getString("name") + ", address : " + object.getString("vicinity"));
                                 locationList.add(new digitalcard.digitalcard.Model.Location(object.getString("name"), object.getString("vicinity")));
                             }
@@ -242,7 +240,9 @@ public class LocationFragment extends Fragment implements View.OnClickListener {
 
             CameraPosition cameraPosition =
                     new CameraPosition.Builder().target(latlng).zoom(16).build();
-            mGoogleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+//            mGoogleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+            mGoogleMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+
 
             return false;
         }
@@ -251,7 +251,7 @@ public class LocationFragment extends Fragment implements View.OnClickListener {
     GoogleMap.OnMapLoadedCallback onMapLoadedCallback = new GoogleMap.OnMapLoadedCallback() {
         @Override
         public void onMapLoaded() {
-            if (latitude == 0 || longitude== 0) {
+            if (latitude == 0 && longitude == 0) {
                 return;
             }
 
@@ -259,7 +259,8 @@ public class LocationFragment extends Fragment implements View.OnClickListener {
 
             CameraPosition cameraPosition =
                     new CameraPosition.Builder().target(latlng).zoom(14).build();
-            mGoogleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+//            mGoogleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+            mGoogleMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
         }
     };
 

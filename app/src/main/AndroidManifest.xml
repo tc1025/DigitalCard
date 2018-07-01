@@ -36,7 +36,8 @@
             android:windowSoftInputMode="adjustPan">
         </activity>
 
-        <activity android:name=".Scan.CameraActivity"/>
+        <activity android:name=".Scan.CameraActivity"
+            android:screenOrientation="portrait"/>
 
 
     </application>
