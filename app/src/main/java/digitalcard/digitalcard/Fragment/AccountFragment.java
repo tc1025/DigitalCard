@@ -86,7 +86,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener{
     SignInButton signInButton;
     Button signOutButton, backupButton;
     TextView tvTitle, tvAccountName, tvAccountEmail, tvAccountDOB, tvAccountIdentityNumber, tvAccountAddress, tvAccountPhoneNumber;
-    LinearLayout llNotConnected, llConnected;
+    LinearLayout llNotConnected, llConnected, btnBack;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -103,11 +103,20 @@ public class AccountFragment extends Fragment implements View.OnClickListener{
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_account, container, false);
+
+        if (getContext() instanceof MainActivity) {
+            ((MainActivity) getContext()).getSlidingPanel().setTouchEnabled(false);
+        }
+
         editDialog = new EditDialog(getActivity());
 
         toolbar = rootView.findViewById(R.id.toolbar);
 
         tvTitle = toolbar.getTxtTitle();
+        tvTitle.setText("Account");
+
+        btnBack = toolbar.getBtnBack();
+
         signInButton = rootView.findViewById(R.id.btn_sign_in);
         backupButton = rootView.findViewById(R.id.btn_backup);
         signOutButton = rootView.findViewById(R.id.btn_sign_out);
@@ -120,8 +129,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener{
         tvAccountAddress = rootView.findViewById(R.id.account_address);
         tvAccountPhoneNumber = rootView.findViewById(R.id.account_phone_number);
 
-        tvTitle.setText("Account");
-
+        btnBack.setOnClickListener(this);
         signInButton.setOnClickListener(this);
         signOutButton.setOnClickListener(this);
         backupButton.setOnClickListener(this);
@@ -132,20 +140,20 @@ public class AccountFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.back_button:
+                getActivity().onBackPressed();
+                break;
             case R.id.btn_sign_in:
                 signIn();
                 break;
-
             case R.id.btn_sign_out:
                 signOut();
                 break;
-
             case R.id.btn_backup:
                 saveSQLite();
                 break;
-
             case R.id.account_dob:
-                new DatePickerDialog(getContext(), R.style.DatePickerDialogTheme, date, 1990, 1, 1).show();
+                new DatePickerDialog(getContext(), date, 1990, 1, 1).show();
                 break;
         }
     }
@@ -158,8 +166,10 @@ public class AccountFragment extends Fragment implements View.OnClickListener{
     public void onStart() {
         super.onStart();
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount((getActivity()));
-        if (account != null)
+        if (account != null) {
             updateUI(account);
+            Log.e("asdasd", account.getEmail() + " " + account.getDisplayName());
+        }
     }
 
     @Override

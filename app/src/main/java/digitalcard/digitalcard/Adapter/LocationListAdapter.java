@@ -1,6 +1,8 @@
 package digitalcard.digitalcard.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +23,7 @@ public class LocationListAdapter extends RecyclerView.Adapter<LocationListAdapte
     public class ViewHolder extends RecyclerView.ViewHolder{
         TextView name, address;
         LinearLayout panel;
+        Double latitude, longitude;
         ViewHolder(View itemView) {
             super(itemView);
             name = itemView.findViewById(R.id.location_name);
@@ -41,14 +44,15 @@ public class LocationListAdapter extends RecyclerView.Adapter<LocationListAdapte
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, final int position) {
         final Location location = locationList.get(position);
         holder.name.setText(location.name);
         holder.address.setText(location.address);
         holder.panel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, "You choose " + location.name + ", address : " + location.address, Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse("google.navigation:q=" + location.getLatitude() + "," + location.getLongitude()));
+                context.startActivity(intent);
             }
         });
     }

@@ -2,9 +2,11 @@ package digitalcard.digitalcard.Fragment;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.text.InputType;
 import android.view.LayoutInflater;
@@ -24,6 +26,9 @@ import java.util.Calendar;
 import java.util.Locale;
 import java.util.Random;
 
+import digitalcard.digitalcard.Database.CardDB;
+import digitalcard.digitalcard.MainActivity;
+import digitalcard.digitalcard.Model.CardList;
 import digitalcard.digitalcard.Module.DoubleButton;
 import digitalcard.digitalcard.Module.Toolbar;
 import digitalcard.digitalcard.R;
@@ -44,7 +49,7 @@ public class RegistrationCardFragment extends Fragment implements View.OnClickLi
     RadioGroup regGender;
     RadioButton rbGender;
 
-    String title, logo, captcha = "";
+    String title, logo, cardName, barcodeNumber, frontView, backView, notes, captcha = "";
     int backgroundColor;
 
     Calendar calendar = Calendar.getInstance();
@@ -54,6 +59,10 @@ public class RegistrationCardFragment extends Fragment implements View.OnClickLi
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_register_card, container, false);
+
+        if (getContext() instanceof MainActivity) {
+            ((MainActivity) getContext()).getSlidingPanel().setTouchEnabled(false);
+        }
 
         toolbar = rootView.findViewById(R.id.toolbar);
         action = rootView.findViewById(R.id.btn_action);
@@ -114,7 +123,7 @@ public class RegistrationCardFragment extends Fragment implements View.OnClickLi
 
         switch (v.getId()){
             case R.id.register_DOB:
-                new DatePickerDialog(getContext(), R.style.DatePickerDialogTheme, date, 1990, 1, 1).show();
+                new DatePickerDialog(getContext(), date, 1990, 1, 1).show();
                 break;
 
             case R.id.back_button:
@@ -122,7 +131,6 @@ public class RegistrationCardFragment extends Fragment implements View.OnClickLi
                 break;
 
             case R.id.button_cancel:
-                Toast.makeText(getActivity(), "You choose cancel", Toast.LENGTH_SHORT).show();
                 getActivity().onBackPressed();
                 break;
 
@@ -140,7 +148,7 @@ public class RegistrationCardFragment extends Fragment implements View.OnClickLi
                 } else if (regDOB.getText().toString().equals("")) {
                     Toast.makeText(getActivity(), "Date of birth field must be filled", Toast.LENGTH_SHORT).show();
                 } else if (regCardName.getText().toString().equals("")) {
-                    Toast.makeText(getActivity(), "Card name field must be filled", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Card alias field must be filled", Toast.LENGTH_SHORT).show();
                 } else if (!regCaptcha.getText().toString().equals(captcha)) {
                     Toast.makeText(getActivity(), "Captcha not matched", Toast.LENGTH_SHORT).show();
                 } else {
@@ -157,22 +165,36 @@ public class RegistrationCardFragment extends Fragment implements View.OnClickLi
                         }
                     }
 
+                    Toast.makeText(getActivity(), "Registration Successful", Toast.LENGTH_SHORT).show();
+
+                    cardName = regCardName.getText().toString();
+                    barcodeNumber = randomBarcode;
+                    notes = "";
+                    frontView = "";
+                    backView = "";
+
                     CardOverViewFragment cardOverViewFragment = new CardOverViewFragment();
                     Bundle bundle = new Bundle();
-                    bundle.putString(Utilities.BUNDLE_CARD_NAME, regCardName.getText().toString());
-                    bundle.putString(Utilities.BUNDLE_BARCODE_NUMBER, randomBarcode);
+                    bundle.putString(Utilities.BUNDLE_CARD_NAME, cardName);
+                    bundle.putString(Utilities.BUNDLE_BARCODE_NUMBER, barcodeNumber);
                     bundle.putString(Utilities.BUNDLE_CARD_CATEGORY, title);
                     bundle.putString(Utilities.BUNDLE_CARD_LOGO, logo);
                     bundle.putInt(Utilities.BUNDLE_CARD_BACKGROUND, backgroundColor);
-                    bundle.putString(Utilities.BUNDLE_CARD_NOTES, "");
-                    bundle.putString(Utilities.BUNDLE_CARD_FRONT_VIEW, "");
-                    bundle.putString(Utilities.BUNDLE_CARD_BACK_VIEW, "");
-                    bundle.putBoolean(Utilities.BUNDLE_BACK_BUTTON_VISIBILITY, true);
+                    bundle.putString(Utilities.BUNDLE_CARD_NOTES, notes);
+                    bundle.putString(Utilities.BUNDLE_CARD_FRONT_VIEW, frontView);
+                    bundle.putString(Utilities.BUNDLE_CARD_BACK_VIEW, backView);
                     cardOverViewFragment.setArguments(bundle);
+
+                    FragmentManager fm = getActivity().getSupportFragmentManager();
+                    for(int i = 0; i < fm.getBackStackEntryCount(); ++i) {
+                        fm.popBackStack();
+                    }
+
+                    addCard();
 
                     FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
                     ft.addToBackStack(null);
-                    ft.replace(R.id.drag_view, cardOverViewFragment, "DetailCard").commit();
+                    ft.replace(R.id.drag_view, cardOverViewFragment, "CardOverview").commit();
                 }
                 break;
         }
@@ -191,5 +213,23 @@ public class RegistrationCardFragment extends Fragment implements View.OnClickLi
     private void updateDate() {
         SimpleDateFormat sdf = new SimpleDateFormat(dateFormat, Locale.US);
         regDOB.setText(sdf.format(calendar.getTime()));
+    }
+
+    public void addCard () {
+        CardList cardList = new CardList();
+        cardList.cardName       = cardName;
+        cardList.cardType       = title;
+        cardList.barcodeNumber  = barcodeNumber;
+        cardList.cardIcon       = logo;
+        cardList.cardBackground = backgroundColor;
+        cardList.cardNote       = notes;
+        cardList.cardFrontView  = frontView;
+        cardList.cardBackView   = backView;
+
+        CardDB cardDB = new CardDB(getContext());
+        cardDB.addCard(new CardList(cardList.cardName, cardList.cardType ,cardList.barcodeNumber, cardList.cardIcon, cardList.cardBackground, cardList.cardNote, cardList.cardFrontView, cardList.cardBackView));
+
+        Intent intent = new Intent(TabKartu.RADIO_DATASET_CHANGED);
+        getActivity().sendBroadcast(intent);
     }
 }

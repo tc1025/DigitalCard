@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/gradient_background">
+
+    <TextView
+        android:id="@+id/enter_pin_prompt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="60dp"
+        android:text="@string/enter_security_code"
+        android:textColor="@color/white"
+        android:textSize="17sp" />
+
+    <com.andrognito.pinlockview.IndicatorDots
+        android:id="@+id/pin_indicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/enter_pin_prompt"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+        app:dotDiameter="10dp"
+        app:dotEmptyBackground="@drawable/indicator_dots_empty_white"
+        app:dotFilledBackground="@drawable/indicator_dots_filled_white"
+        app:dotSpacing="15dp" />
+
+    <com.andrognito.pinlockview.PinLockView
+        android:id="@+id/pin_lock_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/pin_indicator"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="60dp"
+        app:keypadDeleteButtonDrawable="@drawable/ic_backspace"
+        app:keypadDeleteButtonSize="20dp"
+        app:keypadTextSize="24sp"
+        app:keypadVerticalSpacing="24dp" />
+
+    <LinearLayout
+        android:id="@+id/use_fingerprint_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/pin_lock_view"
+        android:layout_marginEnd="15dp"
+        android:layout_marginStart="15dp"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_gravity="center"
+                android:layout_weight="2"
+                android:background="@color/white" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Or Use"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_gravity="center"
+                android:layout_weight="2"
+                android:background="@color/white" />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/fingerprint_logo"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_margin="10dp"
+            android:src="@drawable/ic_fingerprint" />
+
+    </LinearLayout>
+
+</RelativeLayout>

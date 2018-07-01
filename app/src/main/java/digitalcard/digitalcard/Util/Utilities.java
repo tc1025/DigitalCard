@@ -70,8 +70,6 @@ public class Utilities {
     public final static String BUNDLE_LOCATION_LATITUDE = "location_latitude";
     public final static String BUNDLE_LOCATION_LONGITUDE = "location_longitude";
 
-    public final static String BUNDLE_BACK_BUTTON_VISIBILITY = "visibility";
-
 //    Merchant
     public final static String MERCHANT_STARBUCKS = "Starbucks";
 }

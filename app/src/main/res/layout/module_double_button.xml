@@ -14,7 +14,7 @@
             android:layout_height="match_parent"
             android:orientation="horizontal"
             android:gravity="center"
-            android:background="@color/start2">
+            android:background="@color/colorAccent">
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
@@ -42,7 +42,7 @@
             android:layout_height="match_parent"
             android:orientation="horizontal"
             android:gravity="center"
-            android:background="@color/start2">
+            android:background="@color/colorAccent">
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"

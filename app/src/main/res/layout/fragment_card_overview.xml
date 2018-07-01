@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -32,12 +33,6 @@
                     android:layout_height="200dp"
                     android:background="#E3E3E3" />
 
-                <ImageButton
-                    android:id="@+id/delete_card"
-                    android:layout_width="56dp"
-                    android:layout_height="56dp"
-                    android:layout_alignParentEnd="true"
-                    android:src="@drawable/ic_delete" />
             </RelativeLayout>
 
             <TextView
@@ -49,30 +44,28 @@
                 android:text="test"
                 android:textSize="14sp" />
 
-            <ImageView
-                android:id="@+id/barcode_image"
+            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:layout_marginEnd="16dp"
-                android:layout_marginStart="16dp" />
+                android:layout_marginStart="16dp">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:layout_marginStart="16dp"
-                android:background="#E3E3E3">
+                <ImageView
+                    android:id="@+id/barcode_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
 
                 <TextView
-                    android:id="@+id/barcode_number"
                     android:layout_width="match_parent"
-                    android:layout_height="36dp"
-                    android:layout_margin="1dp"
-                    android:background="@android:color/white"
-                    android:gravity="center"
-                    android:text="test"
-                    android:textSize="16sp" />
-            </LinearLayout>
+                    android:layout_height="match_parent"
+                    android:gravity="center|bottom"
+                    android:background="@drawable/fading_white"
+                    android:paddingBottom="20dp"
+                    android:text="Show Barcode"
+                    android:textSize="18sp"
+                    android:textStyle="bold"/>
+
+            </FrameLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -197,13 +190,6 @@
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
-
-            <Button
-                android:id="@+id/btn_ok"
-                android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:text="Ok"
-                android:visibility="gone" />
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

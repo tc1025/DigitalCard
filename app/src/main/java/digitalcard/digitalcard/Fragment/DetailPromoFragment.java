@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import digitalcard.digitalcard.MainActivity;
 import digitalcard.digitalcard.Module.Toolbar;
 import digitalcard.digitalcard.R;
 import digitalcard.digitalcard.Util.Utilities;
@@ -34,6 +35,10 @@ public class DetailPromoFragment extends Fragment implements View.OnClickListene
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_detail_promo, container, false);
+
+        if (getContext() instanceof MainActivity) {
+            ((MainActivity) getContext()).getSlidingPanel().setTouchEnabled(true);
+        }
 
         toolbar = rootView.findViewById(R.id.toolbar);
         btnBack = toolbar.getBtnBack();

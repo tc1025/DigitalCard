@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:textSize="24sp"
+        android:textSize="20sp"
         android:text="Title here"/>
 
     <EditText
@@ -28,6 +28,18 @@
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
         android:gravity="center_vertical">
+
+        <Button
+        android:id="@+id/btn_cancel"
+        android:layout_width="0dp"
+        android:layout_height="55dp"
+        android:layout_weight="1"
+        android:text="@string/cancel_text"/>
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="55dp"/>
+
         <Button
             android:id="@+id/btn_done"
             android:layout_width="0dp"
@@ -35,15 +47,5 @@
             android:layout_weight="1"
             android:text="@string/done_text"/>
 
-        <View
-            android:layout_width="2dp"
-            android:layout_height="55dp"/>
-
-        <Button
-            android:id="@+id/btn_cancel"
-            android:layout_width="0dp"
-            android:layout_height="55dp"
-            android:layout_weight="1"
-            android:text="@string/cancel_text"/>
     </LinearLayout>
 </LinearLayout>

@@ -14,6 +14,7 @@
     tools:context=".MainActivity">
 
     <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/activity_main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true">
@@ -36,10 +37,9 @@
                 android:id="@+id/tab_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@android:color/white"
                 app:tabMode="fixed"
                 app:tabSelectedTextColor="@android:color/black"
-                app:tabTextColor="@android:color/darker_gray" />
+                app:tabTextColor="@android:color/darker_gray"/>
 
         </android.support.design.widget.AppBarLayout>
 
@@ -74,6 +74,6 @@
             android:id="@+id/drag_area"
             android:layout_width="match_parent"
             android:layout_height="56dp"
-            android:orientation="vertical"/>
+            android:orientation="vertical" />
     </RelativeLayout>
 </com.sothree.slidinguppanel.SlidingUpPanelLayout>

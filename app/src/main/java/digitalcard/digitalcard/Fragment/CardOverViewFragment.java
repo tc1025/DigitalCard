@@ -1,7 +1,9 @@
 package digitalcard.digitalcard.Fragment;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -74,11 +76,10 @@ public class CardOverViewFragment extends Fragment implements View.OnClickListen
     PopupBarcodeDialog popupDialog;
     EditDialog editDialog;
 
-    TextView tvTitle, tvCardName, tvBarcodeNumber, tvNotes;
+    TextView tvTitle, tvCardName, tvNotes;
     ImageButton btnLocation, btnDelete;
     ImageView imgBarcode, dialogImgBarcode, imgLogo, imgFrontView, imgBackView;
-    LinearLayout dialogActivity, btnBack;
-    Button btnOk;
+    LinearLayout dialogActivity;
 
     String title, cardName, barcodeNumber, logo, frontView, backView, notes;
     int cardID, backgroundColor, id;
@@ -95,6 +96,11 @@ public class CardOverViewFragment extends Fragment implements View.OnClickListen
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_card_overview, container, false);
+
+        if (getContext() instanceof MainActivity) {
+            ((MainActivity) getContext()).getSlidingPanel().setTouchEnabled(true);
+        }
+
         cardDB = new CardDB(getActivity());
 
         ((MainActivity) getContext()).getSlidingPanel().setTouchEnabled(false);
@@ -109,29 +115,13 @@ public class CardOverViewFragment extends Fragment implements View.OnClickListen
 
         tvTitle = toolbar.getTxtTitle();
         btnLocation = toolbar.getBtnLocation();
-        btnBack = toolbar.getBtnBack();
+        btnDelete = toolbar.getBtnDelete();
         tvCardName = rootView.findViewById(R.id.card_name);
-        tvBarcodeNumber = rootView.findViewById(R.id.barcode_number);
         imgBarcode = rootView.findViewById(R.id.barcode_image);
-        btnDelete = rootView.findViewById(R.id.delete_card);
         imgLogo = rootView.findViewById(R.id.merchant_logo);
         tvNotes = rootView.findViewById(R.id.notes);
         imgFrontView = rootView.findViewById(R.id.img_front_view);
         imgBackView = rootView.findViewById(R.id.img_back_view);
-        btnOk = rootView.findViewById(R.id.btn_ok);
-
-        Boolean toolbarView = getArguments().getBoolean(Utilities.BUNDLE_BACK_BUTTON_VISIBILITY, false);
-        if (toolbarView) {
-            toolbar.backButtonView(toolbarView);
-            if (getContext() instanceof MainActivity) {
-                ((MainActivity) getContext()).getSlidingPanel().setTouchEnabled(false);
-                btnDelete.setVisibility(View.GONE);
-                btnLocation.setVisibility(View.GONE);
-                btnOk.setVisibility(View.VISIBLE);
-            }
-        } else {
-            toolbar.backButtonView(toolbarView);
-        }
 
         assert getArguments() != null;
         cardID = getArguments().getInt(Utilities.BUNDLE_CARD_ID);
@@ -147,7 +137,6 @@ public class CardOverViewFragment extends Fragment implements View.OnClickListen
 
         tvTitle.setText(title);
         tvCardName.setText(cardName);
-        tvBarcodeNumber.setText(barcodeNumber);
         Picasso.get().load(logo).into(imgLogo);
         imgLogo.setBackgroundColor(backgroundColor);
         if (!notes.equals(""))
@@ -170,8 +159,6 @@ public class CardOverViewFragment extends Fragment implements View.OnClickListen
         tvNotes.setOnClickListener(this);
         imgFrontView.setOnClickListener(this);
         imgBackView.setOnClickListener(this);
-        btnBack.setOnClickListener(this);
-        btnOk.setOnClickListener(this);
 
         convertNumberToBarcode(barcodeNumber, false);
 
@@ -191,14 +178,6 @@ public class CardOverViewFragment extends Fragment implements View.OnClickListen
         FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
         Intent intentCamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         switch (v.getId()) {
-            case  R.id.back_button:
-                getActivity().onBackPressed();
-                break;
-
-            case R.id.btn_ok:
-                addCard();
-                break;
-
             case R.id.card_name:
                 popUpEdit("cardName");
                 break;
@@ -256,14 +235,25 @@ public class CardOverViewFragment extends Fragment implements View.OnClickListen
                 popupDialog.dismiss();
                 break;
 
-            case R.id.delete_card:
-                List<CardList> tempCardLists = cardDB.getAllCardList();
-                if (!tempCardLists.isEmpty())
-                    for (CardList data : tempCardLists) {
-                        cardLists.add(new CardList(data.getId(), data.getCardType(), data.getCardName(), data.getBarcodeNumber(), data.getCardIcon(), data.getCardBackground(), data.getCardNote(), data.getCardFrontView(), data.getCardBackView()));
-                    }
-                CardList deleteTarget = cardLists.get(cardID);
-                cardDB.deleteCard(deleteTarget);
+            case R.id.delete_button:
+                LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                View alertLayout = inflater.inflate(R.layout.register_dialog_layout, null);
+
+                TextView dialogMessage = alertLayout.findViewById(R.id.dialog_message);
+                dialogMessage.setText("Are you sure you want to delete " + title +" card?");
+
+                AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+                alert.setView(alertLayout);
+                alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        List<CardList> tempCardLists = cardDB.getAllCardList();
+                        if (!tempCardLists.isEmpty())
+                            for (CardList data : tempCardLists) {
+                                cardLists.add(new CardList(data.getId(), data.getCardType(), data.getCardName(), data.getBarcodeNumber(), data.getCardIcon(), data.getCardBackground(), data.getCardNote(), data.getCardFrontView(), data.getCardBackView()));
+                            }
+                        CardList deleteTarget = cardLists.get(cardID);
+                        cardDB.deleteCard(deleteTarget);
 
 //                TabKartu tabKartu = new TabKartu();
 //                ft = Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction();
@@ -271,13 +261,24 @@ public class CardOverViewFragment extends Fragment implements View.OnClickListen
 //                ft.attach(tabKartu);
 //                ft.commit();
 
-                Intent intent = new Intent(getActivity(), MainActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
+                        Intent intent = new Intent(TabKartu.RADIO_DATASET_CHANGED);
+                        getActivity().sendBroadcast(intent);
 
-//                if (getContext() instanceof MainActivity) {
-//                    ((MainActivity) getContext()).getSlidingPanel().setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
-//                }
+                        if (getContext() instanceof MainActivity) {
+                            ((MainActivity) getContext()).getSlidingPanel().setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+                        }
+                    }
+                });
+
+                alert.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+                AlertDialog dialog = alert.create();
+                dialog.show();
                 break;
         }
     }
@@ -311,7 +312,7 @@ public class CardOverViewFragment extends Fragment implements View.OnClickListen
 
             switch (editSection) {
                 case "cardName":
-                    tvTitle.setText("Input new card name");
+                    tvTitle.setText("Input new card alias");
                     break;
 
                 case "cardNotes":

@@ -40,6 +40,8 @@ dependencies {
     implementation 'com.sothree.slidinguppanel:library:3.4.0'
     implementation 'com.squareup.picasso:picasso:2.71828'
 
+    implementation 'com.andrognito.pinlockview:pinlockview:2.1.0'
+
     implementation 'com.android.support:recyclerview-v7:27.1.1'
     //noinspection GradleDynamicVersion
     implementation 'com.nineoldandroids:library:2.4.0+'

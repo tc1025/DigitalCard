@@ -41,6 +41,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import digitalcard.digitalcard.Adapter.CardListAdapter;
+import digitalcard.digitalcard.MainActivity;
 import digitalcard.digitalcard.Model.CardList;
 import digitalcard.digitalcard.Module.Toolbar;
 import digitalcard.digitalcard.R;
@@ -70,10 +71,16 @@ public class CategoryCardFragment extends Fragment implements View.OnClickListen
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootview = inflater.inflate(R.layout.fragment_category_card, container, false);
+
+        if (getContext() instanceof MainActivity) {
+            ((MainActivity) getContext()).getSlidingPanel().setTouchEnabled(true);
+        }
+
         toolbar = rootview.findViewById(R.id.toolbar);
 
         txtTitle = toolbar.getTxtTitle();
-        btnBack = toolbar.getBtnBack();     btnBack.setVisibility(View.GONE);
+        btnBack = toolbar.getBtnBack();
+        btnBack.setVisibility(View.GONE);
         searchPanel = rootview.findViewById(R.id.search_panel);
         lvTop5Card = rootview.findViewById(R.id.top_5_cards);
         rvAllCard = rootview.findViewById(R.id.all_card_list);
@@ -128,81 +135,15 @@ public class CategoryCardFragment extends Fragment implements View.OnClickListen
     }
 
     @Override
-    public void onDetach() {
-        super.onDetach();
-        InputMethodManager imm = (InputMethodManager) Objects.requireNonNull(getActivity()).getSystemService(Context.INPUT_METHOD_SERVICE);
-        if (Objects.requireNonNull(getActivity().getCurrentFocus()).getWindowToken() != null) {
-            assert imm != null;
-            imm.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
-        }
-
+    public void onDestroyView() {
+        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(rootview.getWindowToken(), 0);
+        super.onDestroyView();
     }
 
-    /*buat hide keyboard*/
-    public void dismissKeyboard(){
-        InputMethodManager imm =(InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
-        mKeyboardStatus = false;
-    }
-
-    public void showKeyboard(){
-        InputMethodManager imm =(InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
-        mKeyboardStatus = true;
-    }
-
-    private boolean isKeyboardActive(){
-        return mKeyboardStatus;
-    }
 
     @Override
     public void onClick(View v) {
 
     }
-
-//    public void getData(){
-//        String[] cardCategory = new String[]{
-//                "Alfamart",
-//                "Alfamidi",
-//                "Indomaret",
-//                "Starbucks",
-//                "Lottemart",
-//                "ACE Hardware",
-//        };
-//
-//        int[] logo = new int[]{
-//                R.drawable.store_alfamart,
-//                R.drawable.store_alfamidi,
-//                R.drawable.store_indomaret,
-//                R.drawable.store_starbucks,
-//                R.drawable.store_lottemart,
-//                R.drawable.store_ace,
-//        };
-//
-//        int[] backgroundColor = new int[]{
-//                colour.bgAlfamart,
-//                colour.bgAlfamidi,
-//                colour.bgIndomaret,
-//                colour.bgStarbucks,
-//                colour.bgLottemart,
-//                colour.bgAce,
-//        };
-//
-//        CardList cardList;
-//        for (int i = 0; i < cardCategory.length; i++) {
-//            cardList = new CardList(cardCategory[i], logo[i], backgroundColor[i]);
-//            cardLists.add(cardList);
-//        }
-//
-//        cardListAdapter.notifyDataSetChanged();
-//    }
-//
-//    class colour {
-//        static final int bgAlfamart = 0xFFFFFFFF;
-//        static final int bgAlfamidi = 0xFFFFFFFF;
-//        static final int bgIndomaret = 0xFFFFFFFF;
-//        static final int bgStarbucks = 0xFF00704A;
-//        static final int bgLottemart = 0xFFDA291C;
-//        static final int bgAce = 0xFFFFFFFF;
-//    }
 }

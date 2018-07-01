@@ -199,7 +199,6 @@ public class TabKartu extends Fragment {
                     bundle.putString(Utilities.BUNDLE_CARD_NOTES, data.cardNote);
                     bundle.putString(Utilities.BUNDLE_CARD_FRONT_VIEW, data.cardFrontView);
                     bundle.putString(Utilities.BUNDLE_CARD_BACK_VIEW, data.cardBackView);
-                    bundle.putBoolean(Utilities.BUNDLE_BACK_BUTTON_VISIBILITY, false);
                     bundle.putInt("aaa", data.id);
                     cardOverViewFragment.setArguments(bundle);
 

@@ -2,10 +2,11 @@ package digitalcard.digitalcard;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
-import android.view.Menu;
 
 /**
  * Created by Laptops on 03/05/2018.
@@ -22,9 +23,17 @@ public class SplashScreenActivity extends Activity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent i = new Intent(SplashScreenActivity.this, MainActivity.class);
-                startActivity(i);
-                finish();
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(SplashScreenActivity.this);
+                if (preferences.contains("Key")){
+                    Intent i = new Intent(SplashScreenActivity.this, SecurityCodeActivity.class);
+                    startActivity(i);
+                    finish();
+                } else {
+                    Intent i = new Intent(SplashScreenActivity.this, MainActivity.class);
+                    startActivity(i);
+                    finish();
+                }
+
             }
         }, SPLASH_DISPLAY_LENGTH);
     }

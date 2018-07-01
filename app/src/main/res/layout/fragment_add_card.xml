@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+
     <digitalcard.digitalcard.Module.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
@@ -17,52 +18,91 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <digitalcard.digitalcard.Module.DoubleButton
             android:id="@+id/btn_action"
             android:layout_width="match_parent"
             android:layout_height="56dp"
-            android:layout_gravity="bottom"
-            android:layout_alignParentBottom="true"/>
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="bottom" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center_vertical"
-            android:layout_marginTop="36dp"
+            android:layout_marginEnd="16dp"
             android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp">
+            android:layout_marginTop="36dp"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Card Name"/>
+                android:text="Card Alias" />
+
             <EditText
                 android:id="@+id/card_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                android:hint="Name this card here"/>
+                android:hint="Add alias for this card here"
+                android:inputType="text"
+                android:maxLines="1" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Barcode"/>
+                android:text="Barcode" />
+
             <EditText
                 android:id="@+id/barcode_number"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Input your card's barcode number here"/>
+                android:hint="Input your card's barcode number here"
+                android:inputType="text"
+                android:maxLines="1" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="5dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_gravity="center"
+                    android:layout_weight="2"
+                    android:background="@android:color/black" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="Or" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_gravity="center"
+                    android:layout_weight="2"
+                    android:background="@android:color/black" />
+            </LinearLayout>
 
             <Button
                 android:id="@+id/btn_scan"
-                android:layout_marginTop="32dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:text="Scan Barcode"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
                 android:textColor="@android:color/white"
-                android:background="@color/start2"
-                android:text="scan"/>
+                android:background="@color/start2"/>
         </LinearLayout>
     </RelativeLayout>
 </LinearLayout>
