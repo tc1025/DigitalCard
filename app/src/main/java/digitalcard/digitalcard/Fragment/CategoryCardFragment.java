@@ -79,6 +79,7 @@ public class CategoryCardFragment extends Fragment implements View.OnClickListen
         toolbar = rootview.findViewById(R.id.toolbar);
 
         txtTitle = toolbar.getTxtTitle();
+        txtTitle.setText("Add New Card");
         btnBack = toolbar.getBtnBack();
         btnBack.setVisibility(View.GONE);
         searchPanel = rootview.findViewById(R.id.search_panel);
@@ -114,19 +115,22 @@ public class CategoryCardFragment extends Fragment implements View.OnClickListen
                                 Log.e("data", "card : " + object.getString("name") + ", logo : " + object.getString("logo"));
                                 cardLists.add(new CardList(object.getString("name"), object.getString("logo"), object.getInt("background")));
                             }
-                        } catch (JSONException e) { e.printStackTrace(); }
-                        finally {
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        } finally {
                             cardListAdapter.notifyDataSetChanged();
                         }
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
-                    public void onErrorResponse(VolleyError error) { Log.e(TAG, error.toString()); }
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e(TAG, error.toString());
+                    }
                 }) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String , String> map = new HashMap<String, String>();
+                Map<String, String> map = new HashMap<String, String>();
                 return map;
             }
         };
