@@ -25,12 +25,10 @@ public class SplashScreenActivity extends Activity {
             public void run() {
                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(SplashScreenActivity.this);
                 if (preferences.contains("Key")){
-                    Intent i = new Intent(SplashScreenActivity.this, SecurityCodeActivity.class);
-                    startActivity(i);
+                    startActivity(new Intent(SplashScreenActivity.this, SecurityCodeActivity.class));
                     finish();
                 } else {
-                    Intent i = new Intent(SplashScreenActivity.this, MainActivity.class);
-                    startActivity(i);
+                    startActivity(new Intent(SplashScreenActivity.this, MainActivity.class));
                     finish();
                 }
 

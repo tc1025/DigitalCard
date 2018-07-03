@@ -74,14 +74,14 @@ public class TabKartu extends Fragment {
         super.onResume();
         IntentFilter filter = new IntentFilter();
         filter.addAction(RADIO_DATASET_CHANGED);
-        getActivity().getApplicationContext().registerReceiver(radio, filter);
+        getActivity().registerReceiver(radio, filter);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         try {
-            getActivity().getApplicationContext().unregisterReceiver(radio);
+            getActivity().unregisterReceiver(radio);
         } catch (Exception e) {
             Toast.makeText(getActivity(), "not changed", Toast.LENGTH_SHORT).show();
         }
@@ -125,12 +125,17 @@ public class TabKartu extends Fragment {
     public void loadCard(){
         cardDB = new CardDB(getContext());
         List<CardList> cardLists =  cardDB.getAllCardList();
+
         if (!cardLists.isEmpty()) {
+            rvCard.setVisibility(View.VISIBLE);
+            llNoCard.setVisibility(View.GONE);
             for (CardList data : cardLists) {
                 cardListArrayList.add(new CardList(data.getId(), data.getCardType(), data.getCardName(), data.getBarcodeNumber(), data.getCardIcon(), data.getCardBackground(), data.getCardNote(), data.getCardFrontView(), data.getCardBackView()));
             }
-        }
-        cardCount = cardListArrayList.size();
+            cardCount = cardListArrayList.size();
+        } else {
+            rvCard.setVisibility(View.GONE);
+            llNoCard.setVisibility(View.VISIBLE);}
     }
 
     private void fillCardList(){
@@ -216,13 +221,6 @@ public class TabKartu extends Fragment {
 
         @Override
         public int getItemCount() {
-            if (cardListArrayList.size() == 0) {
-                rvCard.setVisibility(View.GONE);
-                llNoCard.setVisibility(View.VISIBLE);
-            } else {
-                rvCard.setVisibility(View.VISIBLE);
-                llNoCard.setVisibility(View.GONE);
-            }
             return cardListArrayList.size();
         }
     }

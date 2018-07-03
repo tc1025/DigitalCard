@@ -9,11 +9,18 @@
         android:layout_width="match_parent"
         android:layout_height="56dp" />
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/toolbar"
+        android:background="@color/grey_background" />
+
     <LinearLayout
         android:id="@+id/setting_password_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/toolbar"
+        android:layout_marginTop="1dp"
         android:background="@drawable/ripple_button"
         android:orientation="vertical"
         android:padding="10dp">
@@ -21,20 +28,72 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/settings_password"
+            android:text="@string/settings_security_code"
             android:textColor="@android:color/black"
             android:textSize="16sp" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/settings_password_subtitle"
+            android:text="@string/settings_security_code_subtitle"
             android:textSize="12sp" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginTop="5dp"
+            android:background="#E3E3E3" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/delete_security_code_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/setting_password_button"
+        android:background="@drawable/ripple_button"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/remove_security_code"
+            android:textColor="@android:color/black"
+            android:textSize="16sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/remove_security_code_subtitle"
+            android:textSize="12sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="5dp"
+            android:background="#E3E3E3" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/about_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/delete_security_code_button"
+        android:background="@drawable/ripple_button"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/about"
+            android:textColor="@android:color/black"
+            android:textSize="16sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="17dp"
             android:background="#E3E3E3" />
     </LinearLayout>
 

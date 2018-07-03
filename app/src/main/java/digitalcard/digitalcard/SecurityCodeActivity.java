@@ -1,11 +1,17 @@
 package digitalcard.digitalcard;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.KeyguardManager;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.hardware.fingerprint.FingerprintManager;
 import android.os.Bundle;
+import android.security.keystore.KeyGenParameterSpec;
+import android.security.keystore.KeyPermanentlyInvalidatedException;
+import android.security.keystore.KeyProperties;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -14,9 +20,25 @@ import com.andrognito.pinlockview.IndicatorDots;
 import com.andrognito.pinlockview.PinLockListener;
 import com.andrognito.pinlockview.PinLockView;
 
+import java.io.IOException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
+
+import javax.crypto.Cipher;
+import javax.crypto.KeyGenerator;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
+
 import digitalcard.digitalcard.Util.KeyUtilities;
 
 public class SecurityCodeActivity extends Activity {
+    private static final String KEY_NAME = "DigiCardFingerprint";
 
     private LinearLayout mFingerprintLayout;
     private PinLockView mPinLockView;
@@ -46,8 +68,7 @@ public class SecurityCodeActivity extends Activity {
                 decryptResult = keyUtilities.decryptString(SecurityCodeActivity.this);
 
                 if (pin.equals(decryptResult)){
-                    Intent i = new Intent(SecurityCodeActivity.this, MainActivity.class);
-                    startActivity(i);
+                    startActivity(new Intent(SecurityCodeActivity.this, MainActivity.class));
                     finish();
                 }else {
                  mPinLockView.resetPinLockView();
@@ -67,11 +88,27 @@ public class SecurityCodeActivity extends Activity {
             }
         });
 
+        final KeyUtilities keyUtilities = new KeyUtilities();
+        keyUtilities.initKeystore();
+
         keyguardManager = (KeyguardManager) getSystemService(KEYGUARD_SERVICE);
         fingerprintManager = (FingerprintManager) getSystemService(FINGERPRINT_SERVICE);
 
-        if (!fingerprintManager.isHardwareDetected()){
+        if (!fingerprintManager.isHardwareDetected()
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.USE_FINGERPRINT) != PackageManager.PERMISSION_GRANTED
+                && !fingerprintManager.hasEnrolledFingerprints()
+                && !keyguardManager.isKeyguardSecure()){
             mFingerprintLayout.setVisibility(View.GONE);
+        } else{
+            try {
+                keyUtilities.generateKeyFingerprint();
+
+                if (keyUtilities.initCipher()) {
+                    keyUtilities.startAuth(this, fingerprintManager);
+                }
+            } catch (KeyUtilities.FingerprintException e) {
+                e.printStackTrace();
+            }
         }
 
     }

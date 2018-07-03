@@ -99,10 +99,8 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="10dp"
                 android:text="Scan Barcode"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
                 android:textColor="@android:color/white"
-                android:background="@color/start2"/>
+                android:backgroundTint="@color/start2"/>
         </LinearLayout>
     </RelativeLayout>
 </LinearLayout>
