@@ -21,9 +21,12 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.sothree.slidinguppanel.SlidingUpPanelLayout;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.Random;
 
 import digitalcard.digitalcard.Database.CardDB;
@@ -173,17 +176,17 @@ public class RegistrationCardFragment extends Fragment implements View.OnClickLi
                     frontView = "";
                     backView = "";
 
-                    CardOverViewFragment cardOverViewFragment = new CardOverViewFragment();
-                    Bundle bundle = new Bundle();
-                    bundle.putString(Utilities.BUNDLE_CARD_NAME, cardName);
-                    bundle.putString(Utilities.BUNDLE_BARCODE_NUMBER, barcodeNumber);
-                    bundle.putString(Utilities.BUNDLE_CARD_CATEGORY, title);
-                    bundle.putString(Utilities.BUNDLE_CARD_LOGO, logo);
-                    bundle.putInt(Utilities.BUNDLE_CARD_BACKGROUND, backgroundColor);
-                    bundle.putString(Utilities.BUNDLE_CARD_NOTES, notes);
-                    bundle.putString(Utilities.BUNDLE_CARD_FRONT_VIEW, frontView);
-                    bundle.putString(Utilities.BUNDLE_CARD_BACK_VIEW, backView);
-                    cardOverViewFragment.setArguments(bundle);
+//                    CardOverViewFragment cardOverViewFragment = new CardOverViewFragment();
+//                    Bundle bundle = new Bundle();
+//                    bundle.putString(Utilities.BUNDLE_CARD_NAME, cardName);
+//                    bundle.putString(Utilities.BUNDLE_BARCODE_NUMBER, barcodeNumber);
+//                    bundle.putString(Utilities.BUNDLE_CARD_CATEGORY, title);
+//                    bundle.putString(Utilities.BUNDLE_CARD_LOGO, logo);
+//                    bundle.putInt(Utilities.BUNDLE_CARD_BACKGROUND, backgroundColor);
+//                    bundle.putString(Utilities.BUNDLE_CARD_NOTES, notes);
+//                    bundle.putString(Utilities.BUNDLE_CARD_FRONT_VIEW, frontView);
+//                    bundle.putString(Utilities.BUNDLE_CARD_BACK_VIEW, backView);
+//                    cardOverViewFragment.setArguments(bundle);
 
                     FragmentManager fm = getActivity().getSupportFragmentManager();
                     for(int i = 0; i < fm.getBackStackEntryCount(); ++i) {
@@ -192,9 +195,9 @@ public class RegistrationCardFragment extends Fragment implements View.OnClickLi
 
                     addCard();
 
-                    FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-                    ft.addToBackStack(null);
-                    ft.replace(R.id.drag_view, cardOverViewFragment, "CardOverview").commit();
+//                    FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+//                    ft.addToBackStack(null);
+//                    ft.replace(R.id.drag_view, cardOverViewFragment, "CardOverview").commit();
                 }
                 break;
         }
@@ -230,6 +233,8 @@ public class RegistrationCardFragment extends Fragment implements View.OnClickLi
         cardDB.addCard(new CardList(cardList.cardName, cardList.cardType ,cardList.barcodeNumber, cardList.cardIcon, cardList.cardBackground, cardList.cardNote, cardList.cardFrontView, cardList.cardBackView));
 
         Intent intent = new Intent(TabKartu.RADIO_DATASET_CHANGED);
-        getActivity().sendBroadcast(intent);
+        Objects.requireNonNull(getActivity()).sendBroadcast(intent);
+
+        ((MainActivity) getContext()).getSlidingPanel().setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
     }
 }

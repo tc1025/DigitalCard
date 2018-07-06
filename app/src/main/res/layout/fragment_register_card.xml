@@ -46,14 +46,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
-                        android:text="Name"
+                        android:text="@string/name"
                         android:textSize="14sp" />
 
                     <EditText
                         android:id="@+id/register_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Input your full name"
+                        android:hint="@string/name_hint"
                         android:inputType="text"
                         android:maxLines="1" />
                 </LinearLayout>
@@ -70,14 +70,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
-                        android:text="Identity Number"
+                        android:text="@string/identity"
                         android:textSize="14sp" />
 
                     <EditText
                         android:id="@+id/register_id_number"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="KTP (16 digits)"
+                        android:hint="@string/identity_number_hint"
                         android:inputType="text"
                         android:maxLines="1" />
                 </LinearLayout>
@@ -94,7 +94,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
-                        android:text="Gender"
+                        android:text="@string/gender"
                         android:textSize="14sp" />
 
                     <RadioGroup
@@ -106,13 +106,13 @@
                         <RadioButton
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Male" />
+                            android:text="@string/male" />
 
                         <RadioButton
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="16dp"
-                            android:text="Female" />
+                            android:text="@string/female" />
                     </RadioGroup>
                 </LinearLayout>
 
@@ -128,14 +128,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
-                        android:text="Address"
+                        android:text="@string/addressess"
                         android:textSize="14sp" />
 
                     <EditText
                         android:id="@+id/register_address"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Input your address" />
+                        android:hint="@string/addressess_hint" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -150,7 +150,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
-                        android:text="Date of Birth"
+                        android:text="@string/date_of_birth"
                         android:textSize="14sp" />
 
                     <EditText
@@ -158,7 +158,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:focusableInTouchMode="false"
-                        android:hint="dd/mm/yyyy" />
+                        android:hint="@string/date_of_birth_hint" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -173,14 +173,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
-                        android:text="Card Alias"
+                        android:text="@string/card_alias"
                         android:textSize="14sp" />
 
                     <EditText
                         android:id="@+id/register_card_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Input this card alias"
+                        android:hint="@string/card_alias_hint"
                         android:inputType="text"
                         android:maxLines="1" />
                 </LinearLayout>
@@ -214,7 +214,7 @@
                         android:id="@+id/register_captcha"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Input captcha"
+                        android:hint="@string/captcha_hint"
                         android:inputType="textCapCharacters" />
                 </LinearLayout>
             </LinearLayout>

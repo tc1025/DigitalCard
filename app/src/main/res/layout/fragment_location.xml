@@ -26,6 +26,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:text="No Merchant around here"
+        android:text="@string/no_merchant"
         android:visibility="gone" />
 </LinearLayout>

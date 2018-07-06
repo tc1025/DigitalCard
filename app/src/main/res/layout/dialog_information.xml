@@ -20,7 +20,7 @@
             android:paddingEnd="24dp"
             android:paddingStart="24dp"
             android:paddingTop="24dp"
-            android:text="warning"
+            android:text="@string/warning"
             android:textAllCaps="true"
             android:textColor="#FF333333"
             android:textSize="20sp"
@@ -52,7 +52,7 @@
                 android:layout_height="match_parent"
                 android:background="@drawable/ripple_button"
                 android:gravity="center"
-                android:text="Okay"
+                android:text="@string/okay"
                 android:textColor="#FFD4444E" />
         </LinearLayout>
 

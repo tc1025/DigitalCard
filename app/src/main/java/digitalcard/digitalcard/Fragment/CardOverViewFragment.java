@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
@@ -145,11 +146,13 @@ public class CardOverViewFragment extends Fragment implements View.OnClickListen
             byte[] decodeImage = Base64.decode(frontView, Base64.DEFAULT);
             Bitmap image = BitmapFactory.decodeByteArray(decodeImage, 0, decodeImage.length);
             imgFrontView.setImageBitmap(image);
+            imgFrontView.setBackgroundColor(Color.parseColor("#FFFFFF"));
         }
         if (!backView.equals("")) {
             byte[] decodeImage = Base64.decode(backView, Base64.DEFAULT);
             Bitmap image = BitmapFactory.decodeByteArray(decodeImage, 0, decodeImage.length);
             imgBackView.setImageBitmap(image);
+            imgBackView.setBackgroundColor(Color.parseColor("#FFFFFF"));
         }
 
         btnLocation.setOnClickListener(this);
@@ -351,16 +354,15 @@ public class CardOverViewFragment extends Fragment implements View.OnClickListen
                             tvNotes.setText(getEdited);
                             break;
                     }
-
                     editDialog.dismiss();
                 }
             });
         }
-        getActivity().sendBroadcast(intent);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        String checkIntent = data.toString();
         if (requestCode == 1) {
             if (resultCode == 1) {
                 Place place = PlaceAutocomplete.getPlace(getActivity(), data);
@@ -373,9 +375,10 @@ public class CardOverViewFragment extends Fragment implements View.OnClickListen
         }
 
         if (requestCode == 5) {
-            if (data!= null) {
+            if (!checkIntent.equals("Intent {  }")) {
                 bmFrontView = (Bitmap) data.getExtras().get("data");
                 imgFrontView.setImageBitmap(bmFrontView);
+                imgFrontView.setBackgroundColor(Color.parseColor("#FFFFFF"));
 
                 ByteArrayOutputStream baos=new  ByteArrayOutputStream();
                 bmFrontView.compress(Bitmap.CompressFormat.PNG,100, baos);
@@ -392,14 +395,15 @@ public class CardOverViewFragment extends Fragment implements View.OnClickListen
                 cardList.cardBackView = backView;
                 cardDB.updateCard(new CardList(id, cardList.cardType, cardList.cardName, cardList.barcodeNumber, cardList.cardIcon, cardList.cardBackground, cardList.cardNote, frontView, cardList.cardBackView));
 
-                getActivity().sendBroadcast(intent);
+//                Objects.requireNonNull(getActivity()).sendBroadcast(intent);
             }
         }
 
         if (requestCode == 6) {
-            if (data != null) {
+            if (!checkIntent.equals("Intent {  }")) {
                 bmBackView = (Bitmap) data.getExtras().get("data");
                 imgBackView.setImageBitmap(bmBackView);
+                imgBackView.setBackgroundColor(Color.parseColor("#FFFFFF"));
 
                 ByteArrayOutputStream baos=new  ByteArrayOutputStream();
                 bmBackView.compress(Bitmap.CompressFormat.PNG,100, baos);
@@ -416,7 +420,7 @@ public class CardOverViewFragment extends Fragment implements View.OnClickListen
                 cardList.cardFrontView = frontView;
                 cardDB.updateCard(new CardList(id, cardList.cardType, cardList.cardName, cardList.barcodeNumber, cardList.cardIcon, cardList.cardBackground, cardList.cardNote, cardList.cardFrontView, backView));
 
-                getActivity().sendBroadcast(intent);
+//                Objects.requireNonNull(getActivity()).sendBroadcast(intent);
             }
         }
     }

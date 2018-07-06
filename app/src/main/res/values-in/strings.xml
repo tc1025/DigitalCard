@@ -1,0 +1,33 @@
+<resources>
+    <string name="app_name">DigiCard</string>
+
+    <string name="imageButton_plus_description">Add New Card</string>
+    <string name="imageButton_menu_description">menu</string>
+    
+    <string name="account">Akun</string>
+    <string name="settings">Setelan</string>
+
+    <string name="card_text">Kartu</string>
+    <string name="promo_text">Promo</string>
+    <string name="add_new_card_text">Tambah Kartu Baru</string>
+    <string name="back_text">Kembali</string>
+
+    <string name="done_text">Selesai</string>
+    <string name="cancel_text">Batal</string>
+
+    <string name="settings_password">Kata Sandi</string>
+    <string name="settings_password_subtitle">Tambah atau ganti kata sandi untuk mengamankan DigiCard</string>
+
+    <!--dialog-->
+    <string name="title_location_permission">Membutuhkan izin</string>
+    <string name="text_location_permission">Aplikasi ini ingin menggunakan lokasi Anda saat ini untuk menyesuaikan pengalaman Anda.</string>
+    <string name="cancel_permission">BATAL</string>
+    <string name="dialog_header_location_null">Lokasi tidak ditemukan</string>
+    <string name="dialog_content_location_null">Silahkan cek koneksi internet atau layanan GPS aktif.</string>
+    <string name="enter_security_code">Masukkan Kata Sandi Anda</string>
+    <string name="wrong_security_code">Kata Sandi Salah</string>
+    <string name="ok_permission">OKE</string>
+    <string name="hint_search">Cari Disini...</string>
+    <string name="all_card">Semua Kartu</string>
+
+</resources>

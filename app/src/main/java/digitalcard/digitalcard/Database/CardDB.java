@@ -2,18 +2,22 @@ package digitalcard.digitalcard.Database;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
+import digitalcard.digitalcard.Fragment.TabKartu;
 import digitalcard.digitalcard.Model.CardList;
 import digitalcard.digitalcard.Util.Utilities;
 
 public class CardDB extends SQLiteOpenHelper {
     private Context context;
+    private Intent intent = new Intent(TabKartu.RADIO_DATASET_CHANGED);
 
     public CardDB(Context context) {
         super(context, Utilities.DATABASE_NAME, null, Utilities.DATABASE_VERSION);
@@ -55,6 +59,7 @@ public class CardDB extends SQLiteOpenHelper {
         values.put(Utilities.back_view, cardList.getCardBackView());
 
         db.insert(Utilities.TABLE_CARDLIST,  null,values);
+        context.sendBroadcast(intent);
         db.close();
     }
 
@@ -72,6 +77,7 @@ public class CardDB extends SQLiteOpenHelper {
         values.put(Utilities.back_view, cardList.getCardBackView());
 
         db.update(Utilities.TABLE_CARDLIST, values,"id=" + cardList.getId(), null );
+        context.sendBroadcast(intent);
         db.close();
     }
 

@@ -39,31 +39,29 @@
                 android:id="@+id/card_name"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
-                android:layout_gravity="center_horizontal"
                 android:gravity="center"
-                android:text="test"
-                android:textSize="14sp" />
+                android:textSize="18sp" />
 
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
+                android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
                 android:layout_marginStart="16dp">
 
                 <ImageView
                     android:id="@+id/barcode_image"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="100dp" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:gravity="center|bottom"
                     android:background="@drawable/fading_white"
+                    android:gravity="center|bottom"
                     android:paddingBottom="20dp"
-                    android:text="Show Barcode"
+                    android:text="@string/show_barcode"
                     android:textSize="18sp"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold" />
 
             </FrameLayout>
 
@@ -87,7 +85,7 @@
                         android:layout_height="56dp"
                         android:layout_marginStart="16dp"
                         android:gravity="center_vertical"
-                        android:text="Notes"
+                        android:text="@string/notes"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
@@ -103,7 +101,7 @@
                         android:layout_marginBottom="8dp"
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="8dp"
-                        android:text="Add note.." />
+                        android:text="@string/notes_hint" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -127,7 +125,7 @@
                         android:layout_height="56dp"
                         android:layout_marginStart="16dp"
                         android:gravity="center_vertical"
-                        android:text="Card Preview"
+                        android:text="@string/card_preview"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
@@ -152,12 +150,13 @@
                                 android:id="@+id/img_front_view"
                                 android:layout_width="match_parent"
                                 android:layout_height="100dp"
+                                android:layout_marginTop="6dp"
                                 android:background="@color/grey_button" />
 
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="Front view"
+                                android:text="@string/front_view"
                                 android:textAlignment="center" />
                         </LinearLayout>
 
@@ -173,6 +172,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
+                            android:layout_marginTop="6dp"
                             android:orientation="vertical">
 
                             <ImageView
@@ -184,7 +184,7 @@
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="Back view"
+                                android:text="@string/back_view"
                                 android:textAlignment="center" />
                         </LinearLayout>
                     </LinearLayout>

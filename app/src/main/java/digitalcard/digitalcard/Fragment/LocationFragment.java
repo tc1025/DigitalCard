@@ -9,7 +9,9 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.location.GpsSatellite;
 import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -57,6 +59,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import digitalcard.digitalcard.Adapter.LocationListAdapter;
 import digitalcard.digitalcard.MainActivity;
@@ -77,7 +80,7 @@ public class LocationFragment extends Fragment implements View.OnClickListener, 
     TextView tvTitle, tvNoLocation;
     MapView merchantLocation;
     GoogleMap mGoogleMap;
-//    LocationManager mLocationManager;
+    LocationManager mLocationManager;
     RecyclerView rvLocation;
 
     Location location;
@@ -125,7 +128,7 @@ public class LocationFragment extends Fragment implements View.OnClickListener, 
         tvTitle.setText(title);
         btnBack.setOnClickListener(this);
 
-//        mLocationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+        mLocationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
 
         checkLocationPermission();
 
@@ -208,6 +211,17 @@ public class LocationFragment extends Fragment implements View.OnClickListener, 
 //
 //            mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 400, 1000, this);
 //        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (ContextCompat.checkSelfPermission(getActivity(),
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+
+            mLocationManager.removeUpdates(this);
+        }
     }
 
     @Override

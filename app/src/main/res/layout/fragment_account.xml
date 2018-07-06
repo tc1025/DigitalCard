@@ -9,7 +9,7 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        app:backButton="true" />
+        app:backButton="false" />
 
     <View
         android:layout_width="match_parent"
@@ -27,7 +27,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="No connected account"
+            android:text="@string/no_connected_account"
             android:textColor="@color/grey_button"
             android:textSize="14sp" />
 
@@ -66,28 +66,28 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="DOB not set yet" />
+            android:text="@string/dob" />
 
         <TextView
             android:id="@+id/account_identity_number"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="Identity number not set yet" />
+            android:text="@string/identity" />
 
         <TextView
             android:id="@+id/account_address"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="Address not set yet" />
+            android:text="@string/address" />
 
         <TextView
             android:id="@+id/account_phone_number"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="Phone number not set yet" />
+            android:text="@string/phone" />
 
         <Button
             android:id="@+id/btn_backup"
@@ -95,7 +95,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:backgroundTint="@color/white"
-            android:text="Back up data" />
+            android:text="@string/backup" />
 
         <Button
             android:id="@+id/btn_sign_out"
@@ -103,7 +103,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:backgroundTint="@color/colorAccent"
-            android:text="Sign Out"
+            android:text="@string/sign_out"
             android:textColor="@color/white" />
     </LinearLayout>
 </LinearLayout>

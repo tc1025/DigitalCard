@@ -65,8 +65,6 @@ public class CategoryCardFragment extends Fragment implements View.OnClickListen
     List<CardList> cardLists;
     CardListAdapter cardListAdapter;
 
-    Boolean mKeyboardStatus = false;
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -88,6 +86,7 @@ public class CategoryCardFragment extends Fragment implements View.OnClickListen
         cardLists = new ArrayList<>();
         cardListAdapter = new CardListAdapter(getContext(), cardLists);
 
+        txtTitle.setText(getResources().getString(R.string.add_new_card_text));
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         rvAllCard.setLayoutManager(layoutManager);
         rvAllCard.setItemAnimator(new DefaultItemAnimator());

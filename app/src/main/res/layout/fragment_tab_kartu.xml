@@ -26,7 +26,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="You don't have any card"
+            android:text="@string/no_card"
             android:textColor="@color/grey_button"
             android:textSize="14sp" />
     </LinearLayout>

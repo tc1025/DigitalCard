@@ -9,10 +9,11 @@
     android:layout_gravity="center">
     <TextView
         android:id="@+id/dialog_title"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:textSize="20sp"
+        android:gravity="center"
         android:text="Title here"/>
 
     <EditText
