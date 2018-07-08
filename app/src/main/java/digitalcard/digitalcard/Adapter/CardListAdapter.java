@@ -78,50 +78,64 @@ public class CardListAdapter extends RecyclerView.Adapter<CardListAdapter.ViewHo
         holder.panel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                View alertLayout = inflater.inflate(R.layout.register_dialog_layout, null);
+                final ExistingMemberFragment existingMemberFragment = new ExistingMemberFragment();
+                if (data.cardCategory.equals("Other")) {
+                    Bundle bundle = new Bundle();
+                    bundle.putString(Utilities.BUNDLE_CARD_CATEGORY, data.cardCategory);
+                    bundle.putString(Utilities.BUNDLE_CARD_LOGO, data.cardIcon);
+                    bundle.putInt(Utilities.BUNDLE_CARD_BACKGROUND, data.cardBackground);
+                    existingMemberFragment.setArguments(bundle);
 
-                TextView dialogMessage = alertLayout.findViewById(R.id.dialog_message);
-                dialogMessage.setText("Do you have this member card");
+                    ((MainActivity) context).getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.drag_view, existingMemberFragment, "AddCard")
+                            .addToBackStack(null)
+                            .commit();
+                } else {
+                    LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                    View alertLayout = inflater.inflate(R.layout.register_dialog_layout, null);
 
-                AlertDialog.Builder alert = new AlertDialog.Builder(context);
-                alert.setView(alertLayout);
-                alert.setPositiveButton("Yes, add existing member card", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        ExistingMemberFragment existingMemberFragment = new ExistingMemberFragment();
-                        Bundle bundle = new Bundle();
-                        bundle.putString(Utilities.BUNDLE_CARD_CATEGORY, data.cardCategory);
-                        bundle.putString(Utilities.BUNDLE_CARD_LOGO, data.cardIcon);
-                        bundle.putInt(Utilities.BUNDLE_CARD_BACKGROUND, data.cardBackground);
-                        existingMemberFragment.setArguments(bundle);
+                    TextView dialogMessage = alertLayout.findViewById(R.id.dialog_message);
+                    dialogMessage.setText(context.getResources().getString(R.string.have_member_card));
 
-                        ((MainActivity)context).getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.drag_view, existingMemberFragment, "AddCard")
-                                .addToBackStack(null)
-                                .commit();
-                    }
-                });
+                    AlertDialog.Builder alert = new AlertDialog.Builder(context);
+                    alert.setView(alertLayout);
+                    alert.setPositiveButton(context.getResources().getString(R.string.have_member_card_yes), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
 
-                alert.setNegativeButton("No, register now", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        RegistrationCardFragment registrationCardFragment = new RegistrationCardFragment();
-                        Bundle bundle = new Bundle();
-                        bundle.putString(Utilities.BUNDLE_CARD_CATEGORY, data.cardCategory);
-                        bundle.putString(Utilities.BUNDLE_CARD_LOGO, data.cardIcon);
-                        bundle.putInt(Utilities.BUNDLE_CARD_BACKGROUND, data.cardBackground);
-                        registrationCardFragment.setArguments(bundle);
+                            Bundle bundle = new Bundle();
+                            bundle.putString(Utilities.BUNDLE_CARD_CATEGORY, data.cardCategory);
+                            bundle.putString(Utilities.BUNDLE_CARD_LOGO, data.cardIcon);
+                            bundle.putInt(Utilities.BUNDLE_CARD_BACKGROUND, data.cardBackground);
+                            existingMemberFragment.setArguments(bundle);
 
-                        ((MainActivity) context).getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.drag_view, registrationCardFragment, "AddCard")
-                                .addToBackStack(null)
-                                .commit();
-                    }
-                });
+                            ((MainActivity) context).getSupportFragmentManager().beginTransaction()
+                                    .replace(R.id.drag_view, existingMemberFragment, "AddCard")
+                                    .addToBackStack(null)
+                                    .commit();
+                        }
+                    });
 
-                AlertDialog dialog = alert.create();
-                dialog.show();
+                    alert.setNegativeButton(context.getResources().getString(R.string.have_member_card_no), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            RegistrationCardFragment registrationCardFragment = new RegistrationCardFragment();
+                            Bundle bundle = new Bundle();
+                            bundle.putString(Utilities.BUNDLE_CARD_CATEGORY, data.cardCategory);
+                            bundle.putString(Utilities.BUNDLE_CARD_LOGO, data.cardIcon);
+                            bundle.putInt(Utilities.BUNDLE_CARD_BACKGROUND, data.cardBackground);
+                            registrationCardFragment.setArguments(bundle);
+
+                            ((MainActivity) context).getSupportFragmentManager().beginTransaction()
+                                    .replace(R.id.drag_view, registrationCardFragment, "AddCard")
+                                    .addToBackStack(null)
+                                    .commit();
+                        }
+                    });
+
+                    AlertDialog dialog = alert.create();
+                    dialog.show();
+                }
             }
         });
     }

@@ -85,8 +85,8 @@ public class AccountDB extends SQLiteOpenHelper {
             do {
                 UserAccount account = /**/new UserAccount();
                 account.setId(Integer.parseInt(cursor.getString(0)));
-                account.setName(cursor.getString(2));
-                account.setEmail(cursor.getString(1));
+                account.setName(cursor.getString(1));
+                account.setEmail(cursor.getString(2));
                 account.setDob(cursor.getString(3));
                 account.setIdentityNumber(cursor.getString(4));
                 account.setAddress(cursor.getString(5));

@@ -1,6 +1,8 @@
 package digitalcard.digitalcard.Fragment;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -13,13 +15,14 @@ import android.widget.TextView;
 import digitalcard.digitalcard.MainActivity;
 import digitalcard.digitalcard.Module.Toolbar;
 import digitalcard.digitalcard.R;
+import digitalcard.digitalcard.Util.KeyUtilities;
 
 public class SettingsFragment extends Fragment implements View.OnClickListener{
     View rootView;
     Toolbar toolbar;
     TextView tvTitle;
 
-    LinearLayout btnBack, addPasswordButton;
+    LinearLayout btnBack, addSecurityCodeButton, deleteSecurityCodeButton, aboutButton;
 
     @Nullable
     @Override
@@ -36,10 +39,20 @@ public class SettingsFragment extends Fragment implements View.OnClickListener{
         tvTitle.setText("Settings");
         btnBack = toolbar.getBtnBack();
 
-        addPasswordButton = rootView.findViewById(R.id.setting_password_button);
+        addSecurityCodeButton = rootView.findViewById(R.id.setting_password_button);
+        deleteSecurityCodeButton = rootView.findViewById(R.id.delete_security_code_button);
+        aboutButton = rootView.findViewById(R.id.about_button);
+
+        SharedPreferences mySPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+
+        if (!mySPrefs.contains("Key")){
+            deleteSecurityCodeButton.setVisibility(View.GONE);
+        }
 
         btnBack.setOnClickListener(this);
-        addPasswordButton.setOnClickListener(this);
+        addSecurityCodeButton.setOnClickListener(this);
+        deleteSecurityCodeButton.setOnClickListener(this);
+        aboutButton.setOnClickListener(this);
 
         return rootView;
     }
@@ -55,6 +68,21 @@ public class SettingsFragment extends Fragment implements View.OnClickListener{
 
                 (getActivity()).getSupportFragmentManager().beginTransaction()
                         .replace(R.id.drag_view, addSecurityCodeFragment, "SettingsAddPassword")
+                        .addToBackStack(null)
+                        .commit();
+                break;
+            case R.id.delete_security_code_button:
+                final KeyUtilities keyUtilities = new KeyUtilities();
+                keyUtilities.initKeystore();
+                keyUtilities.removeKey(getActivity());
+
+                deleteSecurityCodeButton.setVisibility(View.GONE);
+                break;
+            case R.id.about_button:
+                AboutFragment aboutFragment= new AboutFragment();
+
+                (getActivity()).getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.drag_view, aboutFragment, "SettingsAbout")
                         .addToBackStack(null)
                         .commit();
                 break;

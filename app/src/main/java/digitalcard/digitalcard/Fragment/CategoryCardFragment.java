@@ -77,6 +77,7 @@ public class CategoryCardFragment extends Fragment implements View.OnClickListen
         toolbar = rootview.findViewById(R.id.toolbar);
 
         txtTitle = toolbar.getTxtTitle();
+        txtTitle.setText(getResources().getString(R.string.add_new_card_text));
         btnBack = toolbar.getBtnBack();
         btnBack.setVisibility(View.GONE);
         searchPanel = rootview.findViewById(R.id.search_panel);
@@ -97,6 +98,7 @@ public class CategoryCardFragment extends Fragment implements View.OnClickListen
     }
 
     public void loadCardServer() {
+        cardLists.add(new CardList("Other", null, 0xFFFFFFFF));
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Utilities.URL_CARD,
                 new Response.Listener<String>() {
                     @Override
@@ -113,19 +115,22 @@ public class CategoryCardFragment extends Fragment implements View.OnClickListen
                                 Log.e("data", "card : " + object.getString("name") + ", logo : " + object.getString("logo"));
                                 cardLists.add(new CardList(object.getString("name"), object.getString("logo"), object.getInt("background")));
                             }
-                        } catch (JSONException e) { e.printStackTrace(); }
-                        finally {
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        } finally {
                             cardListAdapter.notifyDataSetChanged();
                         }
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
-                    public void onErrorResponse(VolleyError error) { Log.e(TAG, error.toString()); }
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e(TAG, error.toString());
+                    }
                 }) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String , String> map = new HashMap<String, String>();
+                Map<String, String> map = new HashMap<String, String>();
                 return map;
             }
         };

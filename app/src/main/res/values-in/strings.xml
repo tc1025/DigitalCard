@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">DigiCard</string>
 
-    <string name="imageButton_plus_description">Add New Card</string>
+    <string name="imageButton_plus_description">Tambah Kartu Baru</string>
     <string name="imageButton_menu_description">menu</string>
     
     <string name="account">Akun</string>
@@ -29,5 +29,57 @@
     <string name="ok_permission">OKE</string>
     <string name="hint_search">Cari Disini...</string>
     <string name="all_card">Semua Kartu</string>
+    <string name="hint_scan_activity">Kartu tidak memiliki barcode?</string>
+    <string name="input_manually">Masukkan Manual</string>
+    <string name="settings_security_code">Kata Sandi</string>
+    <string name="settings_security_code_subtitle">Tambah atau ganti kata sandi untuk keamanan DigiCard</string>
+    <string name="remove_security_code">Hapus Kata Sandi</string>
+    <string name="remove_security_code_subtitle">Hapus kata sandi yang sudah ada</string>
+    <string name="about">Tentang</string>
+    <string name="about_message">Digicard adalah aplikasi yang dapat membantu Anda menyimpan kartu loyalti dengan membuat dan menyimpannya dalam bentuk digital, jadi membuat dompet Anda menjadi lebih leluasa darikartu plastik dan terbebas dari masalah dari pentuk fisik kartu dengan menggunakan aplikasi DigiCard</string>
+    <string name="or_use">Atau Gunakan</string>
+    <string name="okay">Oke</string>
+    <string name="no_connected_account">Akun tidak terhubung</string>
+    <string name="dob">Tempat tanggal lahir belum disetel</string>
+    <string name="identity">Nomor identitas belum di setel</string>
+    <string name="address">Alamat belum disetel</string>
+    <string name="phone">Nomor telepon belum disetel</string>
+    <string name="backup">Buat cadangan data</string>
+    <string name="sign_out">Keluar</string>
+    <string name="card_alias">Alias kartu</string>
+    <string name="card_alias_hint">Tambah alias untuk kartu ini disini</string>
+    <string name="barcode">Barcode</string>
+    <string name="barcode_hint">Masukkan nomor barcode kartu Anda disini</string>
+    <string name="or">Atau</string>
+    <string name="scan_barcode">Pindai Barcode</string>
+    <string name="show_barcode">Tampilkan Barcode</string>
+    <string name="notes">Catatan</string>
+    <string name="notes_hint">Tulis catatan...</string>
+    <string name="card_preview">Tampilan Kartu</string>
+    <string name="front_view">Tampilan depan</string>
+    <string name="back_view">Tampilan belakan</string>
+    <string name="card_name">"Nama Kartu : "</string>
+    <string name="no_merchant">Tidak ada Merchant disekitar Anda</string>
+    <string name="name">Nama</string>
+    <string name="name_hint">Masukkan nama lengkap Anda</string>
+    <string name="identity_number">Nomor Identitas</string>
+    <string name="identity_number_hint">KTP (16 digit)</string>
+    <string name="gender">Jenis Kelamin</string>
+    <string name="male">Laki-laki</string>
+    <string name="female">Perempuan</string>
+    <string name="addressess">Alamat</string>
+    <string name="addressess_hint">Masukkan alamat Anda</string>
+    <string name="date_of_birth">Tanggal Lahir</string>
+    <string name="date_of_birth_hint">hh/bb/tttt</string>
+    <string name="captcha_hint">Masukkan captcha</string>
+    <string name="no_card">Anda tidak mempunyai kartu</string>
+    <string name="no_promo">Promo tida tersedia</string>
+    <string name="have_member_card">Apakah Anda memiliki kartu ini?</string>
+    <string name="have_member_card_yes">Ya, tambah kartu yang sudah ada</string>
+    <string name="have_member_card_no">Tidak,registrasi sekarang</string>
+    <string name="warning">peringatan</string>
+    <string name="hello">Halo,</string>
+    <string name="input_new_alias">Masukkan alias kartu baru</string>
+    <string name="input_notes">Masukkan catatan disini</string>
 
 </resources>

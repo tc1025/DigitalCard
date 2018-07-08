@@ -104,8 +104,6 @@ public class CardOverViewFragment extends Fragment implements View.OnClickListen
 
         cardDB = new CardDB(getActivity());
 
-        ((MainActivity) getContext()).getSlidingPanel().setTouchEnabled(false);
-
         toolbar = rootView.findViewById(R.id.toolbar);
         popupDialog = new PopupBarcodeDialog(getActivity());
         editDialog = new EditDialog(getActivity());
@@ -315,11 +313,11 @@ public class CardOverViewFragment extends Fragment implements View.OnClickListen
 
             switch (editSection) {
                 case "cardName":
-                    tvTitle.setText("Input new card alias");
+                    tvTitle.setText(getResources().getString(R.string.input_new_alias));
                     break;
 
                 case "cardNotes":
-                    tvTitle.setText("Input notes here");
+                    tvTitle.setText(getResources().getString(R.string.input_notes));
                     break;
             }
 

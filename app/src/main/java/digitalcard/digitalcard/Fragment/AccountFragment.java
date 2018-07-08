@@ -74,7 +74,7 @@ import static android.app.Activity.RESULT_OK;
 import static android.content.Context.MODE_PRIVATE;
 import static android.support.constraint.Constraints.TAG;
 
-public class AccountFragment extends Fragment implements View.OnClickListener{
+public class AccountFragment extends Fragment implements View.OnClickListener {
     View rootView;
     Toolbar toolbar;
     EditDialog editDialog;
@@ -87,6 +87,8 @@ public class AccountFragment extends Fragment implements View.OnClickListener{
     Button signOutButton, backupButton;
     TextView tvTitle, tvAccountName, tvAccountEmail, tvAccountDOB, tvAccountIdentityNumber, tvAccountAddress, tvAccountPhoneNumber;
     LinearLayout llNotConnected, llConnected, btnBack;
+
+    int id;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -113,7 +115,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener{
         toolbar = rootView.findViewById(R.id.toolbar);
 
         tvTitle = toolbar.getTxtTitle();
-        tvTitle.setText("Account");
+        tvTitle.setText(getResources().getString(R.string.account));
 
         btnBack = toolbar.getBtnBack();
 
@@ -177,8 +179,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener{
         super.onStop();
     }
 
-    int id;
-    public void updateUI(GoogleSignInAccount account){
+    public void updateUI(GoogleSignInAccount account) {
         llNotConnected.setVisibility(View.GONE);
         llConnected.setVisibility(View.VISIBLE);
 
@@ -208,7 +209,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener{
     }
 
     public void insertData(final UserAccount userAccount, final int id) {
-        tvAccountName.setText(userAccount.getName());
+        tvAccountName.setText(getResources().getString(R.string.hello).concat(" " + userAccount.getName()));
         tvAccountEmail.setText(userAccount.getEmail());
         if (!userAccount.getDob().equals(""))
             tvAccountDOB.setText(userAccount.getDob());

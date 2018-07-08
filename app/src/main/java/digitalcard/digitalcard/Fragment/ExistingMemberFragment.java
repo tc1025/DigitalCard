@@ -39,9 +39,9 @@ public class ExistingMemberFragment extends Fragment implements View.OnClickList
     Toolbar toolbar;
     DoubleButton btnAction;
 
-    LinearLayout btnBack, btnCancel, btnDone;
+    LinearLayout btnBack, btnCancel, btnDone, llOtherPanel;
     TextView txtTitle;
-    EditText etBarcodeNumber, etCardName;
+    EditText etBarcodeNumber, etCardName, etOtherMerchant;
     Button btnScan;
 
     String title, logo, cardName, barcodeNumber, frontView, backView, notes;
@@ -67,12 +67,20 @@ public class ExistingMemberFragment extends Fragment implements View.OnClickList
         etCardName = rootView.findViewById(R.id.card_name);
         btnScan = rootView.findViewById(R.id.btn_scan);
 
+        llOtherPanel = rootView.findViewById(R.id.other_panel);
+        etOtherMerchant = rootView.findViewById(R.id.card_other);
+
         title = getArguments().getString(Utilities.BUNDLE_CARD_CATEGORY);
         logo = getArguments().getString(Utilities.BUNDLE_CARD_LOGO);
         backgroundColor = getArguments().getInt(Utilities.BUNDLE_CARD_BACKGROUND);
 
         txtTitle.setText(title);
         etBarcodeNumber.setInputType(InputType.TYPE_CLASS_NUMBER);
+
+        if (title.equals("Other"))
+            llOtherPanel.setVisibility(View.VISIBLE);
+        else
+            llOtherPanel.setVisibility(View.GONE);
 
         btnBack.setOnClickListener(this);
         btnCancel.setOnClickListener(this);
@@ -97,7 +105,34 @@ public class ExistingMemberFragment extends Fragment implements View.OnClickList
 
             case R.id.button_done:
                 Log.e("edittext", "card name : " + etCardName.getText() + ", barcode number : " + etBarcodeNumber.getText());
-                if (etCardName.getText().toString().equals("")) {
+
+                if (title.equals("Other")){
+                    if (etOtherMerchant.getText().toString().equals("")) {
+                        Toast.makeText(getActivity(), "Merchant card name must be filled", Toast.LENGTH_SHORT).show();
+                        etOtherMerchant.requestFocus();
+                    } else if (etCardName.getText().toString().equals("")) {
+                        Toast.makeText(getActivity(), "Card alias must be filled", Toast.LENGTH_SHORT).show();
+                        etCardName.requestFocus();
+                    } else if (etBarcodeNumber.getText().toString().equals("")) {
+                        Toast.makeText(getActivity(), "Barcode number must be filled", Toast.LENGTH_SHORT).show();
+                        etBarcodeNumber.requestFocus();
+                    } else {
+                        Toast.makeText(getActivity(), "Card Added", Toast.LENGTH_SHORT).show();
+
+                        cardName = etCardName.getText().toString();
+                        barcodeNumber = etBarcodeNumber.getText().toString();
+                        notes = "";
+                        frontView = "";
+                        backView = "";
+
+                        FragmentManager fm = getActivity().getSupportFragmentManager();
+                        for(int i = 0; i < fm.getBackStackEntryCount(); ++i) {
+                            fm.popBackStack();
+                        }
+
+                        addCard();
+                    }
+                } else if (etCardName.getText().toString().equals("")) {
                     Toast.makeText(getActivity(), "Card alias must be filled", Toast.LENGTH_SHORT).show();
                     etCardName.requestFocus();
                 } else if (etBarcodeNumber.getText().toString().equals("")) {
@@ -157,7 +192,10 @@ public class ExistingMemberFragment extends Fragment implements View.OnClickList
         cardList.cardBackView   = backView;
 
         CardDB cardDB = new CardDB(getContext());
-        cardDB.addCard(new CardList(cardList.cardName, cardList.cardType ,cardList.barcodeNumber, cardList.cardIcon, cardList.cardBackground, cardList.cardNote, cardList.cardFrontView, cardList.cardBackView));
+        if (title.equals("Other"))
+            cardDB.addCard(new CardList(cardList.cardName, etOtherMerchant.getText().toString() ,cardList.barcodeNumber, null, cardList.cardBackground, cardList.cardNote, cardList.cardFrontView, cardList.cardBackView));
+        else
+            cardDB.addCard(new CardList(cardList.cardName, cardList.cardType ,cardList.barcodeNumber, cardList.cardIcon, cardList.cardBackground, cardList.cardNote, cardList.cardFrontView, cardList.cardBackView));
 
         Intent intent = new Intent(TabKartu.RADIO_DATASET_CHANGED);
         getActivity().sendBroadcast(intent);

@@ -35,30 +35,51 @@
             android:gravity="center_vertical"
             android:orientation="vertical">
 
+            <LinearLayout
+                android:id="@+id/other_panel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Merchant Card Name" />
+
+                <EditText
+                    android:id="@+id/card_other"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:hint="Add merchant card name here"
+                    android:inputType="text"
+                    android:maxLines="1" />
+            </LinearLayout>
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/card_alias" />
+                android:text="Card Alias" />
 
             <EditText
                 android:id="@+id/card_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                android:hint="@string/card_alias_hint"
+                android:hint="Add alias for this card here"
                 android:inputType="text"
                 android:maxLines="1" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/barcode" />
+                android:text="Barcode" />
 
             <EditText
                 android:id="@+id/barcode_number"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/barcode_hint"
+                android:hint="Input your card's barcode number here"
                 android:inputType="text"
                 android:maxLines="1" />
 
@@ -82,7 +103,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="@string/or" />
+                    android:text="Or" />
 
                 <View
                     android:layout_width="0dp"
@@ -99,8 +120,6 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="10dp"
                 android:text="@string/scan_barcode"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
                 android:textColor="@android:color/white"
                 android:background="@color/start2"/>
         </LinearLayout>

@@ -63,7 +63,10 @@ public class DetailPromoFragment extends Fragment implements View.OnClickListene
         tvTitle.setText(title);
         tvPromoTitle.setText(promoTitle);
         Picasso.get().load(promoBanner).into(ivPromoImage);
-        tvPromoOriginalPrice.setText(promoOriginalPrice);
+        if (promoOriginalPrice.equals("Rp0"))
+            tvPromoOriginalPrice.setVisibility(View.GONE);
+        else
+            tvPromoOriginalPrice.setText(promoOriginalPrice);
         tvPromoDiscountedPrice.setText(promoDiscountedPrice);
         tvPromoDescription.setText(promoDescription);
         tvPromoLink.setText(promoLink);

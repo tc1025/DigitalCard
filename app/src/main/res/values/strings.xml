@@ -19,6 +19,13 @@
     <string name="done_text">Done</string>
     <string name="cancel_text">Cancel</string>
 
+    <string name="settings_security_code">Security Code</string>
+    <string name="settings_security_code_subtitle">Add or change security code to secure Digicard</string>
+    <string name="remove_security_code">Remove Security Code</string>
+    <string name="remove_security_code_subtitle">Remove existing security code</string>
+    <string name="about">About</string>
+    <string name="about_message">Digicard is an application that helps you store your loyalty cards by creating and storing digital copies, so you can free your wallet from plastic cards and enjoy hassle-free experiences unlike physical ones from using DigiCard. </string>
+
     <string name="settings_password">Security Code</string>
     <string name="settings_password_subtitle">Add or change security code to secure DigiCard</string>
     <string name="or_use">Or Use</string>
@@ -58,7 +65,12 @@
     <string name="captcha_hint">Input captcha</string>
     <string name="no_card">You don\'t have any card</string>
     <string name="no_promo">No promo available</string>
-    
+    <string name="have_member_card">Do you have this member card</string>
+    <string name="have_member_card_yes">Yes, add existing member card</string>
+    <string name="have_member_card_no">No, register now</string>
+    <string name="input_new_alias">Input new card alias</string>
+    <string name="input_notes">Input notes here</string>
+
     <!--dialog-->
     <string name="warning">warning</string>
     <string name="title_location_permission">Permisssion Needed</string>
@@ -69,5 +81,6 @@
     <string name="enter_security_code">Enter Your Security Code</string>
     <string name="wrong_security_code">Wrong Security Code</string>
     <string name="ok_permission">OKAY</string>
+    <string name="hello">Hello,</string>
 
 </resources>

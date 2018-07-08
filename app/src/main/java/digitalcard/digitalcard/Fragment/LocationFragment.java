@@ -50,6 +50,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -132,8 +133,6 @@ public class LocationFragment extends Fragment implements View.OnClickListener, 
 
         checkLocationPermission();
 
-        loadPlace();
-
         return rootView;
     }
 
@@ -160,6 +159,7 @@ public class LocationFragment extends Fragment implements View.OnClickListener, 
                     try {
                         mGoogleMap.setMyLocationEnabled(true);
                         Log.e("KEVIN", "MAP READY");
+                        loadPlace(mGoogleMap);
                     } catch (SecurityException e) {
                         e.printStackTrace();
                     }
@@ -333,7 +333,7 @@ public class LocationFragment extends Fragment implements View.OnClickListener, 
 
     }
 
-    public void loadPlace(){
+    public void loadPlace(final GoogleMap googleMap){
 //        radius = meter
 //        keyword = yg mau dicari
         String link = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location="
@@ -372,6 +372,11 @@ public class LocationFragment extends Fragment implements View.OnClickListener, 
                         } catch (JSONException e) { e.printStackTrace(); }
                         finally {
                             locationListAdapter.notifyDataSetChanged();
+
+                            if (!locationList.isEmpty())
+                                for (int i = 0; i < locationList.size(); i++)
+                                    googleMap.addMarker(new MarkerOptions().position(new LatLng(locationList.get(i).getLatitude(), locationList.get(i).getLongitude()))
+                                            .title(locationList.get(i).getName()).snippet(locationList.get(i).getAddress()));
 
                             if (locationList.isEmpty()) {
                                 tvNoLocation.setVisibility(View.VISIBLE);
